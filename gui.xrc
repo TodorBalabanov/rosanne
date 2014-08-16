@@ -1,0 +1,1034 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+	<object class="wxDialog" name="raDlgAbout">
+		<style>wxDEFAULT_DIALOG_STYLE</style>
+		<size>447,447</size>
+		<title>About</title>
+		<centered>1</centered>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+						<border>5</border>
+						<object class="wxStaticBitmap" name="m_bitmap1">
+							<bitmap>main_icon_32.xpm</bitmap>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND</flag>
+						<border>5</border>
+						<object class="wxBoxSizer">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxStaticText" name="m_staticText1">
+									<font>
+										<family>default</family>
+										<style>normal</style>
+										<weight>bold</weight>
+										<underlined>0</underlined>
+									</font>
+									<label>Rosanne v1.0b2 (Beta)\nA Twenty Eight carg game for multiple platforms.\n\nCopyright Vipin Cherian 2006-2008.</label>
+								</object>
+							</object>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxHyperlinkCtrl" name="m_hyperlink1">
+									<label>http://rosanne.sourceforge.net/</label>
+									<url>http://rosanne.sourceforge.net/</url>
+									<style>wxHL_DEFAULT_STYLE</style>
+									<font>
+										<family>default</family>
+										<style>normal</style>
+										<weight>bold</weight>
+										<underlined>0</underlined>
+									</font>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>1</option>
+				<flag>wxEXPAND|wxALL</flag>
+				<border>5</border>
+				<object class="wxNotebook" name="m_notebook4">
+					<object class="notebookpage">
+						<label>License</label>
+						<selected>0</selected>
+						<object class="wxPanel" name="m_panel6">
+							<style>wxSUNKEN_BORDER|wxTAB_TRAVERSAL</style>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>1</option>
+									<flag>wxALL|wxEXPAND</flag>
+									<border>5</border>
+									<object class="wxStaticText" name="m_staticText5">
+										<label>This program is free software; you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation; either version 2 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program; if not, write to the Free Software\nFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="notebookpage">
+						<label>Credits</label>
+						<selected>1</selected>
+						<object class="wxPanel" name="m_panel7">
+							<style>wxSUNKEN_BORDER|wxTAB_TRAVERSAL</style>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxLEFT</flag>
+									<border>5</border>
+									<object class="wxStaticText" name="m_staticText6">
+										<label>Special thanks to :\n</label>
+									</object>
+								</object>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxEXPAND</flag>
+									<border>5</border>
+									<object class="wxBoxSizer">
+										<orient>wxHORIZONTAL</orient>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag>wxLEFT</flag>
+											<border>5</border>
+											<object class="wxStaticText" name="m_staticText7">
+												<label>SourceForge.net (</label>
+											</object>
+										</object>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag></flag>
+											<border>5</border>
+											<object class="wxHyperlinkCtrl" name="m_hyperlink2">
+												<label>http://sourceforge.net/</label>
+												<url>http://sourceforge.net/</url>
+												<style>wxHL_DEFAULT_STYLE</style>
+											</object>
+										</object>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag></flag>
+											<border>5</border>
+											<object class="wxStaticText" name="m_staticText8">
+												<label>).</label>
+											</object>
+										</object>
+									</object>
+								</object>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxEXPAND</flag>
+									<border>5</border>
+									<object class="wxBoxSizer">
+										<orient>wxHORIZONTAL</orient>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag>wxLEFT</flag>
+											<border>5</border>
+											<object class="wxStaticText" name="m_staticText71">
+												<label>wxWidgets (</label>
+											</object>
+										</object>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag></flag>
+											<border>5</border>
+											<object class="wxHyperlinkCtrl" name="m_hyperlink21">
+												<label>http://www.wxwidgets.org/</label>
+												<url>http://www.wxwidgets.org/</url>
+												<style>wxHL_DEFAULT_STYLE</style>
+											</object>
+										</object>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag></flag>
+											<border>5</border>
+											<object class="wxStaticText" name="m_staticText81">
+												<label>).</label>
+											</object>
+										</object>
+									</object>
+								</object>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxEXPAND</flag>
+									<border>5</border>
+									<object class="wxBoxSizer">
+										<orient>wxHORIZONTAL</orient>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag>wxLEFT</flag>
+											<border>5</border>
+											<object class="wxStaticText" name="m_staticText72">
+												<label>wxWidgets Discussion Forum (</label>
+											</object>
+										</object>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag></flag>
+											<border>5</border>
+											<object class="wxHyperlinkCtrl" name="m_hyperlink22">
+												<label>http://wxforum.shadonet.com/</label>
+												<url>http://wxforum.shadonet.com/</url>
+												<style>wxHL_DEFAULT_STYLE</style>
+											</object>
+										</object>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag></flag>
+											<border>5</border>
+											<object class="wxStaticText" name="m_staticText82">
+												<label>).</label>
+											</object>
+										</object>
+									</object>
+								</object>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxLEFT</flag>
+									<border>5</border>
+									<object class="wxStaticText" name="m_staticText61">
+										<label>Sean Eron Anderson.</label>
+									</object>
+								</object>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxLEFT</flag>
+									<border>5</border>
+									<object class="wxStaticText" name="m_staticText62">
+										<label>My wife Lavi.\nAnd also Vinod Sureshbabu, Gigi Joseph, Kamjith P., Sankar C., \nDavid C. Kandathil, \nAravind Parameswaran, Jayesh G., Jamsheed Kormath, V. Sridhar,\nFeby George, Prashanth Kuttickat, Anoop A., Linov P. Suresh,\nGaurav Sharma, Baljinder Singh Sandhu, Rajeev Mittal, Keya Pansare,\nManish Gupta, Sreepad Ramesan Kutty, Reynold Johns, Shadaab Syed,\nSankara S. P., Mainak Bose, Sooraj K. Prabha, DTops DTharas,\nPrashanth P, Rupesh R. S., Sajith Bhaskar, Dishkangang,\nFriends at Malayalavedhi and many others...</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALIGN_RIGHT|wxALL</flag>
+				<border>5</border>
+				<object class="wxButton" name="m_radlgabout_ok">
+					<label>Ok</label>
+					<default>0</default>
+				</object>
+			</object>
+		</object>
+	</object>
+	<object class="wxDialog" name="raDlgPrefs">
+		<style>wxDEFAULT_DIALOG_STYLE</style>
+		<title>Preferences</title>
+		<centered>1</centered>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxStaticBoxSizer">
+					<orient>wxVERTICAL</orient>
+					<label>Input</label>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND</flag>
+						<border>5</border>
+						<object class="wxBoxSizer">
+							<orient>wxHORIZONTAL</orient>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxStaticText" name="m_staticText12">
+									<label>Play card on : </label>
+								</object>
+							</object>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxComboBox" name="m_radlgprefs_playcardon">
+									<value>Single-click</value>
+									<content />
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxCheckBox" name="m_radlgprefs_playsingauto">
+							<label>If only a single card can be played, play it automatically</label>
+							<checked>0</checked>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxStaticBoxSizer">
+					<orient>wxVERTICAL</orient>
+					<label>Output</label>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxCheckBox" name="m_radlgprefs_showbidbubb">
+							<label>Show bids as bubbled text</label>
+							<checked>0</checked>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxStaticBoxSizer">
+					<orient>wxVERTICAL</orient>
+					<label>Appearance</label>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND</flag>
+						<border>5</border>
+						<object class="wxBoxSizer">
+							<orient>wxHORIZONTAL</orient>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxStaticText" name="m_staticText13">
+									<label>Card Back : </label>
+								</object>
+							</object>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxComboBox" name="m_radlgprefs_cardback">
+									<value>Blue</value>
+									<content />
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALIGN_RIGHT</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxButton" name="m_radlgprefs_apply">
+							<label>Apply</label>
+							<default>1</default>
+						</object>
+					</object>
+				</object>
+			</object>
+		</object>
+	</object>
+	<object class="wxDialog" name="raDlgRules">
+		<style>wxDEFAULT_DIALOG_STYLE</style>
+		<title>Rules</title>
+		<centered>1</centered>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxStaticBoxSizer">
+					<orient>wxVERTICAL</orient>
+					<label>Auction</label>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND</flag>
+						<border>5</border>
+						<object class="wxBoxSizer">
+							<orient>wxHORIZONTAL</orient>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxStaticText" name="m_staticText15">
+									<label>Minimum bid for the third round : </label>
+								</object>
+							</object>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxComboBox" name="m_radlgrules_minbidthird">
+									<value>23</value>
+									<content />
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxCheckBox" name="m_radlgrules_enablealltricks">
+							<label>Enable the bid for &quot;All Tricks&quot;</label>
+							<checked>0</checked>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxStaticBoxSizer">
+					<orient>wxVERTICAL</orient>
+					<label>Card Play</label>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND</flag>
+						<border>5</border>
+						<object class="wxBoxSizer">
+							<orient>wxHORIZONTAL</orient>
+							<object class="sizeritem">
+								<option>0</option>
+								<flag>wxALL</flag>
+								<border>5</border>
+								<object class="wxStaticText" name="m_staticText16">
+									<label>Direction of play : </label>
+								</object>
+							</object>
+							<object class="sizeritem">
+								<option>1</option>
+								<flag>wxEXPAND</flag>
+								<border>5</border>
+								<object class="wxBoxSizer">
+									<orient>wxVERTICAL</orient>
+									<object class="sizeritem">
+										<option>0</option>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<object class="wxRadioButton" name="m_radlgrules_clockwise">
+											<label>Clockwise</label>
+											<value>0</value>
+										</object>
+									</object>
+									<object class="sizeritem">
+										<option>0</option>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<object class="wxRadioButton" name="m_radlgrules_anticlockwise">
+											<label>Anti-clockwise</label>
+											<value>0</value>
+										</object>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxCheckBox" name="m_radlgrules_sluffjacks">
+							<label>Allow to sluff Jacks</label>
+							<checked>0</checked>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxCheckBox" name="m_radlgrules_claimalljacks">
+							<label>Allow to claim all tricks</label>
+							<checked>0</checked>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxCheckBox" name="m_radlgrules_waiverule4">
+							<label>When trump is shown, the same card should be played.</label>
+							<checked>0</checked>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALL</flag>
+				<border>5</border>
+				<object class="wxStaticText" name="m_staticText18">
+					<label>Note : New rules will be effective only after a new game is started.</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALIGN_RIGHT</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxButton" name="m_radlgrules_apply">
+							<label>Apply</label>
+							<default>1</default>
+						</object>
+					</object>
+				</object>
+			</object>
+		</object>
+	</object>
+	<object class="wxPanel" name="raInfo">
+		<style>wxTAB_TRAVERSAL</style>
+		<size>500,477</size>
+		<bg>#ffffff</bg>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+				<border>2</border>
+				<object class="wxPanel" name="m_panel3">
+					<style>wxTAB_TRAVERSAL</style>
+					<bg>#005c85</bg>
+					<object class="wxBoxSizer">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<option>0</option>
+							<flag>wxALIGN_CENTER|wxALL</flag>
+							<border>2</border>
+							<object class="wxStaticText" name="m_staticText19">
+								<fg>#ffffff</fg>
+								<font>
+									<family>default</family>
+									<style>normal</style>
+									<weight>bold</weight>
+									<underlined>0</underlined>
+								</font>
+								<label>Deal</label>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel5">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#81cbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_staticText21">
+										<label>Deal No.</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel6">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#a8dbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_dealno">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel51">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#bcaeff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_staticText23">
+										<label>Dealer</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_rainfo_dealer_pnl">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#d4ccff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_dealer">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel52">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#81cbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_staticText241">
+										<label>Bid</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel62">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#a8dbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_bid">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel53">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#bcaeff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_staticText26">
+										<label>Trump</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel63">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#d4ccff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_trump">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+				<border>2</border>
+				<object class="wxPanel" name="m_panel31">
+					<style>wxTAB_TRAVERSAL</style>
+					<bg>#005c85</bg>
+					<object class="wxBoxSizer">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<option>0</option>
+							<flag>wxALIGN_CENTER|wxALL</flag>
+							<border>2</border>
+							<object class="wxStaticText" name="m_staticText20">
+								<fg>#ffffff</fg>
+								<font>
+									<family>default</family>
+									<style>normal</style>
+									<weight>bold</weight>
+									<underlined>0</underlined>
+								</font>
+								<label>Game Points</label>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel54">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#81cbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_staticText28">
+										<label>N/S</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel64">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#a8dbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_nspts">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel55">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#bcaeff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_staticText30">
+										<label>E/W</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel65">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#d4ccff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_ewpts">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+				<border>2</border>
+				<object class="wxPanel" name="m_panel32">
+					<style>wxTAB_TRAVERSAL</style>
+					<bg>#005c85</bg>
+					<object class="wxBoxSizer">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<option>0</option>
+							<flag>wxALIGN_CENTER|wxALL</flag>
+							<border>2</border>
+							<object class="wxStaticText" name="m_staticText32">
+								<fg>#ffffff</fg>
+								<font>
+									<family>default</family>
+									<style>normal</style>
+									<weight>bold</weight>
+									<underlined>0</underlined>
+								</font>
+								<label>Penalties</label>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel56">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#81cbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_spnlty">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel66">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#a8dbff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_npnlty">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel57">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#bcaeff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_wpnlty">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+						<border>2</border>
+						<object class="wxPanel" name="m_panel67">
+							<style>wxTAB_TRAVERSAL</style>
+							<bg>#d4ccff</bg>
+							<object class="wxBoxSizer">
+								<orient>wxVERTICAL</orient>
+								<object class="sizeritem">
+									<option>0</option>
+									<flag>wxALL</flag>
+									<border>2</border>
+									<object class="wxStaticText" name="m_rainfo_epnlty">
+										<label>MyLabel</label>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+				<border>2</border>
+				<object class="wxPanel" name="m_panel33">
+					<style>wxTAB_TRAVERSAL</style>
+					<bg>#005c85</bg>
+					<object class="wxBoxSizer">
+						<orient>wxVERTICAL</orient>
+						<object class="sizeritem">
+							<option>0</option>
+							<flag>wxALIGN_CENTER|wxALL</flag>
+							<border>2</border>
+							<object class="wxStaticText" name="m_staticText37">
+								<fg>#ffffff</fg>
+								<font>
+									<family>default</family>
+									<style>normal</style>
+									<weight>bold</weight>
+									<underlined>0</underlined>
+								</font>
+								<label>Instructions</label>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>1</option>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>10</border>
+				<object class="wxStaticText" name="m_rainfo_instr">
+					<fg>#ff0090</fg>
+					<font>
+						<family>default</family>
+						<style>normal</style>
+						<weight>bold</weight>
+						<underlined>0</underlined>
+					</font>
+					<label>MyLabel</label>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALIGN_CENTER|wxALL</flag>
+				<border>5</border>
+				<object class="wxButton" name="m_rainfo_btn">
+					<label>MyButton</label>
+					<default>0</default>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>
