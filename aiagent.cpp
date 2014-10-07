@@ -45,10 +45,6 @@ int aiAgent::GetLocation()
 
 bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool force_bid)
 {
-	int i, k;
-	int initial;
-	int *undealt;
-	int eval[2];
 	int trump_count;		// Counter, used to loop through different trump options
 	int sample;				// Counter, used to loop though different samples
 	int data[4][29];
@@ -69,12 +65,12 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 	wxLogDebug(gmUtil::PrintLong(cards));
 #endif
 
-	initial = (int)gmUtil::CountBitsSet(cards);
+	int initial = (int)gmUtil::CountBitsSet(cards);
 	wxASSERT(initial <= 8);
 #ifdef raAI_LOG_GETBID
 	wxLogDebug(wxString::Format("initial is %d", initial));
 #endif
-	undealt = new int[32 - initial];
+	int *undealt = new int[32 - initial];
 
 	//
 	//Dealing the rest of the cards
@@ -83,8 +79,8 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 	for(sample = 0; sample < aiBID_SAMPLE; sample++)
 	{
 		// Get the rest of the cards into undealt
-		k = 0;
-		for(i = 0; i < 32; i++)
+		int k = 0;
+		for(int i = 0; i < 32; i++)
 			if(!(cards & (1 << i)))
 				undealt[k++] = i;
 
@@ -101,7 +97,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 
 		// Deal the undealt cards
 		k = 0;
-		for(i = /*8 - */initial; i < 32; i++)
+		for(int i = /*8 - */initial; i < 32; i++)
 			hands[i / 8] |= 1 << undealt[k++];
 
 #ifdef raAI_LOG_GETBID
@@ -120,8 +116,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 			if(cards & gmUtil::m_suit_mask[trump_count])
 			{
 				temp_trump = trump_count;
-				eval[0] = 0;
-				eval[1] = 0;
+				int eval[2] = {0, 0};
 				EstimatePoints(hands, temp_trump, 0, eval);
 
 				// Distribute half of the unallocated points equally
@@ -162,10 +157,10 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 	// figuring out which is the best bid
 	*bid = 0;
 	*trump = -1;
-	for(i = 0; i < 4; i++)
+	for(int i = 0; i < 4; i++)
 	{
 		sample = 0;
-		for(k = 28; k >= 0; k--)
+		for(int k = 28; k >= 0; k--)
 		{
 			sample += data[i][k];
 			// TODO : 70 might be an aggressive value fix it accordingly
