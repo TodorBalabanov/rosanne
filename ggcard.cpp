@@ -31,12 +31,16 @@ ggCard::ggCard()
 	// If the constructor is being called for the first time
 	// 1. Load the resources used by the library.
 	// 2. Load the mask image
+	if(s_init){
+		return;
+	}
 
-	if(!s_init)
-	{
 		wxMutexLocker lock(s_mutex);
-		if(!s_init)
-		{
+
+		if(s_init){
+			return;
+		}
+
 			wxFileSystem::AddHandler(new wxZipFSHandler);
 			wxImage::AddHandler(new wxXPMHandler);
 
@@ -53,8 +57,6 @@ ggCard::ggCard()
 				return;
 			}
 			s_init = true;
-		}
-	}
 }
 
 ggCard::ggCard(int suit, int value)

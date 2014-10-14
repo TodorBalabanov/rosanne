@@ -116,8 +116,10 @@ int gmUtil::LogTable256[] =
 
 void gmUtil::ShuffleArray(int *array, unsigned long n)
 {
+	if (n <= 1){
+		return;
+	}
 
-	if (n > 1) {
 		unsigned long i;
 		for (i = n - 1; i >= 1; i--) {
 		    // TODO : Non linear distribution. To be corrected.
@@ -126,19 +128,17 @@ void gmUtil::ShuffleArray(int *array, unsigned long n)
 			array[j] = array[i];
 			array[i] = t;
 		}
-	}
 }
 
 wxString gmUtil::PrintLong(unsigned long cards)
 {
-	unsigned long i;
 	wxString out, final;
 
 	//wxLogDebug(wxString::Format("Cards = %lu", cards));
 
 	out = _("");
 	//wxLogDebug(wxString::Format("%s%s", m_suits[highest / 8], m_values[highest % 8]));
-	for(i = 0; i < 32; i++)
+	for(int i = 0; i < 32; i++)
 	{
 		if(cards & (1 << i))
 			out = out + m_suits[i / 8] + m_values[i % 8] + _(",");
@@ -156,7 +156,6 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	wxString final;
 	wxString out;
 	unsigned long temp;
-	int i, j;
 
 	ret_val.Clear();
 
@@ -165,11 +164,11 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	ret_val.Append(SPACES20 + m_long_locs[2]);
 	ret_val.Append(wxT("\n"));
 
-	for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		temp = (hands[2] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
-		for(j = 7; j >= 0; j--)
+		for(int j = 7; j >= 0; j--)
 		{
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");
@@ -186,12 +185,12 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	ret_val.Append(wxString::Format(wxT("%-40s%-40s"), m_long_locs[1].c_str(), m_long_locs[3].c_str()));
 	ret_val.Append(wxT("\n"));
 
-	for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		temp = (hands[1] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
-		for(j = 7; j >= 0; j--)
+		for(int j = 7; j >= 0; j--)
 		{
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");
@@ -202,7 +201,7 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 		temp = (hands[3] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
-		for(j = 7; j >= 0; j--)
+		for(int j = 7; j >= 0; j--)
 		{
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");
@@ -220,12 +219,12 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	ret_val.Append(SPACES20 + m_long_locs[0]);
 	ret_val.Append(wxT("\n"));
 
-	for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		temp = (hands[0] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
-		for(j = 7; j >= 0; j--)
+		for(int j = 7; j >= 0; j--)
 		{
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");

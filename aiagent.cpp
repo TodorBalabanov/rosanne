@@ -45,12 +45,6 @@ int aiAgent::GetLocation()
 
 bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool force_bid)
 {
-	int trump_count;		// Counter, used to loop through different trump options
-	int sample;				// Counter, used to loop though different samples
-	int data[4][29];
-	unsigned long hands[4];
-	int temp_trump;
-
 	//raAIGameState state;
 
 	//data = new int[4][29];
@@ -59,6 +53,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 	data[i] = new int[aiBID_SAMPLE];
 	memset(data[i], 0, aiBID_SAMPLE * sizeof(int));
 	}*/
+	int data[4][29];
 	memset(data, 0, 4 * 29 * sizeof(int));
 
 #ifdef raAI_LOG_GETBID
@@ -76,7 +71,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 	//Dealing the rest of the cards
 	//
 
-	for(sample = 0; sample < aiBID_SAMPLE; sample++)
+	for(int sample = 0; sample < aiBID_SAMPLE; sample++)
 	{
 		// Get the rest of the cards into undealt
 		int k = 0;
@@ -88,6 +83,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 		gmUtil::ShuffleArray(undealt, 32 - initial);
 
 		//Initialize the hands
+		unsigned long hands[4];
 		memset(hands, 0, sizeof(hands));
 
 		// Simplifying the problem, assume the current player is South
@@ -109,13 +105,13 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 		// Calculate the estimated points
 		// considering each suit as trump
 
-		for(trump_count = 0; trump_count < 4; trump_count++)
+		for(int trump_count = 0; trump_count < 4; trump_count++)
 		{
 			// Estimation done only if there is atleast one card
 			// belonging to the suit, in the initial hand
 			if(cards & gmUtil::m_suit_mask[trump_count])
 			{
-				temp_trump = trump_count;
+				int temp_trump = trump_count;
 				int eval[2] = {0, 0};
 				EstimatePoints(hands, temp_trump, 0, eval);
 
@@ -159,7 +155,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 	*trump = -1;
 	for(int i = 0; i < 4; i++)
 	{
-		sample = 0;
+		int sample = 0;
 		for(int k = 28; k >= 0; k--)
 		{
 			sample += data[i][k];
