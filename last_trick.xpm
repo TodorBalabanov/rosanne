@@ -1,5 +1,5 @@
 /* XPM */
-static char * last_trick_xpm[] = {
+static char const * last_trick_xpm[] = {
 "16 16 57 1",
 " 	c None",
 ".	c #254A6A",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * bid_history_xpm[] = {
+static char const * bid_history_xpm[] = {
 "16 16 108 2",
 "  	c None",
 ". 	c #755332",

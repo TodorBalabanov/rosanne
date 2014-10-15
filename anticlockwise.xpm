@@ -1,5 +1,5 @@
 /* XPM */
-static char * anticlockwise_xpm[] = {
+static char const * anticlockwise_xpm[] = {
 "16 16 5 1",
 " 	c None",
 ".	c #372848",

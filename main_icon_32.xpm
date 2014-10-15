@@ -1,5 +1,5 @@
 /* XPM */
-static char * main_icon_16_xpm[] = {
+static char const * main_icon_16_xpm[] = {
 "16 16 91 1",
 " 	c None",
 ".	c #5F7281",

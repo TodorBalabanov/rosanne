@@ -1,5 +1,5 @@
 /* XPM */
-static char * bubble_arrow_right_xpm[] = {
+static char const * bubble_arrow_right_xpm[] = {
 "12 12 5 1",
 " 	c None",
 ".	c #D9FFC8",

@@ -1,5 +1,5 @@
 /* XPM */
-static char *back_01_xpm[] = {
+static char const *back_01_xpm[] = {
 /* width height num_colors chars_per_pixel */
 "    71    96       16            1",
 /* colors */

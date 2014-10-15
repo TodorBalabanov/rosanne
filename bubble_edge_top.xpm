@@ -1,5 +1,5 @@
 /* XPM */
-static char * bubble_edge_top_xpm[] = {
+static char const * bubble_edge_top_xpm[] = {
 "5 5 5 1",
 " 	c None",
 ".	c #205A05",

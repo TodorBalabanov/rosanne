@@ -1,5 +1,5 @@
 /* XPM */
-static char * green_arrow_top_xpm[] = {
+static char const * green_arrow_top_xpm[] = {
 "16 16 5 1",
 " 	c None",
 ".	c #356B1A",
