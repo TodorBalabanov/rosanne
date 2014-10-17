@@ -88,8 +88,7 @@
 #define raBUBB_ARROW_OVERLAP 3
 #define raBUBB_ARROW_PROTUN (raBUBB_ARROW_WIDTH - raBUBB_ARROW_OVERLAP)
 
-enum
-{
+enum {
 	raSBARPOS_GEN = 0,
 	raSBARPOS_CLOCK
 };

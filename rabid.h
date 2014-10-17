@@ -36,14 +36,13 @@
 
 class raGamePanel;
 
-class raBid: public wxPanel
-{
+class raBid: public wxPanel {
 private:
 	DECLARE_EVENT_TABLE()
 
 	// Disallow copy constructor/assignment operators
 	raBid(const raBid &);
-    raBid & operator=(const raBid &);
+	raBid & operator=(const raBid &);
 
 	int m_min_bid;
 

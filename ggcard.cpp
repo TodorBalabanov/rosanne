@@ -24,43 +24,39 @@ wxBitmap ggCard::s_mask_bmp;
 // Constructor
 //
 
-ggCard::ggCard()
-{
+ggCard::ggCard() {
 	m_face = NULL;
 
 	// If the constructor is being called for the first time
 	// 1. Load the resources used by the library.
 	// 2. Load the mask image
-	if(s_init){
+	if(s_init) {
 		return;
 	}
 
-		wxMutexLocker lock(s_mutex);
+	wxMutexLocker lock(s_mutex);
 
-		if(s_init){
-			return;
-		}
+	if(s_init) {
+		return;
+	}
 
-			wxFileSystem::AddHandler(new wxZipFSHandler);
-			wxImage::AddHandler(new wxXPMHandler);
+	wxFileSystem::AddHandler(new wxZipFSHandler);
+	wxImage::AddHandler(new wxXPMHandler);
 
-			wxXmlResource::Get()->InitAllHandlers();
-			if(!wxXmlResource::Get()->Load(GG_CARD_XRS))
-			{
-				wxLogError(wxString::Format(wxT("Failed to load xrs %s. %s:%d"),GG_CARD_XRS,  wxT(__FILE__), __LINE__));
-				return;
-			}
-			s_mask_bmp = wxXmlResource::Get()->LoadBitmap(wxT("mask"));
-			if(!s_mask_bmp.Ok())
-			{
-				wxLogError(wxString::Format(wxT("Failed to load mask bitmap. %s:%d"), wxT(__FILE__), __LINE__));
-				return;
-			}
-			s_init = true;
+	wxXmlResource::Get()->InitAllHandlers();
+	if(!wxXmlResource::Get()->Load(GG_CARD_XRS)) {
+		wxLogError(wxString::Format(wxT("Failed to load xrs %s. %s:%d"),GG_CARD_XRS,  wxT(__FILE__), __LINE__));
+		return;
+	}
+	s_mask_bmp = wxXmlResource::Get()->LoadBitmap(wxT("mask"));
+	if(!s_mask_bmp.Ok()) {
+		wxLogError(wxString::Format(wxT("Failed to load mask bitmap. %s:%d"), wxT(__FILE__), __LINE__));
+		return;
+	}
+	s_init = true;
 }
 
-ggCard::ggCard(int suit, int value)
-{
+ggCard::ggCard(int suit, int value) {
 	wxASSERT((suit >= 0 ) && (suit < GG_CARD_TOTAL_SUITS));
 	wxASSERT((value >= 0) && (suit < GG_CARD_TOTAL_VALUES));
 
@@ -72,11 +68,9 @@ ggCard::ggCard(int suit, int value)
 	return;
 }
 
-ggCard::ggCard(int other)
-{
+ggCard::ggCard(int other) {
 	ggCard();
-	switch(other)
-	{
+	switch(other) {
 	case GG_CARD_BACK_1:
 		if(!LoadFace(wxT("back_00")))
 			wxLogError(wxString::Format(wxT("LoadFace failed. %s:%d"), wxT(__FILE__), __LINE__));
@@ -105,10 +99,8 @@ ggCard::ggCard(int other)
 // Destructor
 //
 
-ggCard::~ggCard()
-{
-	if(m_face)
-	{
+ggCard::~ggCard() {
+	if(m_face) {
 		delete m_face;
 		m_face = NULL;
 	}
@@ -118,27 +110,23 @@ ggCard::~ggCard()
 // Public methods
 //
 
-bool ggCard::BlitTo(wxDC* dest, wxCoord xdest, wxCoord ydest, int logicalFunc)
-{
+bool ggCard::BlitTo(wxDC* dest, wxCoord xdest, wxCoord ydest, int logicalFunc) {
 	wxMemoryDC mdc;
 
 	wxASSERT(dest);
 
 	mdc.SelectObject(*m_face);
-	if(!dest->Blit(xdest, ydest, GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, logicalFunc, true))
-	{
+	if(!dest->Blit(xdest, ydest, GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, logicalFunc, true)) {
 		wxLogError(wxString::Format(wxT("Blit failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 	return true;
 }
-wxBitmap * ggCard::GetFace()
-{
+wxBitmap * ggCard::GetFace() {
 	wxASSERT(m_face);
 	return m_face;
 }
-void ggCard::SelectToDC(wxMemoryDC *mdc)
-{
+void ggCard::SelectToDC(wxMemoryDC *mdc) {
 	wxASSERT(mdc);
 	mdc->SelectObject(*m_face);
 }
@@ -147,8 +135,7 @@ void ggCard::SelectToDC(wxMemoryDC *mdc)
 // Private methods
 //
 
-bool ggCard::LoadFace(wxString res_name)
-{
+bool ggCard::LoadFace(wxString res_name) {
 	wxBitmap bmp_temp1, bmp_temp2;
 	wxImage img_mask, img_face;
 	wxMemoryDC mdc1, mdc2;
@@ -158,8 +145,7 @@ bool ggCard::LoadFace(wxString res_name)
 
 	// Load the bitmap from the resource file
 	bmp_temp1 = wxXmlResource::Get()->LoadBitmap(res_name);
-	if(!bmp_temp1.Ok())
-	{
+	if(!bmp_temp1.Ok()) {
 		wxLogError(wxString::Format(wxT("Failed to load resource %s. %s:%d"), res_name.c_str(), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -167,8 +153,7 @@ bool ggCard::LoadFace(wxString res_name)
 	// The widths of mask and the xpm image are differt.
 	// Hence create a new bitmap with correct dimensions and
 	// copy the data to the same.
-	if(!bmp_temp2.Create(GG_CARD_WIDTH, GG_CARD_HEIGHT, -1))
-	{
+	if(!bmp_temp2.Create(GG_CARD_WIDTH, GG_CARD_HEIGHT, -1)) {
 		wxLogError(wxString::Format(wxT("Failed to create bitmap. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -176,8 +161,7 @@ bool ggCard::LoadFace(wxString res_name)
 	mdc1.SelectObject(bmp_temp1);
 	mdc2.SelectObject(bmp_temp2);
 
-	if(!mdc2.Blit(0, 0, GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc1, 0, 0))
-	{
+	if(!mdc2.Blit(0, 0, GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc1, 0, 0)) {
 		wxLogError(wxString::Format(wxT("Blit failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -192,8 +176,7 @@ bool ggCard::LoadFace(wxString res_name)
 	// And then finally create a bitmap from the masked image
 	m_face = new wxBitmap(img_face, -1);
 
-	if(!m_face)
-	{
+	if(!m_face) {
 		wxLogError(wxString::Format(wxT("Creation of bitmap from image failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}

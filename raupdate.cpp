@@ -16,11 +16,9 @@
 
 #include "raupdate.h"
 
-raUpdate::raUpdate()
-{
+raUpdate::raUpdate() {
 }
-void* raUpdate::Entry()
-{
+void* raUpdate::Entry() {
 	int ret_val;
 	wxString new_var;
 	wxString msg;
@@ -30,20 +28,14 @@ void* raUpdate::Entry()
 	ret_val = CheckForUpdate(&new_var);
 	wxASSERT(ret_val <= 2);
 
-	if(ret_val < 0)
-	{
+	if(ret_val < 0) {
 		wxLogError(wxString::Format(wxT("addr.GetError() returned error. %s:%d"), wxT(__FILE__), __LINE__));
-	}
-	else if(ret_val == 0)
-	{
+	} else if(ret_val == 0) {
 		wxLogMessage(wxT("Check for update done successfully"));
-	}
-	else if(ret_val > 0)
-	{
+	} else if(ret_val > 0) {
 		msg = wxT("");
 		msg.Append(wxT("A new version "));
-		if(!new_var.IsEmpty())
-		{
+		if(!new_var.IsEmpty()) {
 			msg.Append(new_var);
 			msg.Append(wxT(" "));
 		}
@@ -58,15 +50,12 @@ void* raUpdate::Entry()
 		wxFrame *main_frame;
 		main_frame = NULL;
 		main_frame = (wxFrame *)wxTheApp->GetTopWindow();
-		if(main_frame)
-		{
+		if(main_frame) {
 			raUpdateEvent update_event;
 			update_event.SetMessage(msg);
 			wxLogMessage(update_event.GetMessage());
 			main_frame->GetEventHandler()->AddPendingEvent(update_event);
-		}
-		else
-		{
+		} else {
 			wxLogError(wxString::Format(wxT("main_frame is null. %s:%d"), wxT(__FILE__), __LINE__));
 		}
 	}
@@ -74,8 +63,7 @@ void* raUpdate::Entry()
 	return NULL;
 }
 
-int raUpdate::CheckForUpdate(wxString *new_ver)
-{
+int raUpdate::CheckForUpdate(wxString *new_ver) {
 	size_t size;
 	wxChar *data = NULL;
 	wxInputStream *in;
@@ -87,15 +75,13 @@ int raUpdate::CheckForUpdate(wxString *new_ver)
 	wxString temp;
 
 	err = addr.GetError();
-	if ( err != wxURL_NOERR )
-	{
+	if ( err != wxURL_NOERR ) {
 		wxLogError(wxString::Format(wxT("addr.GetError() returned error. %s:%d"), wxT(__FILE__), __LINE__));
 		return -1;
 	}
 
 	http = wxDynamicCast ( &addr.GetProtocol(), wxHTTP );
-	if ( http )
-	{
+	if ( http ) {
 		//http->SetHeader ( wxT("User-agent"),
 		//	wxT("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.8) Gecko/20050511 Firefox/1.0.4") );
 		//http->SetHeader ( wxT("Accept"), wxT("*/*") );
@@ -105,29 +91,24 @@ int raUpdate::CheckForUpdate(wxString *new_ver)
 		http->SetHeader ( wxT("Pragma"), wxT("no-cache") );
 	}
 	in = addr.GetInputStream();
-	if(!in)
-	{
+	if(!in) {
 		wxLogError(wxString::Format(wxT("Attempt to read from wxInputStream failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return -1;
 	}
 	size = in->GetSize();
 
 	data = new wxChar[size + 1];
-	if(!data)
-	{
+	if(!data) {
 		wxLogError(wxString::Format(wxT("Attempt allocate memory for data. %s:%d"), wxT(__FILE__), __LINE__));
 		return -1;
 	}
-	if (!in->Read(data, size))
-	{
+	if (!in->Read(data, size)) {
 		if(data)
 			delete [] data;
 
 		wxLogError(wxString::Format(wxT("Attempt to read from wxInputStream failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return -1;
-	}
-	else
-	{
+	} else {
 		delete in;
 
 		data[size] = '\0';
@@ -139,16 +120,14 @@ int raUpdate::CheckForUpdate(wxString *new_ver)
 		// Get the version of the version information
 		// This is the first field in the pipe delimited input
 		pipe_pos = str->Find('|');
-		if(pipe_pos == -1)
-		{
+		if(pipe_pos == -1) {
 			wxLogError(wxString::Format(wxT("str->Find failed. %s:%d"), wxT(__FILE__), __LINE__));
 			delete str;
 			return -1;
 		}
 
 		temp = str->Left(pipe_pos);
-		if(temp.IsEmpty())
-		{
+		if(temp.IsEmpty()) {
 			wxLogError(wxString::Format(wxT("Empty version or version information. %s:%d"), wxT(__FILE__), __LINE__));
 			delete str;
 			return -1;
@@ -156,8 +135,7 @@ int raUpdate::CheckForUpdate(wxString *new_ver)
 
 		// Check if the obtained version of version information is
 		// compatible with this class
-		if(temp.CmpNoCase(raUPDATE_VER))
-		{
+		if(temp.CmpNoCase(raUPDATE_VER)) {
 			wxLogDebug(temp);
 			wxLogDebug(raUPDATE_VER);
 			if(new_ver)
@@ -169,8 +147,7 @@ int raUpdate::CheckForUpdate(wxString *new_ver)
 		temp = str->Mid(pipe_pos + 1);
 		temp.Trim();
 		// Check whether the versions are different
-		if(temp.CmpNoCase(RA_APP_FULL_VER))
-		{
+		if(temp.CmpNoCase(RA_APP_FULL_VER)) {
 			wxLogDebug(temp);
 			wxLogDebug(RA_APP_FULL_VER);
 			if(new_ver)
@@ -183,4 +160,3 @@ int raUpdate::CheckForUpdate(wxString *new_ver)
 
 	return 0;
 }
-

@@ -35,26 +35,23 @@
 //#define aiLOG_GENERATESLPROBLEM 1
 //#define aiLOG_GENERATEDEALS 0
 
-typedef struct RA_AI_MOVE
-{
+typedef struct RA_AI_MOVE {
 	int card;
 	bool ask_trump;
 	int rank;
-}aiMove;
+} aiMove;
 
-typedef struct RA_AI_EVAL
-{
+typedef struct RA_AI_EVAL {
 	int eval;
 	int count;
 	bool valid;
 } aiEval;
 
-class aiAgent
-{
+class aiAgent {
 private:
 	// Disallow copy constructor/assignment operators
 	aiAgent(const aiAgent &);
-    aiAgent & operator=(const aiAgent &);
+	aiAgent & operator=(const aiAgent &);
 	gmEngine m_engine;
 	int m_loc;
 	unsigned long m_trump_cards;

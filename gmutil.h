@@ -53,8 +53,7 @@
 #define gmGetOpponentOne(X) ((X + 1) % gmTOTAL_PLAYERS)
 #define gmGetOpponentTwo(X) ((X + 3) % gmTOTAL_PLAYERS)
 
-class gmUtil
-{
+class gmUtil {
 public:
 	static int m_value_trans[];
 	static void ShuffleArray(int *array, unsigned long n);

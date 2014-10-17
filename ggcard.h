@@ -58,8 +58,7 @@
 
 #define GG_CARD_XRS wxT("cards.xrs")
 
-class ggCard:public wxObject
-{
+class ggCard:public wxObject {
 public:
 	ggCard();
 	ggCard(int suit, int value);
@@ -71,7 +70,7 @@ public:
 	void SelectToDC(wxMemoryDC *mdc);
 	// Disallow copy constructor/assignment operators
 	ggCard(const ggCard &);
-    ggCard & operator=(const ggCard &);
+	ggCard & operator=(const ggCard &);
 private:
 	static bool s_init;
 	static wxMutex s_mutex;

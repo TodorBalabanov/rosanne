@@ -29,22 +29,19 @@ IMPLEMENT_DYNAMIC_CLASS( raDlgAbout, wxDialog )
 
 // Event table
 BEGIN_EVENT_TABLE( raDlgAbout, wxDialog )
-    EVT_BUTTON( XRCID("m_radlgabout_ok"), raDlgAbout::OnAboutBtnOkClick )
+	EVT_BUTTON( XRCID("m_radlgabout_ok"), raDlgAbout::OnAboutBtnOkClick )
 END_EVENT_TABLE()
 
 
-raDlgAbout::raDlgAbout( )
-{
+raDlgAbout::raDlgAbout( ) {
 }
 
-raDlgAbout::raDlgAbout( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
-{
+raDlgAbout::raDlgAbout( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style ) {
 	SetParent(parent);
 	if (!wxXmlResource::Get()->LoadDialog(this, GetParent(), _T("raDlgAbout")))
 		wxLogError(wxT("Missing wxXmlResource::Get()->Load() in OnInit()?"));
 }
 
-void raDlgAbout::OnAboutBtnOkClick( wxCommandEvent& event )
-{
-    Destroy();
+void raDlgAbout::OnAboutBtnOkClick( wxCommandEvent& event ) {
+	Destroy();
 }

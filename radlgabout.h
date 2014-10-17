@@ -23,18 +23,17 @@
 
 #include "wx/xrc/xmlres.h"
 
-class raDlgAbout: public wxDialog
-{
-    DECLARE_DYNAMIC_CLASS( raDlgAbout )
-    DECLARE_EVENT_TABLE()
+class raDlgAbout: public wxDialog {
+	DECLARE_DYNAMIC_CLASS( raDlgAbout )
+	DECLARE_EVENT_TABLE()
 private:
 	// Disallow copy constructor/assignment operators
 	raDlgAbout(const raDlgAbout &);
-    raDlgAbout & operator=(const raDlgAbout &);
+	raDlgAbout & operator=(const raDlgAbout &);
 public:
-    raDlgAbout( );
-    raDlgAbout( wxWindow* parent, wxWindowID id , const wxString& caption, const wxPoint& pos, const wxSize& size, long style);
-    void OnAboutBtnOkClick( wxCommandEvent& event );
+	raDlgAbout( );
+	raDlgAbout( wxWindow* parent, wxWindowID id , const wxString& caption, const wxPoint& pos, const wxSize& size, long style);
+	void OnAboutBtnOkClick( wxCommandEvent& event );
 };
 
 #endif

@@ -31,8 +31,7 @@
 
 
 
-enum
-{
+enum {
 	gmSTATUS_NOT_STARTED = 0,
 	gmSTATUS_DEAL1,
 	gmSTATUS_BID1,
@@ -45,7 +44,7 @@ enum
 	gmSTATUS_FINISHED
 };
 
-enum{
+enum {
 	gmOUTPUT_INVALID = -1,
 	gmOUTPUT_STARTED,
 	gmOUTPUT_DEAL,
@@ -56,13 +55,13 @@ enum{
 	gmOUTPUT_DEAL_END
 };
 
-enum{
+enum {
 	gmINPUT_INVALID = -1,
 	gmINPUT_BID,
 	gmINPUT_TRUMPSEL,
 	gmINPUT_TRICK
 };
-enum{
+enum {
 	gmERR_CANNOT_PASS = 1,
 	gmERR_BID_LESS_THAN_MIN,
 	gmERR_BID_BY_WRONG_PLAYER,
@@ -90,17 +89,16 @@ enum{
 #define gmJACK 0x80
 #define gmALL_CARDS 0xFFFFFFFF
 
-typedef struct tagGM_RULES
-{
+typedef struct tagGM_RULES {
 	int rot_addn;
 	int min_bid_1;
 	int min_bid_2;
 	int min_bid_3;
 	bool waive_rule_4;
 	bool sluff_jacks;
-}gmRules, *pgmRules;
+} gmRules, *pgmRules;
 
-typedef struct tagGM_TRICK{
+typedef struct tagGM_TRICK {
 	bool trumped;
 	int cards[gmTOTAL_PLAYERS];
 	int lead_suit;
@@ -115,51 +113,44 @@ typedef struct tagGM_TRICK{
 #define gmTrickNext ((m_data.tricks[m_data.trick_round].lead_loc + (m_data.tricks[m_data.trick_round].count * m_data.rules.rot_addn)) % 4)
 #define gmWinnerCard (m_data.tricks[m_data.trick_round].cards[m_data.tricks[m_data.trick_round].winner])
 
-typedef struct tagGM_OUTPUT_DEAL_INFO
-{
+typedef struct tagGM_OUTPUT_DEAL_INFO {
 	int round;
 	unsigned long hands[gmTOTAL_PLAYERS];
-}gmOutputDealInfo;
+} gmOutputDealInfo;
 
-typedef struct tagGM_OUTPUT_TRICK_INFO
-{
+typedef struct tagGM_OUTPUT_TRICK_INFO {
 	int points[gmTOTAL_TEAMS];
 	gmTrick trick;
-}gmOutputTrickInfo;
+} gmOutputTrickInfo;
 
-typedef struct tagGM_OUTPUT_DEAL_END_INFO
-{
+typedef struct tagGM_OUTPUT_DEAL_END_INFO {
 	int winner;
-}gmOutputDealEndInfo;
+} gmOutputDealEndInfo;
 
-typedef struct tagGM_INPUT_BID_INFO
-{
+typedef struct tagGM_INPUT_BID_INFO {
 	int player;
 	int min;
 	//int max;
 	bool passable;
 	int bid;
 	int round;
-}gmInputBidInfo;
+} gmInputBidInfo;
 
-typedef struct tagGM_INPUT_TRUMPSEL_INFO
-{
+typedef struct tagGM_INPUT_TRUMPSEL_INFO {
 	int card;
 	int player;
-}gmInputTrumpselInfo;
+} gmInputTrumpselInfo;
 
-typedef struct tagGM_INPUT_TRICK_INFO
-{
+typedef struct tagGM_INPUT_TRICK_INFO {
 	int player;
 	bool can_ask_trump;
 	bool ask_trump;
 	unsigned long mask;
 	int card;
 	unsigned long rules;
-}gmInputTrickInfo;
+} gmInputTrickInfo;
 
-typedef struct tagGM_ENGINE_DATA
-{
+typedef struct tagGM_ENGINE_DATA {
 	bool ok;
 	bool feedback;
 
@@ -218,8 +209,7 @@ typedef struct tagGM_ENGINE_DATA
 } raOutput, *praOutput;*/
 
 
-class gmEngine
-{
+class gmEngine {
 private:
 	gmEngineData m_data;
 	void SetOutput(int output_type);
@@ -228,17 +218,17 @@ private:
 	bool SetDealEndOutput();
 	// Disallow copy constructor/assignment operators
 	gmEngine(const gmEngine &);
-    gmEngine & operator=(const gmEngine &);
+	gmEngine & operator=(const gmEngine &);
 
 public:
-    // Initialization of the gmEngineData structure used by each gmEngine instance (m_data) is a costly affair
-    // because 1) the structure is huge 2) there are multiple loops to be run to initiate certian data elements.
-    // At one point of time, approx 30% of the entire run time was taken by gmEntine.Reset. To speed things up,
-    // a static m_init of type gmEngineData is created and is initiated manually when the first instance of gmEngine is
-    // called. Once this is done, all further initializations of this struct is done be a memcpy from m_init.
-    static gmEngineData m_init;
-    static void InitCache();
-    static bool m_init_ok;
+	// Initialization of the gmEngineData structure used by each gmEngine instance (m_data) is a costly affair
+	// because 1) the structure is huge 2) there are multiple loops to be run to initiate certian data elements.
+	// At one point of time, approx 30% of the entire run time was taken by gmEntine.Reset. To speed things up,
+	// a static m_init of type gmEngineData is created and is initiated manually when the first instance of gmEngine is
+	// called. Once this is done, all further initializations of this struct is done be a memcpy from m_init.
+	static gmEngineData m_init;
+	static void InitCache();
+	static bool m_init_ok;
 
 	gmEngine();
 	virtual ~gmEngine();

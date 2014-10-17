@@ -53,19 +53,18 @@
 
 
 
-enum{
+enum {
 	raHAND_VERTICAL = 0,
 	raHAND_HORIZONTAL
 };
 
-enum{
+enum {
 	raGAME_ORIENT_ALL_HORZ = 0,
 	raGAME_ORIENT_MIXED
 };
 
 // TODO : If raHandCard is no longer used, remove
-typedef struct tagRA_HAND_CARD
-{
+typedef struct tagRA_HAND_CARD {
 	//int suit;
 	//int value;
 	int index;
@@ -73,32 +72,29 @@ typedef struct tagRA_HAND_CARD
 	int y;
 	int width;
 	int height;
-}raHandCard, *praHandCard;
+} raHandCard, *praHandCard;
 
-typedef struct tagRA_HAND
-{
+typedef struct tagRA_HAND {
 	unsigned long cards;
 	int count;
 	//raHandCard card_info[raMAX_CARDS_PER_HAND];
 	int card_indexes[raMAX_CARDS_PER_HAND];
-}raHand, *praHand;
+} raHand, *praHand;
 
-typedef struct tagRA_BACK_DRAW_INFO
-{
+typedef struct tagRA_BACK_DRAW_INFO {
 	bool draw_bid;
 	int bid_loc;
 	int bid;
-}raBackDrawInfo;
+} raBackDrawInfo;
 
-class raGamePanel: public ggPanel
-{
+class raGamePanel: public ggPanel {
 private:
 	wxBitmap *m_tile;
 	DECLARE_EVENT_TABLE()
 
 	// Disallow copy constructor/assignment operators
 	raGamePanel(const raGamePanel &);
-    raGamePanel & operator=(const raGamePanel &);
+	raGamePanel & operator=(const raGamePanel &);
 
 	wxBitmap *m_card_faces[gmTOTAL_CARDS];
 	wxBitmap *m_card_backs[raTOTAL_CARD_BACKS];

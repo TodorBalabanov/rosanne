@@ -19,8 +19,8 @@
 //#define gmREAD_DEAL_FROM_FILE 0
 
 #ifdef gmREAD_DEAL_FROM_FILE
-    #include <wx/wfstream.h>
-    #include <wx/fileconf.h>
+#include <wx/wfstream.h>
+#include <wx/fileconf.h>
 #endif
 
 //#include "gm/gmengineinit.cpp"
@@ -31,13 +31,11 @@
 bool gmEngine::m_init_ok = false;
 gmEngineData gmEngine::m_init;
 
-gmEngine::gmEngine()
-{
-    if(m_init_ok == false)
-    {
-        gmEngine::InitCache();
-        m_init_ok = true;
-    }
+gmEngine::gmEngine() {
+	if(m_init_ok == false) {
+		gmEngine::InitCache();
+		m_init_ok = true;
+	}
 	m_data.ok = Reset(&m_data);
 	m_data.feedback = true;
 
@@ -54,36 +52,31 @@ gmEngine::gmEngine()
 // Destructor
 //
 
-gmEngine::~gmEngine()
-{
+gmEngine::~gmEngine() {
 }
 
 //
 // Public Methods
 //
 
-bool gmEngine::IsOk()
-{
+bool gmEngine::IsOk() {
 	return m_data.ok;
 }
-int gmEngine::GetStatus()
-{
+int gmEngine::GetStatus() {
 	return m_data.status;
 }
-bool gmEngine::Reset(gmEngineData *data)
-{
-    bool feedback;
-    gmRules rules;
-    feedback = data->feedback;
-    memcpy(&rules, &(data->rules), sizeof(gmRules));
-    memcpy(data, &gmEngine::m_init, sizeof(gmEngineData));
-    data->feedback = feedback;
-    memcpy(&(data->rules), &rules, sizeof(gmRules));
-    return true;
+bool gmEngine::Reset(gmEngineData *data) {
+	bool feedback;
+	gmRules rules;
+	feedback = data->feedback;
+	memcpy(&rules, &(data->rules), sizeof(gmRules));
+	memcpy(data, &gmEngine::m_init, sizeof(gmEngineData));
+	data->feedback = feedback;
+	memcpy(&(data->rules), &rules, sizeof(gmRules));
+	return true;
 }
 
-void gmEngine::InitCache()
-{
+void gmEngine::InitCache() {
 	int i, j;
 	memset(&m_init, 0, sizeof(gmEngineData));
 
@@ -131,8 +124,7 @@ void gmEngine::InitCache()
 	gmEngine::m_init.trump_shown = false;
 
 	// TODO : Use ResetTrick
-	for(i = 0; i < gmTOTAL_TRICKS; i++)
-	{
+	for(i = 0; i < gmTOTAL_TRICKS; i++) {
 		for(j = 0; j < gmTOTAL_PLAYERS; j++)
 			gmEngine::m_init.tricks[i].cards[j] = gmCARD_INVALID;
 		gmEngine::m_init.tricks[i].count = 0;
@@ -154,20 +146,17 @@ void gmEngine::InitCache()
 	return;
 
 }
-bool gmEngine::Reset()
-{
+bool gmEngine::Reset() {
 	return Reset(&m_data);
 }
-bool gmEngine::Shuffle()
-{
+bool gmEngine::Shuffle() {
 	int i = 0;
 
 	// If required set the shuffled card as per the
 	// deal read from the test data input file
 #ifdef gmREAD_DEAL_FROM_FILE
 
-	if(::wxFileExists(raTEST_DATA_FILE))
-	{
+	if(::wxFileExists(raTEST_DATA_FILE)) {
 		wxString str_cards_read;
 		wxString text_round;
 		wxString key;
@@ -188,33 +177,26 @@ bool gmEngine::Shuffle()
 			for(j = 0; j < gmTOTAL_PLAYERS; j++)
 				cards_read[i][j] = 0;
 
-		for(k = 1; k <= 2; k++)
-		{
+		for(k = 1; k <= 2; k++) {
 			text_round = wxString::Format("%s%d", raTEXT_DEAL_ROUND, k);
 			if(!fcfg.Exists(text_round))
 				continue;
 
-			for(i = 0; i < gmTOTAL_PLAYERS; i++)
-			{
+			for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 				key = wxString::Format("%s/%s", text_round.c_str(), gmUtil::m_short_locs[i].c_str());
-				if(fcfg.Exists(key))
-				{
-					if(!fcfg.Read(key, &str_cards_read))
-					{
+				if(fcfg.Exists(key)) {
+					if(!fcfg.Read(key, &str_cards_read)) {
 						wxLogError(wxString::Format(
-							wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
+									   wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 
-					}
-					else
-					{
+					} else {
 						wxLogDebug(wxString::Format(
-							"Cards to be dealt to %s are %s",
-							gmUtil::m_short_locs[i].c_str(), str_cards_read.c_str()));
+									   "Cards to be dealt to %s are %s",
+									   gmUtil::m_short_locs[i].c_str(), str_cards_read.c_str()));
 
 						// Get each str_card from the list of str_cards to be
 						// dealt to the location
-						while(!str_cards_read.IsEmpty())
-						{
+						while(!str_cards_read.IsEmpty()) {
 							j = str_cards_read.Find(',');
 							str_card = str_cards_read.Left(j);
 							str_card.UpperCase();
@@ -222,15 +204,12 @@ bool gmEngine::Shuffle()
 							str_card.Trim(false);
 							wxLogDebug(wxString::Format("Card %s", str_card.c_str()));
 							idx = gmUtil::GetCardIndex(str_card);
-							if(idx == -1)
-							{
+							if(idx == -1) {
 								wxLogDebug(wxString::Format(
-									wxT("GetCardIndex failed. %s:%d"),
-									wxT(__FILE__), __LINE__));
+											   wxT("GetCardIndex failed. %s:%d"),
+											   wxT(__FILE__), __LINE__));
 								break;
-							}
-							else
-							{
+							} else {
 								cards_read[k - 1][i] |= (1 << idx);
 								count_read++;
 							}
@@ -245,11 +224,10 @@ bool gmEngine::Shuffle()
 			}
 			wxLogDebug(wxString::Format("For round %d", k));
 			// Print the cards to be dealt for each player
-			for(i = 0; i < gmTOTAL_PLAYERS; i++)
-			{
+			for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 				wxLogDebug(wxString::Format("Cards for %s - %s",
-					gmUtil::m_short_locs[i].c_str(),
-					gmUtil::PrintLong(cards_read[k - 1][i]).c_str()));
+											gmUtil::m_short_locs[i].c_str(),
+											gmUtil::PrintLong(cards_read[k - 1][i]).c_str()));
 			}
 		}
 		/*else
@@ -261,18 +239,14 @@ bool gmEngine::Shuffle()
 		for(i = 0; i < 2; i++)
 			for(j = 0; j < gmTOTAL_PLAYERS; j++)
 				all_read |= cards_read[i][j];
-		if((int)gmUtil::CountBitsSet(all_read) != count_read)
-		{
+		if((int)gmUtil::CountBitsSet(all_read) != count_read) {
 			wxLogError(wxString::Format(
-				"Duplicate cards. From all read %d count read %d",
-				(int)gmUtil::CountBitsSet(all_read), count_read));
-		}
-		else
-		{
+						   "Duplicate cards. From all read %d count read %d",
+						   (int)gmUtil::CountBitsSet(all_read), count_read));
+		} else {
 			int * unassigned = new int[gmTOTAL_CARDS - count_read];
 			j = 0;
-			for(i = 0; i < gmTOTAL_CARDS; i++)
-			{
+			for(i = 0; i < gmTOTAL_CARDS; i++) {
 				if(!(all_read & (1 << i)))
 					unassigned[j++] = i;
 			}
@@ -280,18 +254,14 @@ bool gmEngine::Shuffle()
 			gmUtil::ShuffleArray(unassigned, (gmTOTAL_CARDS - count_read));
 
 			bool flags[gmTOTAL_CARDS];
-			for(i = 0; i < gmTOTAL_CARDS; i++)
-			{
+			for(i = 0; i < gmTOTAL_CARDS; i++) {
 				flags[i] = false;
 			}
-			for(k = 0; k < 2; k++)
-			{
-				for(i = 0; i < gmTOTAL_PLAYERS; i++)
-				{
+			for(k = 0; k < 2; k++) {
+				for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 					j = 0;
 					temp = cards_read[k][i];
-					while(temp)
-					{
+					while(temp) {
 						l = (k * (gmTOTAL_CARDS / 2)) + (i * (gmTOTAL_CARDS / (gmTOTAL_PLAYERS * 2))) +  j;
 						j++;
 						m_data.shuffled[l] = gmUtil::HighestBitSet(temp);
@@ -303,16 +273,13 @@ bool gmEngine::Shuffle()
 				}
 			}
 			j = 0;
-			for(i = 0; i < gmTOTAL_CARDS; i++)
-			{
-				if(!flags[i])
-				{
+			for(i = 0; i < gmTOTAL_CARDS; i++) {
+				if(!flags[i]) {
 					m_data.shuffled[i] = unassigned[j++];
 					flags[i] = true;
 				}
 			}
-			for(i = 0; i < gmTOTAL_CARDS; i++)
-			{
+			for(i = 0; i < gmTOTAL_CARDS; i++) {
 				wxASSERT(flags[i]);
 				//wxLogDebug(wxString::Format("%d - %s%s",
 				//	i,
@@ -334,12 +301,11 @@ bool gmEngine::Shuffle()
 	for (i = 0; i < gmTOTAL_CARDS; i++)
 		m_data.shuffled[i] = i;
 
-    gmUtil::ShuffleArray(m_data.shuffled, gmTOTAL_CARDS);
+	gmUtil::ShuffleArray(m_data.shuffled, gmTOTAL_CARDS);
 
 	return true;
 }
-bool gmEngine::Continue()
-{
+bool gmEngine::Continue() {
 	int i;
 	unsigned long u;
 	unsigned long rules;
@@ -352,8 +318,7 @@ bool gmEngine::Continue()
 	if(m_data.output_pending)
 		return false;
 
-	switch(m_data.status)
-	{
+	switch(m_data.status) {
 
 	case gmSTATUS_NOT_STARTED:
 		if(m_data.feedback)
@@ -364,11 +329,10 @@ bool gmEngine::Continue()
 
 	case gmSTATUS_DEAL1:
 		// Shuffle the cards before dealing round 1
-		if(!Shuffle())
-		{
+		if(!Shuffle()) {
 			wxLogDebug(wxString::Format(
-				wxT("Unexpected error while shuffling cards. File - %s Line - %d"),
-				wxT(__FILE__), __LINE__));
+						   wxT("Unexpected error while shuffling cards. File - %s Line - %d"),
+						   wxT(__FILE__), __LINE__));
 			return false;
 		}
 
@@ -376,12 +340,11 @@ bool gmEngine::Continue()
 		for(i = 0; i < gmTOTAL_CARDS / 2; i++)
 			m_data.hands[i / 4] |= (1 << m_data.shuffled[i]);
 
-		if(m_data.feedback)
-		{
+		if(m_data.feedback) {
 			m_data.out_deal_info.round = gmDEAL_ROUND_1;
 			//TODO : Is this memcpy correct?
 			memcpy(&m_data.out_deal_info.hands, &m_data.hands,
-				sizeof(m_data.hands));
+				   sizeof(m_data.hands));
 
 			// Set output pending
 			SetOutput(gmOUTPUT_DEAL);
@@ -393,8 +356,7 @@ bool gmEngine::Continue()
 	case gmSTATUS_BID1:
 		// If All Tricks has already been bid,
 		// move to next stage
-		if(m_data.curr_max_bid == gmBID_ALL)
-		{
+		if(m_data.curr_max_bid == gmBID_ALL) {
 			m_data.status++;
 			return false;
 		}
@@ -408,14 +370,12 @@ bool gmEngine::Continue()
 		// u will hold the list of players for which
 		// it was checked as to whether the player can bid
 		u = 0;
-		while(u < 0x0000000F)
-		{
+		while(u < 0x0000000F) {
 			// If the player has not already bid
 			// and the highest bid is not held by his partner
 			// then a bid is expected.
 			if(!m_data.bid_hist[0][i] && (gmPartner(i)
-				!= m_data.curr_max_bidder))
-			{
+										  != m_data.curr_max_bidder)) {
 				// Fill data in the input bid structure
 				m_data.in_bid_info.player = i;
 				m_data.in_bid_info.bid = 0;
@@ -454,8 +414,7 @@ bool gmEngine::Continue()
 	case gmSTATUS_BID2:
 		// If All Tricks has already been bid,
 		// move to next stage
-		if(m_data.curr_max_bid == gmBID_ALL)
-		{
+		if(m_data.curr_max_bid == gmBID_ALL) {
 			m_data.status++;
 			return false;
 		}
@@ -470,8 +429,7 @@ bool gmEngine::Continue()
 		// u will hold the list of players for which
 		// it was checked as to whether the player can bid
 		u = 0;
-		while(u < 0x0000000F)
-		{
+		while(u < 0x0000000F) {
 			// If the player has not already bid
 			// and the highest bid is not by the player
 			// then a bid is expected and if the player
@@ -480,8 +438,7 @@ bool gmEngine::Continue()
 				!m_data.bid_hist[1][i] &&
 				(i != m_data.curr_max_bidder) &&
 				!(m_data.passed_round1 & (1 << i))
-				)
-			{
+			) {
 				// Fill data in the input bid structure
 				m_data.in_bid_info.player = i;
 				m_data.in_bid_info.bid = 0;
@@ -513,8 +470,7 @@ bool gmEngine::Continue()
 	case gmSTATUS_BID3:
 		// If All Tricks has already been bid,
 		// move to next stage
-		if(m_data.curr_max_bid == gmBID_ALL)
-		{
+		if(m_data.curr_max_bid == gmBID_ALL) {
 			m_data.status++;
 			return false;
 		}
@@ -529,12 +485,10 @@ bool gmEngine::Continue()
 		// u will hold the list of players for which
 		// it was checked as to whether the player can bid
 		u = 0;
-		while(u < 0x0000000F)
-		{
+		while(u < 0x0000000F) {
 			// If the player has not already bid
 			// then a bid is expected.
-			if(!m_data.bid_hist[2][i])
-			{
+			if(!m_data.bid_hist[2][i]) {
 				// Fill data in the input bid structure
 				m_data.in_bid_info.player = i;
 				m_data.in_bid_info.bid = 0;
@@ -565,8 +519,7 @@ bool gmEngine::Continue()
 
 	case gmSTATUS_TRUMPSEL1:
 	case gmSTATUS_TRUMPSEL2:
-		if((m_data.trump_card == gmCARD_INVALID) && (m_data.curr_max_bid != gmBID_ALL))
-		{
+		if((m_data.trump_card == gmCARD_INVALID) && (m_data.curr_max_bid != gmBID_ALL)) {
 			// Fill data in the input trumpsel info structure
 			m_data.in_trumpsel_info.card = gmCARD_INVALID;
 			m_data.in_trumpsel_info.player = m_data.curr_max_bidder;
@@ -585,12 +538,11 @@ bool gmEngine::Continue()
 			m_data.hands[i / 4] |=
 				(1 << m_data.shuffled[i + (gmTOTAL_CARDS / 2)]);
 
-		if(m_data.feedback)
-		{
+		if(m_data.feedback) {
 			m_data.out_deal_info.round = gmDEAL_ROUND_2;
 			// TODO : Is this memcpy correct?
 			memcpy(&m_data.out_deal_info.hands,
-				&m_data.hands, sizeof(m_data.hands));
+				   &m_data.hands, sizeof(m_data.hands));
 
 			// Set output pending
 			SetOutput(gmOUTPUT_DEAL);
@@ -599,15 +551,13 @@ bool gmEngine::Continue()
 		return false;
 		break;
 	case gmSTATUS_TRICKS:
-		if(m_data.trick_round < gmTOTAL_TRICKS)
-		{
+		if(m_data.trick_round < gmTOTAL_TRICKS) {
 
 			m_data.in_trick_info.ask_trump = false;
 
 			// A player can ask for the trump
 			// only if the bid is not for All tricks
-			if(m_data.curr_max_bid != gmBID_ALL)
-			{
+			if(m_data.curr_max_bid != gmBID_ALL) {
 				// Player can ask for trump to be shown if,
 				// 1. Trump is not shown
 				// 2. The trick has a valid lead suit
@@ -616,13 +566,11 @@ bool gmEngine::Continue()
 				if(
 					!m_data.trump_shown &&
 					(m_data.tricks[m_data.trick_round].lead_suit != gmSUIT_INVALID)
-					)
-				{
+				) {
 					if(
 						!(m_data.hands[gmTrickNext] &
-						gmUtil::m_suit_mask[m_data.tricks[m_data.trick_round].lead_suit])
-						)
-					{
+						  gmUtil::m_suit_mask[m_data.tricks[m_data.trick_round].lead_suit])
+					) {
 						m_data.in_trick_info.can_ask_trump = true;
 					}
 				}
@@ -636,8 +584,8 @@ bool gmEngine::Continue()
 					(gmTrickNext == m_data.curr_max_bidder) &&
 					!m_data.trump_shown &&
 					!m_data.hands[gmTrickNext]
-					)
-						m_data.in_trick_info.can_ask_trump = true;
+				)
+					m_data.in_trick_info.can_ask_trump = true;
 			}
 
 			m_data.in_trick_info.card = gmCARD_INVALID;
@@ -651,18 +599,14 @@ bool gmEngine::Continue()
 
 			// If the player has no card which matches
 			// the mask, player can play any card
-			if(!(m_data.hands[m_data.in_trick_info.player] & m_data.in_trick_info.mask))
-			{
+			if(!(m_data.hands[m_data.in_trick_info.player] & m_data.in_trick_info.mask)) {
 				// If jacks cannot be sluffed, set the mask appropriately
-				if(!m_data.rules.sluff_jacks)
-				{
+				if(!m_data.rules.sluff_jacks) {
 					unsigned long jacks = gmFOUR_JACKS;
 					// Rule 5 is applicable only if the player is not leading
-					if(m_data.tricks[m_data.trick_round].count)
-					{
+					if(m_data.tricks[m_data.trick_round].count) {
 						// If trump is shown the Jack of trumps can be played
-						if(m_data.trump_shown)
-						{
+						if(m_data.trump_shown) {
 							jacks &= ~(gmJACK << gmUtil::m_suit_rs[m_data.trump_suit]);
 						}
 						m_data.in_trick_info.mask = gmALL_CARDS & ~(jacks);
@@ -673,8 +617,7 @@ bool gmEngine::Continue()
 					// reset the mask
 					if(!(m_data.hands[m_data.in_trick_info.player] & m_data.in_trick_info.mask))
 						m_data.in_trick_info.mask = gmALL_CARDS;
-				}
-				else
+				} else
 					m_data.in_trick_info.mask = gmALL_CARDS;
 			}
 
@@ -695,16 +638,14 @@ bool gmEngine::Continue()
 }
 
 
-bool gmEngine::GetOutput(int *output_type, void *output)
-{
+bool gmEngine::GetOutput(int *output_type, void *output) {
 	// If output is not pending, return false
 	if(!m_data.output_pending)
 		return false;
 
 	if(output_type)
 		*output_type = m_data.output_type;
-	switch(m_data.output_type)
-	{
+	switch(m_data.output_type) {
 	case gmOUTPUT_STARTED:
 		break;
 	case gmOUTPUT_DEAL:
@@ -721,12 +662,10 @@ bool gmEngine::GetOutput(int *output_type, void *output)
 	m_data.output_pending = false;
 	return true;
 }
-bool gmEngine::IsOutputPending()
-{
+bool gmEngine::IsOutputPending() {
 	return m_data.output_pending;
 }
-int gmEngine::GetPendingOutputType()
-{
+int gmEngine::GetPendingOutputType() {
 	// If no output is pending,
 	// return invalid type
 	if(!m_data.output_pending)
@@ -735,12 +674,10 @@ int gmEngine::GetPendingOutputType()
 	return m_data.output_type;
 }
 
-bool gmEngine::IsInputPending()
-{
+bool gmEngine::IsInputPending() {
 	return m_data.input_pending;
 }
-int gmEngine::GetPendingInputType()
-{
+int gmEngine::GetPendingInputType() {
 	// If no input is pending,
 	// return invalid type
 	if(!m_data.input_pending)
@@ -749,8 +686,7 @@ int gmEngine::GetPendingInputType()
 	return m_data.input_type;
 }
 
-bool gmEngine::GetPendingInputCriteria(int *input_type, void *input)
-{
+bool gmEngine::GetPendingInputCriteria(int *input_type, void *input) {
 	// If input is not pending, return false
 	if(!m_data.input_pending)
 		return false;
@@ -758,8 +694,7 @@ bool gmEngine::GetPendingInputCriteria(int *input_type, void *input)
 	if(input_type)
 		*input_type = m_data.input_type;
 
-	switch(m_data.input_type)
-	{
+	switch(m_data.input_type) {
 	case gmINPUT_BID:
 		memcpy(input, &m_data.in_bid_info, sizeof(gmInputBidInfo));
 		break;
@@ -776,8 +711,7 @@ bool gmEngine::GetPendingInputCriteria(int *input_type, void *input)
 
 	return true;
 }
-int gmEngine::PostInputMessage(int input_type, void *input)
-{
+int gmEngine::PostInputMessage(int input_type, void *input) {
 	gmInputBidInfo *in_bid_info, *exist_bid_info;
 	gmInputTrumpselInfo *in_trumpsel_info, *exist_trumpsel_info;
 	gmInputTrickInfo *in_trick_info, *exist_trick_info;
@@ -789,8 +723,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 	if(input_type != m_data.input_type)
 		return false;
 
-	switch(m_data.input_type)
-	{
+	switch(m_data.input_type) {
 	case gmINPUT_BID:
 		in_bid_info = (gmInputBidInfo *)input;
 		exist_bid_info = &m_data.in_bid_info;
@@ -800,8 +733,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 			return gmERR_BID_BY_WRONG_PLAYER;
 
 		// If passed, check whether the bid is indeed passable
-		if(in_bid_info->bid == gmBID_PASS)
-		{
+		if(in_bid_info->bid == gmBID_PASS) {
 			if(!exist_bid_info->passable)
 				return gmERR_CANNOT_PASS;
 
@@ -821,8 +753,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 
 		// If there is an existing trump, invalidate the same
 		// and add the card back to the max bidder
-		if(m_data.trump_card != gmCARD_INVALID)
-		{
+		if(m_data.trump_card != gmCARD_INVALID) {
 			m_data.hands[m_data.curr_max_bidder] |= (1 << m_data.trump_card);
 			m_data.trump_card = gmCARD_INVALID;
 			m_data.trump_suit = gmSUIT_INVALID;
@@ -874,8 +805,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 			return gmERR_TRICK_BY_WRONG_PLAYER;
 
 		// Is the player asking for trump to be shown?
-		if(in_trick_info->ask_trump)
-		{
+		if(in_trick_info->ask_trump) {
 			if(!exist_trick_info->can_ask_trump)
 				return gmERR_TRICK_INVALID_TRUMP_REQ;
 
@@ -885,18 +815,14 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 			// Add the trump card to max bidder's hand
 			m_data.hands[m_data.curr_max_bidder] |= (1 << m_data.trump_card);
 
-			if(exist_trick_info->player == m_data.curr_max_bidder)
-			{
+			if(exist_trick_info->player == m_data.curr_max_bidder) {
 				m_data.should_play_trump_card = true;
 				m_data.in_trick_info.mask = (1 << m_data.trump_card);
-			}
-			else
-			{
+			} else {
 				// Check if the player who asked for trump has
 				// at least a single trump. If that is the case,
 				// then he should play trump. Set mask accordingly
-				if(m_data.hands[m_data.in_trick_info.player] & gmUtil::m_suit_mask[m_data.trump_suit])
-				{
+				if(m_data.hands[m_data.in_trick_info.player] & gmUtil::m_suit_mask[m_data.trump_suit]) {
 					m_data.in_trick_info.mask &= gmUtil::m_suit_mask[m_data.trump_suit];
 				}
 			}
@@ -913,7 +839,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 		if(
 			(m_data.hands[exist_trick_info->player] & exist_trick_info->mask) &&
 			!(exist_trick_info->mask & (1 << in_trick_info->card))
-			)
+		)
 			return gmERR_TRICK_MASK_MISMATCH;
 
 		// Check whether the card played actually exists in the players hand
@@ -921,8 +847,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 			return gmERR_TRICK_CARD_NOT_IN_HAND;
 
 		// If the first card to be played in the round
-		if(!m_data.tricks[m_data.trick_round].count)
-		{
+		if(!m_data.tricks[m_data.trick_round].count) {
 			m_data.tricks[m_data.trick_round].lead_loc = exist_trick_info->player;
 			m_data.tricks[m_data.trick_round].lead_suit = gmGetSuit(in_trick_info->card);
 			m_data.tricks[m_data.trick_round].winner = exist_trick_info->player;
@@ -931,42 +856,33 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 			// to be played is a trump then the trick is already trumped
 			if(m_data.trump_shown && (gmGetSuit(in_trick_info->card) == m_data.trump_suit))
 				m_data.tricks[m_data.trick_round].trumped = true;
-		}
-		else
-		{
+		} else {
 
 			// If the card played is a trump
-			if(gmGetSuit(in_trick_info->card) == m_data.trump_suit)
-			{
+			if(gmGetSuit(in_trick_info->card) == m_data.trump_suit) {
 				// and if the trick is already trumped
-				if(m_data.tricks[m_data.trick_round].trumped)
-				{
+				if(m_data.tricks[m_data.trick_round].trumped) {
 					// check for over trumping
-					if(gmGetValue(in_trick_info->card) > gmGetValue(gmWinnerCard))
-					{
+					if(gmGetValue(in_trick_info->card) > gmGetValue(gmWinnerCard)) {
 						m_data.tricks[m_data.trick_round].winner = exist_trick_info->player;
 					}
 				}
 				// If the trick is not trumped yet
 				// and the trump has been shown,
-				else if(m_data.trump_shown)
-				{
+				else if(m_data.trump_shown) {
 					// The trick is being trumped
 					m_data.tricks[m_data.trick_round].trumped = true;
 
 					// If the lead suit is trump
 					// then check whether we have a new winner
-					if(m_data.tricks[m_data.trick_round].lead_suit == m_data.trump_suit)
-					{
-						if(gmGetValue(in_trick_info->card) > gmGetValue(gmWinnerCard))
-						{
+					if(m_data.tricks[m_data.trick_round].lead_suit == m_data.trump_suit) {
+						if(gmGetValue(in_trick_info->card) > gmGetValue(gmWinnerCard)) {
 							m_data.tricks[m_data.trick_round].winner = exist_trick_info->player;
 						}
 					}
 					// If the lead suit is not trump
 					// then we have a new winner
-					else
-					{
+					else {
 						m_data.tricks[m_data.trick_round].winner = exist_trick_info->player;
 					}
 				}
@@ -977,14 +893,12 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 				else if(
 					(m_data.trump_suit == m_data.tricks[m_data.trick_round].lead_suit) &&
 					(gmGetValue(in_trick_info->card) > gmGetValue(gmWinnerCard))
-					)
-				{
+				) {
 					m_data.tricks[m_data.trick_round].winner = exist_trick_info->player;
 				}
 			}
 			// If the card being played is not a trump
-			else
-			{
+			else {
 				// If the trick is not trumped already,
 				// and if the lead suit has been followed,
 				// check whether we have a new winner
@@ -992,8 +906,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 					(gmGetSuit(in_trick_info->card) == m_data.tricks[m_data.trick_round].lead_suit) &&
 					(gmGetValue(in_trick_info->card) > gmGetValue(gmWinnerCard)) &&
 					!m_data.tricks[m_data.trick_round].trumped
-					)
-				{
+				) {
 					m_data.tricks[m_data.trick_round].winner = exist_trick_info->player;
 				}
 			}
@@ -1022,8 +935,7 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 		//	gmUtil::m_values[gmGetValue(in_trick_info->card)].c_str()));
 
 		// If all 4 cards have been played, move to the next round
-		if(m_data.tricks[m_data.trick_round].count == gmTOTAL_PLAYERS)
-		{
+		if(m_data.tricks[m_data.trick_round].count == gmTOTAL_PLAYERS) {
 			m_data.trick_round++;
 			m_data.tricks[m_data.trick_round].lead_loc = m_data.tricks[m_data.trick_round - 1].winner;
 			// To Remove
@@ -1047,80 +959,64 @@ int gmEngine::PostInputMessage(int input_type, void *input)
 	return 0;
 }
 
-bool gmEngine::GetFeedback()
-{
+bool gmEngine::GetFeedback() {
 	return m_data.feedback;
 }
-void gmEngine::SetFeedback(bool feedback)
-{
+void gmEngine::SetFeedback(bool feedback) {
 	m_data.feedback = feedback;
 	if(!m_data.feedback)
 		m_data.output_pending = false;
 }
 
-void gmEngine::GetRules(gmRules *rules)
-{
+void gmEngine::GetRules(gmRules *rules) {
 	memcpy(rules, &m_data.rules, sizeof(gmRules));
 }
-void gmEngine::SetRules(gmRules *rules)
-{
+void gmEngine::SetRules(gmRules *rules) {
 	memcpy(&m_data.rules, rules, sizeof(gmRules));
 }
-void gmEngine::GetHands(unsigned long *hands)
-{
+void gmEngine::GetHands(unsigned long *hands) {
 	memcpy(hands, m_data.hands, sizeof(m_data.hands));
 }
-void gmEngine::GetCardsPlayed(unsigned long *cards)
-{
+void gmEngine::GetCardsPlayed(unsigned long *cards) {
 	memcpy(cards, m_data.played_cards, sizeof(m_data.played_cards));
 }
-void gmEngine::GetTrick(int trick_round, gmTrick *trick)
-{
+void gmEngine::GetTrick(int trick_round, gmTrick *trick) {
 	wxASSERT((trick_round >= 0) && (trick_round < gmTOTAL_TRICKS));
 	memcpy(trick, &m_data.tricks[trick_round], sizeof(gmTrick));
 }
-void gmEngine::GetTrick(gmTrick *trick)
-{
+void gmEngine::GetTrick(gmTrick *trick) {
 	GetTrick(m_data.trick_round, trick);
 }
 
-int gmEngine::GetTrickRound()
-{
+int gmEngine::GetTrickRound() {
 	return m_data.trick_round;
 }
 
-int gmEngine::GetPoints(int team)
-{
+int gmEngine::GetPoints(int team) {
 	wxASSERT((team >= 0) && (team < gmTOTAL_TEAMS));
 	return m_data.pts[team];
 }
-void gmEngine::GetPoints(int *pts)
-{
+void gmEngine::GetPoints(int *pts) {
 	wxASSERT(pts);
 	memcpy(pts, m_data.pts, sizeof(m_data.pts));
 }
 
-int gmEngine::GetTrump()
-{
+int gmEngine::GetTrump() {
 	return m_data.trump_suit;
 }
-int gmEngine::GetTrumpCard()
-{
+int gmEngine::GetTrumpCard() {
 	return m_data.trump_card;
 }
-int gmEngine::GetDealer()
-{
+int gmEngine::GetDealer() {
 	wxASSERT((m_data.dealer >= 0) && (m_data.dealer < gmTOTAL_PLAYERS));
 	return m_data.dealer;
 }
-void gmEngine::SetDealer(int dealer)
-{
+void gmEngine::SetDealer(int dealer) {
 	wxASSERT((dealer >= 0) && (dealer < gmTOTAL_PLAYERS));
 	m_data.dealer = dealer;
 }
 
-void gmEngine::ResetTrick(gmTrick *trick)
-{
+void gmEngine::ResetTrick(gmTrick *trick) {
 	int j;
 	for(j = 0; j < gmTOTAL_PLAYERS; j++)
 		trick->cards[j] = gmCARD_INVALID;
@@ -1131,29 +1027,25 @@ void gmEngine::ResetTrick(gmTrick *trick)
 	trick->trumped = false;
 	trick->winner = gmPLAYER_INVALID;
 }
-bool gmEngine::GetData(gmEngineData *data)
-{
+bool gmEngine::GetData(gmEngineData *data) {
 	memcpy(data, &m_data, sizeof(gmEngineData));
 	return true;
 }
-bool gmEngine::SetData(gmEngineData *data, bool check)
-{
+bool gmEngine::SetData(gmEngineData *data, bool check) {
 	// TODO : Add error checks and remove wxASSERT
 	wxASSERT(!check);
 	memcpy(&m_data, data, sizeof(gmEngineData));
 	return true;
 }
 
-bool gmEngine::GetMaxBid(int *bid, int *loc)
-{
+bool gmEngine::GetMaxBid(int *bid, int *loc) {
 	if(bid)
 		*bid = m_data.curr_max_bid;
 	if(loc)
 		*loc = m_data.curr_max_bidder;
 	return true;
 }
-wxString gmEngine::GetLoggable()
-{
+wxString gmEngine::GetLoggable() {
 	return PrintRuleEngineData(&m_data);
 	/*wxString out;//, temp;
 	int i, j;
@@ -1204,43 +1096,38 @@ wxString gmEngine::GetLoggable()
 	out.Append(gmUtil::PrintHands(m_data.hands));
 	return out;*/
 }
-wxString gmEngine::PrintRuleEngineData(gmEngineData *data)
-{
+wxString gmEngine::PrintRuleEngineData(gmEngineData *data) {
 	wxString out;//, temp;
 	int i, j;
 
 	wxASSERT(data);
 
 	out.Append(wxT("\n"));
-	if(data->trump_shown)
-	{
+	if(data->trump_shown) {
 		out.Append(wxString::Format(wxT("Trump - %s(%s)\n"),
-			gmUtil::m_suits[gmGetSuit(data->trump_card)].c_str(),
-			gmUtil::m_values[gmGetValue(data->trump_card)].c_str()
-			));
+									gmUtil::m_suits[gmGetSuit(data->trump_card)].c_str(),
+									gmUtil::m_values[gmGetValue(data->trump_card)].c_str()
+								   ));
 	}
-	for(i = 0; i < data->trick_round; i++)
-	{
+	for(i = 0; i < data->trick_round; i++) {
 		out.Append(wxString::Format(wxT("Trick %d - "), i));
 
-		for(j = 0; j < gmTOTAL_PLAYERS; j++)
-		{
+		for(j = 0; j < gmTOTAL_PLAYERS; j++) {
 
 			if(data->tricks[i].lead_loc == j)
 				out.Append(wxT("+"));
 			if(data->tricks[i].winner == j)
 				out.Append(wxT("*"));
 			out.Append(wxString::Format(wxT("%s%s "),
-				gmUtil::m_suits[gmGetSuit(data->tricks[i].cards[j])].c_str(),
-				gmUtil::m_values[gmGetValue(data->tricks[i].cards[j])].c_str()
-				));
+										gmUtil::m_suits[gmGetSuit(data->tricks[i].cards[j])].c_str(),
+										gmUtil::m_values[gmGetValue(data->tricks[i].cards[j])].c_str()
+									   ));
 		}
 		out.Append(wxT("\n"));
 	}
 	out.Append(wxT("\n"));
 	i = data->trick_round;
-	for(j = 0; j < gmTOTAL_PLAYERS; j++)
-	{
+	for(j = 0; j < gmTOTAL_PLAYERS; j++) {
 		if(data->tricks[i].cards[j] == gmCARD_INVALID)
 			continue;
 		out.Append(wxString::Format(wxT("%s - "), gmUtil::m_short_locs[j].c_str()));
@@ -1249,21 +1136,19 @@ wxString gmEngine::PrintRuleEngineData(gmEngineData *data)
 		if(data->tricks[i].winner == j)
 			out.Append(wxT("*"));
 		out.Append(wxString::Format(wxT("%s%s "),
-			gmUtil::m_suits[gmGetSuit(data->tricks[i].cards[j])].c_str(),
-			gmUtil::m_values[gmGetValue(data->tricks[i].cards[j])].c_str()
-			));
+									gmUtil::m_suits[gmGetSuit(data->tricks[i].cards[j])].c_str(),
+									gmUtil::m_values[gmGetValue(data->tricks[i].cards[j])].c_str()
+								   ));
 		out.Append(wxT("\n"));
 	}
 	out.Append(wxT("\n"));
 	out.Append(gmUtil::PrintHands(data->hands));
 	return out;
 }
-bool gmEngine::IsTrumpShown()
-{
+bool gmEngine::IsTrumpShown() {
 	return m_data.trump_shown;
 }
-int gmEngine::GetTrickNextToPlay()
-{
+int gmEngine::GetTrickNextToPlay() {
 	if(m_data.status != gmSTATUS_TRICKS)
 		return gmPLAYER_INVALID;
 	if(m_data.tricks[m_data.trick_round].count == gmTOTAL_PLAYERS)
@@ -1272,18 +1157,15 @@ int gmEngine::GetTrickNextToPlay()
 	return gmTrickNext;
 }
 
-void gmEngine::SetMinBid(int round, int bid)
-{
+void gmEngine::SetMinBid(int round, int bid) {
 	wxASSERT(round == raBID_ROUND_3);
 	wxASSERT((bid == 23) || (bid == 24));
 	m_data.rules.min_bid_3 = bid;
 }
-void gmEngine::SetWaiveRuleFour(bool flag)
-{
+void gmEngine::SetWaiveRuleFour(bool flag) {
 	m_data.rules.waive_rule_4 = flag;
 }
-void gmEngine::SetSluffJacks(bool flag)
-{
+void gmEngine::SetSluffJacks(bool flag) {
 	m_data.rules.sluff_jacks = flag;
 }
 
@@ -1291,22 +1173,19 @@ void gmEngine::SetSluffJacks(bool flag)
 // Private methods
 //
 
-void gmEngine::SetOutput(int output_type)
-{
+void gmEngine::SetOutput(int output_type) {
 	wxASSERT(!m_data.output_pending);
 	wxASSERT(!m_data.input_pending);
 	m_data.output_type = output_type;
 	m_data.output_pending = true;
 }
-void gmEngine::SetInput(int input_type)
-{
+void gmEngine::SetInput(int input_type) {
 	wxASSERT(!m_data.output_pending);
 	wxASSERT(!m_data.input_pending);
 	m_data.input_type = input_type;
 	m_data.input_pending = true;
 }
-unsigned long gmEngine::GenerateMask(unsigned long *rules)
-{
+unsigned long gmEngine::GenerateMask(unsigned long *rules) {
 	unsigned long mask = gmALL_CARDS;
 	unsigned long temp = 0;
 
@@ -1317,8 +1196,7 @@ unsigned long gmEngine::GenerateMask(unsigned long *rules)
 	if(
 		!m_data.tricks[m_data.trick_round].count &&
 		!m_data.trump_shown &&
-		(gmTrickNext == m_data.curr_max_bidder))
-	{
+		(gmTrickNext == m_data.curr_max_bidder)) {
 		wxASSERT(m_data.trump_suit != gmSUIT_INVALID);
 		mask = ~(gmUtil::m_suit_mask[m_data.trump_suit]);
 		temp |= gmRULE_1;
@@ -1326,24 +1204,21 @@ unsigned long gmEngine::GenerateMask(unsigned long *rules)
 	// Rule 4 :
 	// If the max bidder asked for trump to be shown
 	// he/she must play the very same card
-	else if(m_data.should_play_trump_card && (!m_data.rules.waive_rule_4))
-	{
+	else if(m_data.should_play_trump_card && (!m_data.rules.waive_rule_4)) {
 		wxASSERT(m_data.trump_card != gmCARD_INVALID);
 		mask  = 1 << m_data.trump_card;
 		temp |= gmRULE_4;
 	}
 	// Rule 2 :
 	// If trump was asked to be shown, then trump must be played
-	else if(m_data.should_trump)
-	{
+	else if(m_data.should_trump) {
 		wxASSERT(m_data.trump_suit != gmSUIT_INVALID);
 		mask = gmUtil::m_suit_mask[m_data.trump_suit];
 		temp |= gmRULE_2;
 	}
 	// Rule 3 :
 	// Should follow suit
-	else if(m_data.tricks[m_data.trick_round].count)
-	{
+	else if(m_data.tricks[m_data.trick_round].count) {
 		wxASSERT(m_data.tricks[m_data.trick_round].lead_suit != gmSUIT_INVALID);
 		mask = gmUtil::m_suit_mask[m_data.tricks[m_data.trick_round].lead_suit];
 		temp |= gmRULE_3;
@@ -1355,19 +1230,15 @@ unsigned long gmEngine::GenerateMask(unsigned long *rules)
 		*rules = temp;
 	return mask;
 }
-bool gmEngine::SetDealEndOutput()
-{
+bool gmEngine::SetDealEndOutput() {
 	// Check whether there is a winner?
-	if(m_data.pts[m_data.curr_max_bidder % 2] >= m_data.curr_max_bid)
-	{
+	if(m_data.pts[m_data.curr_max_bidder % 2] >= m_data.curr_max_bid) {
 		m_data.out_deal_end_info.winner = m_data.curr_max_bidder % 2;
 	}
 	// TODO : Remove hard coding of 28
-	else if(m_data.pts[(m_data.curr_max_bidder + 1) % 2] > (28 - m_data.curr_max_bid))
-	{
+	else if(m_data.pts[(m_data.curr_max_bidder + 1) % 2] > (28 - m_data.curr_max_bid)) {
 		m_data.out_deal_end_info.winner = (m_data.curr_max_bidder + 1) % 2;
-	}
-	else
+	} else
 		return false;
 	if(m_data.feedback)
 		SetOutput(gmOUTPUT_DEAL_END);

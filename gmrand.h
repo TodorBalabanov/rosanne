@@ -12,19 +12,17 @@
 #define N (MEXP / 128 + 1)
 #define N32 (N * 4)
 
-typedef struct tagGM_RAND_STATE
-{
+typedef struct tagGM_RAND_STATE {
 	unsigned int state_array[N32];
 	int idx;
-}gmRandState;
+} gmRandState;
 
 
-class gmRand
-{
+class gmRand {
 public:
-    static wxString PrintState();
-    static void GetState(gmRandState *state);
-    static void SetState(gmRandState *state);
+	static wxString PrintState();
+	static void GetState(gmRandState *state);
+	static void SetState(gmRandState *state);
 };
 
 

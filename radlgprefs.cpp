@@ -36,29 +36,25 @@
 IMPLEMENT_DYNAMIC_CLASS( raDlgPrefs, wxDialog )
 
 BEGIN_EVENT_TABLE( raDlgPrefs, wxDialog )
-    EVT_INIT_DIALOG( raDlgPrefs::OnInitDialog )
-    EVT_BUTTON( XRCID("m_radlgprefs_apply"), raDlgPrefs::OnPrefsBtnApplyClick )
+	EVT_INIT_DIALOG( raDlgPrefs::OnInitDialog )
+	EVT_BUTTON( XRCID("m_radlgprefs_apply"), raDlgPrefs::OnPrefsBtnApplyClick )
 END_EVENT_TABLE()
 
-raDlgPrefs::raDlgPrefs( )
-{
+raDlgPrefs::raDlgPrefs( ) {
 }
 
-raDlgPrefs::raDlgPrefs( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
-{
-    SetParent(parent);
+raDlgPrefs::raDlgPrefs( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style ) {
+	SetParent(parent);
 
 	if (!wxXmlResource::Get()->LoadDialog(this, GetParent(), _T("raDlgPrefs")))
 		wxLogError(wxT("Missing wxXmlResource::Get()->Load() in OnInit()?"));
 
-    if (GetSizer())
-    {
-        GetSizer()->SetSizeHints(this);
-    }
+	if (GetSizer()) {
+		GetSizer()->SetSizeHints(this);
+	}
 }
 
-void raDlgPrefs::OnInitDialog( wxInitDialogEvent& event )
-{
+void raDlgPrefs::OnInitDialog( wxInitDialogEvent& event ) {
 	wxComboBox *combo_playcardon;
 	wxComboBox *combo_cardback;
 	wxCheckBox *check_autoplay;
@@ -67,8 +63,7 @@ void raDlgPrefs::OnInitDialog( wxInitDialogEvent& event )
 
 	raConfig::GetInstance()->GetData(&conf_data);
 	combo_playcardon = XRCCTRL(*this, "m_radlgprefs_playcardon", wxComboBox);
-	switch(conf_data.prefs_data.play_card_on)
-	{
+	switch(conf_data.prefs_data.play_card_on) {
 	case raCONFIG_PREFS_PLAYCARDON_SCLICK:
 		combo_playcardon->SetSelection(raPREFS_PLAYCARDON_SCLICK);
 		break;
@@ -82,8 +77,7 @@ void raDlgPrefs::OnInitDialog( wxInitDialogEvent& event )
 
 	combo_cardback = XRCCTRL(*this, "m_radlgprefs_cardback", wxComboBox);
 
-	switch(conf_data.prefs_data.card_back)
-	{
+	switch(conf_data.prefs_data.card_back) {
 	case raCONFIG_PREFS_CARDBACK_BLUE:
 		combo_cardback->SetSelection(raPREFS_CARDBACK_BLUE);
 		break;
@@ -100,11 +94,10 @@ void raDlgPrefs::OnInitDialog( wxInitDialogEvent& event )
 	check_bidbubbles = XRCCTRL(*this, "m_radlgprefs_showbidbubb", wxCheckBox);
 	check_bidbubbles->SetValue(conf_data.prefs_data.show_bid_bubbles);
 
-    event.Skip();
+	event.Skip();
 }
 
-void raDlgPrefs::OnPrefsBtnApplyClick( wxCommandEvent& event )
-{
+void raDlgPrefs::OnPrefsBtnApplyClick( wxCommandEvent& event ) {
 	wxComboBox *combo_playcardon;
 	wxComboBox *combo_cardback;
 	wxCheckBox *check_autoplay;
@@ -112,8 +105,7 @@ void raDlgPrefs::OnPrefsBtnApplyClick( wxCommandEvent& event )
 	raConfData new_conf;
 	raConfig::GetInstance()->GetData(&new_conf);
 	combo_playcardon = XRCCTRL(*this, "m_radlgprefs_playcardon", wxComboBox);
-	switch(combo_playcardon->GetSelection())
-	{
+	switch(combo_playcardon->GetSelection()) {
 	case raPREFS_PLAYCARDON_SCLICK:
 		new_conf.prefs_data.play_card_on = raCONFIG_PREFS_PLAYCARDON_SCLICK;
 		break;
@@ -127,8 +119,7 @@ void raDlgPrefs::OnPrefsBtnApplyClick( wxCommandEvent& event )
 
 	combo_cardback = XRCCTRL(*this, "m_radlgprefs_cardback", wxComboBox);
 
-	switch(combo_cardback->GetSelection())
-	{
+	switch(combo_cardback->GetSelection()) {
 	case raPREFS_CARDBACK_BLUE:
 		new_conf.prefs_data.card_back = raCONFIG_PREFS_CARDBACK_BLUE;
 		break;
@@ -146,7 +137,7 @@ void raDlgPrefs::OnPrefsBtnApplyClick( wxCommandEvent& event )
 	new_conf.prefs_data.show_bid_bubbles = check_bidbubbles->GetValue();
 
 	raConfig::GetInstance()->SetData(&new_conf);
-    event.Skip();
+	event.Skip();
 
 	Destroy();
 }

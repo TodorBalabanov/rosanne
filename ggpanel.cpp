@@ -24,23 +24,20 @@ BEGIN_EVENT_TABLE(ggPanel, wxPanel)
 	//EVT_ERASE_BACKGROUND(wxcTable::OnErase)
 END_EVENT_TABLE()
 
-ggPanel::ggPanel(const wxWindow* parent): wxPanel((wxWindow*)parent)
-{
+ggPanel::ggPanel(const wxWindow* parent): wxPanel((wxWindow*)parent) {
 	m_work = NULL;
 	m_back = NULL;
 	m_f_invalid = true;
 	Size();
 }
-ggPanel::~ggPanel()
-{
+ggPanel::~ggPanel() {
 	// Delete the m_work and m_back bitmaps
 	if(m_back)
 		delete m_back;
 	if(m_work)
 		delete m_work;
 }
-bool ggPanel::Size()
-{
+bool ggPanel::Size() {
 	int x, y;
 
 	GetClientSize(&x, &y);
@@ -54,13 +51,11 @@ bool ggPanel::Size()
 	m_work = new wxBitmap(x, y, -1);
 	m_back = new wxBitmap(x, y, -1);
 
-	if(!m_back)
-	{
+	if(!m_back) {
 		wxLogError(wxT("ggPanel::Size - Creation of m_back failed in wxcTable::Resize"));
 		return false;
 	}
-	if(!m_work)
-	{
+	if(!m_work) {
 		wxLogError(wxT("ggPanel::Size - Creation of m_work failed in wxcTable::Resize"));
 		return false;
 	}
@@ -69,18 +64,15 @@ bool ggPanel::Size()
 
 	return true;
 }
-void ggPanel::OnPaint(wxPaintEvent &event)
-{
+void ggPanel::OnPaint(wxPaintEvent &event) {
 	Paint();
 }
-bool ggPanel::Paint()
-{
+bool ggPanel::Paint() {
 	////wxLogDebug("wxcTable::Paint - Entering");
 	wxPaintDC pdc(this);
 	wxMemoryDC mdc;
 
-	if(!pdc.Ok())
-	{
+	if(!pdc.Ok()) {
 		wxLogError(wxT("wxcTable::Paint - Paint DC is not OK"));
 		return false;
 	}
@@ -91,11 +83,9 @@ bool ggPanel::Paint()
 		return false;
 	}*/
 
-	if(m_back)
-	{
+	if(m_back) {
 		mdc.SelectObject(*m_work);
-		if(!pdc.Blit(wxPoint(0, 0), wxSize(m_work->GetWidth(), m_work->GetHeight()), &mdc, wxPoint(0, 0)))
-		{
+		if(!pdc.Blit(wxPoint(0, 0), wxSize(m_work->GetWidth(), m_work->GetHeight()), &mdc, wxPoint(0, 0))) {
 			wxLogError(wxT("wxcTable::Paint - Blt to wxPaintDC failed in wxCardTable::Paint"));
 			return false;
 		}
@@ -106,8 +96,7 @@ bool ggPanel::Paint()
 	////wxLogDebug("wxcTable::Paint - Exiting");
 
 }
-bool ggPanel::RefreshScreen()
-{
+bool ggPanel::RefreshScreen() {
 	wxClientDC tdc(this);
 	wxMemoryDC wdc;
 	wxPoint pos;
@@ -115,16 +104,14 @@ bool ggPanel::RefreshScreen()
 
 	////wxLogDebug("wxcTable::RefreshTable - Entering");
 
-	if(m_f_invalid)
-	{
+	if(m_f_invalid) {
 		wdc.SelectObject(*m_work);
 
 		pos = m_rect_invalid.GetPosition();
 		size = m_rect_invalid.GetSize();
 
 		//wxLogDebug(wxString::Format("Blit area %d-%d %d-%d", pos.x, pos.y, size.GetWidth(), size.GetHeight()));
-		if(!tdc.Blit(pos, size, &wdc, pos))
-		{
+		if(!tdc.Blit(pos, size, &wdc, pos)) {
 			wxLogError(wxT("wxcTable::RefreshTable - Blit to wxcTable client failed"));
 			return false;
 		}
@@ -139,10 +126,9 @@ bool ggPanel::RefreshScreen()
 	return true;
 }
 bool ggPanel::BlitToBack(wxCoord xdest, wxCoord ydest,
-	wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
-	wxCoord ysrc, int logicalFunc, bool useMask,
-	wxCoord xsrcMask, wxCoord ysrcMask)
-{
+						 wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
+						 wxCoord ysrc, int logicalFunc, bool useMask,
+						 wxCoord xsrcMask, wxCoord ysrcMask) {
 	int x, y;
 	wxMemoryDC bdc, wdc;
 
@@ -172,10 +158,9 @@ bool ggPanel::BlitToBack(wxCoord xdest, wxCoord ydest,
 
 }
 bool ggPanel::BlitToFront(wxCoord xdest, wxCoord ydest,
-	wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
-	wxCoord ysrc, int logicalFunc, bool useMask,
-	wxCoord xsrcMask, wxCoord ysrcMask)
-{
+						  wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
+						  wxCoord ysrc, int logicalFunc, bool useMask,
+						  wxCoord xsrcMask, wxCoord ysrcMask) {
 	wxMemoryDC wdc;
 	wdc.SelectObject(*m_work);
 
@@ -194,8 +179,7 @@ bool ggPanel::BlitToFront(wxCoord xdest, wxCoord ydest,
 	return true;
 }
 
-bool ggPanel::DrawTextOnBack(wxString text, wxPoint pt, wxColour colour, wxFont font)
-{
+bool ggPanel::DrawTextOnBack(wxString text, wxPoint pt, wxColour colour, wxFont font) {
 	int x, y;
 	wxMemoryDC bdc, wdc;
 
@@ -209,13 +193,11 @@ bool ggPanel::DrawTextOnBack(wxString text, wxPoint pt, wxColour colour, wxFont 
 		return false;
 
 	// Set the text foreground colour and the font
-	if(colour != wxNullColour)
-	{
+	if(colour != wxNullColour) {
 		bdc.SetTextForeground(colour);
 		wdc.SetTextForeground(colour);
 	}
-	if(font != wxNullFont)
-	{
+	if(font != wxNullFont) {
 		bdc.SetFont(font);
 		wdc.SetFont(font);
 	}
@@ -231,8 +213,7 @@ bool ggPanel::DrawTextOnBack(wxString text, wxPoint pt, wxColour colour, wxFont 
 	return true;
 }
 
-bool ggPanel::ClearDifference()
-{
+bool ggPanel::ClearDifference() {
 	wxMemoryDC bdc, wdc;
 	bdc.SelectObject(*m_back);
 	wdc.SelectObject(*m_work);
@@ -244,7 +225,7 @@ bool ggPanel::ClearDifference()
 		return false;
 
 	if(!wdc.Blit(m_rect_diff.x, m_rect_diff.y, m_rect_diff.GetWidth(), m_rect_diff.GetHeight(),
-		&bdc, m_rect_diff.x, m_rect_diff.y))
+				 &bdc, m_rect_diff.x, m_rect_diff.y))
 		return false;
 
 	m_rect_invalid.Union(m_rect_diff);

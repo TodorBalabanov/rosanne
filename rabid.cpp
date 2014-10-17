@@ -22,8 +22,7 @@ BEGIN_EVENT_TABLE(raBid, wxPanel)
 	EVT_BUTTON(raBID_BTN_ID_PASS, raBid::OnButtonClick)
 END_EVENT_TABLE()
 
-raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent)
-{
+raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent) {
 	int i = 0;
 	int j = 0;
 	int best_width = 0;
@@ -45,10 +44,9 @@ raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent)
 	// to 28 and the strings "All" and "Pass"
 
 	best_width = 0;
-	for(i = 0 ; i < raBID_TOTAL_BTNS; i++)
-	{
+	for(i = 0 ; i < raBID_TOTAL_BTNS; i++) {
 		this->GetTextExtent(wxString::Format(wxT("%d"), i + 14),
-			&temp_width, &temp_height);
+							&temp_width, &temp_height);
 		best_width = std::max(best_width, temp_width);
 	}
 
@@ -64,8 +62,7 @@ raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent)
 #endif
 
 	m_main_panel = new wxPanel(this);
-	if(!m_main_panel)
-	{
+	if(!m_main_panel) {
 		wxLogError(wxString::Format(wxT("Failed to create main panel. %s:%d"), wxT(__FILE__), __LINE__));
 		return;
 	}
@@ -93,7 +90,7 @@ raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent)
 	m_head_panel_sizer = new wxGridSizer(0, 0, 0, 0);
 	m_head_panel_text = new wxStaticText(m_head_panel, -1, wxT("Enter Bid"));
 	m_head_panel_sizer->Add(m_head_panel_text, 0,
-		wxALIGN_CENTER_HORIZONTAL| wxALIGN_CENTER_VERTICAL|wxALL, 2);
+							wxALIGN_CENTER_HORIZONTAL| wxALIGN_CENTER_VERTICAL|wxALL, 2);
 
 	m_head_panel->SetSizer(m_head_panel_sizer);
 
@@ -101,16 +98,14 @@ raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent)
 	//m_bidbtn_panel->SetWindowStyle(wxSUNKEN_BORDER);
 	m_bidbtn_panel_sizer = new wxGridSizer(5, 3, 0, 0);
 
-	for(i = 0; i < raBID_BTN_ROWS; i++)
-	{
-		for(j = 0; j < raBID_BTN_COLS; j++)
-		{
+	for(i = 0; i < raBID_BTN_ROWS; i++) {
+		for(j = 0; j < raBID_BTN_COLS; j++) {
 			m_buttons[(i * raBID_BTN_COLS) + j] = new wxButton(m_bidbtn_panel,
-				raBID_BTN_ID_START + (i * raBID_BTN_COLS) + j,
-				wxString::Format(wxT("%d"), (i * raBID_BTN_COLS) + j + 14),
-				wxDefaultPosition, wxSize(best_width, -1));
+					raBID_BTN_ID_START + (i * raBID_BTN_COLS) + j,
+					wxString::Format(wxT("%d"), (i * raBID_BTN_COLS) + j + 14),
+					wxDefaultPosition, wxSize(best_width, -1));
 			m_bidbtn_panel_sizer->Add(m_buttons[(i * raBID_BTN_COLS) + j], 0,
-				wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 1);
+									  wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 1);
 			//m_buttons[(i * raBID_BTN_COLS) + j]->SetSize(10, 20);
 			//m_buttons[(i * raBID_BTN_COLS) + j]->SetWindowStyle(wxNO_BORDER);
 			m_buttons[(i * raBID_BTN_COLS) + j]->SetEventHandler(this->GetEventHandler());
@@ -138,9 +133,9 @@ raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent)
 	m_button_pass->SetEventHandler(this->GetEventHandler());
 
 	m_btns_panel_sizer->Add(m_button_all, 0,
-		wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 1);
+							wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 1);
 	m_btns_panel_sizer->Add(m_button_pass, 0,
-		wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 1);
+							wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, 1);
 
 	m_btns_panel->SetSizer(m_btns_panel_sizer);
 	m_btns_panel_sizer->Fit(m_btns_panel);
@@ -162,24 +157,21 @@ raBid::raBid(const wxWindow* parent): wxPanel((wxWindow*)parent)
 	m_main_sizer->Fit(this);
 
 	this->GetEventHandler()->Connect(raBID_BTN_ID_START, raBID_BTN_ID_START + raBID_TOTAL_BTNS - 1,
-		wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(raBid::OnButtonClick));
+									 wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(raBid::OnButtonClick));
 }
 
-raBid::~raBid()
-{
+raBid::~raBid() {
 }
 
 //
 // Public method/s
 //
-bool raBid::SetGamePanel(raGamePanel *game_panel)
-{
+bool raBid::SetGamePanel(raGamePanel *game_panel) {
 	m_game = game_panel;
 	return true;
 }
 
-bool raBid::SetPassable(bool passable)
-{
+bool raBid::SetPassable(bool passable) {
 	// Enable/disable the pass button
 	// as per the input criteria
 
@@ -188,8 +180,7 @@ bool raBid::SetPassable(bool passable)
 	return true;
 }
 
-bool raBid::SetMinimumBid(int min_bid)
-{
+bool raBid::SetMinimumBid(int min_bid) {
 	int i;
 
 	m_min_bid = min_bid;
@@ -206,24 +197,20 @@ bool raBid::SetMinimumBid(int min_bid)
 //
 // Private method/s
 //
-void raBid::OnButtonClick(wxCommandEvent &event)
-{
+void raBid::OnButtonClick(wxCommandEvent &event) {
 	raBidEvent new_event;
 	wxString msg;
 	int id;
 
-	if(m_game)
-	{
+	if(m_game) {
 		id = event.GetId();
-		switch(id)
-		{
+		switch(id) {
 		case raBID_BTN_ID_ALL:
 			// Alert the user if the bid is for All Cards
 			msg.Append(wxT("You have made a bid for All Cards\n\n"));
 			msg.Append(wxT("If you want to continue with the bid, click Yes\n"));
 			msg.Append(wxT("If you want to cancel the bid and make a new one, click No"));
-			if(wxMessageBox(msg, wxT("Confirm"), wxYES_NO | wxICON_QUESTION) != wxYES)
-			{
+			if(wxMessageBox(msg, wxT("Confirm"), wxYES_NO | wxICON_QUESTION) != wxYES) {
 				event.Skip();
 				return;
 			}
@@ -236,14 +223,12 @@ void raBid::OnButtonClick(wxCommandEvent &event)
 		default:
 			// Alert the user if the bid is relatively high
 			// as compared to the minimum possible
-			if((raGetBidFromId(id)) >= (m_min_bid + 3))
-			{
+			if((raGetBidFromId(id)) >= (m_min_bid + 3)) {
 				msg.Append(wxString::Format(wxT("You have bid %d\n\n"), raGetBidFromId(id)));
 				msg.Append(wxT("If you want to continue with the bid, click Yes\n"));
 				msg.Append(wxT("If you want to cancel the bid and make a new one, click No"));
 
-				if(wxMessageBox(msg, wxT("Confirm"), wxYES_NO | wxICON_QUESTION) != wxYES)
-				{
+				if(wxMessageBox(msg, wxT("Confirm"), wxYES_NO | wxICON_QUESTION) != wxYES) {
 					event.Skip();
 					return;
 				}
@@ -252,8 +237,7 @@ void raBid::OnButtonClick(wxCommandEvent &event)
 			break;
 		}
 		m_game->AddPendingEvent(new_event);
-	}
-	else
+	} else
 		wxLogError(wxString::Format(wxT("Game panel not set in raBid. %s:%d"), wxT(__FILE__), __LINE__));
 
 	event.Skip();

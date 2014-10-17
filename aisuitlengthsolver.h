@@ -42,12 +42,11 @@ typedef slMatrix slSolution;
 // The data which represents the problem which is provided as one of the inputs to the
 // suit length solver.
 
-typedef struct slPROBLEM
-{
+typedef struct slPROBLEM {
 	slMatrix suit_length;
 	int suit_total_length[slTOTAL_SUITS];
 	int hand_total_length[slTOTAL_HANDS];
-}slProblem;
+} slProblem;
 
 // Working data for computing the solution.
 
@@ -56,14 +55,12 @@ typedef struct slPROBLEM
 // b) max - the maximum number ofa cards that can be callocated
 // c) suit_length - number of cards allocated. If it is vacant, the value is slVACANT
 
-typedef struct slCELL
-{
+typedef struct slCELL {
 	int min;
 	int max;
 	int suit_length;
-}slCell;
-typedef struct slDATA
-{
+} slCell;
+typedef struct slDATA {
 	slCell cells[slTOTAL_HANDS][slTOTAL_SUITS];
 
 	int suit_total_length[slTOTAL_SUITS];
@@ -74,15 +71,14 @@ typedef struct slDATA
 	int suit_sum_of_maxs[slTOTAL_SUITS];
 	int hand_sum_of_maxs[slTOTAL_HANDS];
 
-    // This is not really the sum of min values.
-    // It is the sum of min values of vacant cells
+	// This is not really the sum of min values.
+	// It is the sum of min values of vacant cells
 	int suit_sum_of_vacant_mins[slTOTAL_SUITS];
 	int hand_sum_of_vacant_mins[slTOTAL_HANDS];
 
-}slData;
+} slData;
 
-class aiSuitLengthSolver
-{
+class aiSuitLengthSolver {
 private:
 	slProblem m_problem;
 	slData m_saved, m_working;
@@ -91,9 +87,9 @@ private:
 	int m_hand_sum_of_min[slTOTAL_HANDS];
 	// Disallow copy constructor/assignment operators
 	aiSuitLengthSolver(const aiSuitLengthSolver &);
-    aiSuitLengthSolver & operator=(const aiSuitLengthSolver &);
-    inline void InitializeWorkingData(slData *data);
-    inline bool RecalcCellMax(slData *data, int hand, int suit);
+	aiSuitLengthSolver & operator=(const aiSuitLengthSolver &);
+	inline void InitializeWorkingData(slData *data);
+	inline bool RecalcCellMax(slData *data, int hand, int suit);
 	inline bool SetCell(slData *data, int hand, int suit, int suit_length);
 	inline bool RecalcMaxForImpactedCells(slData *data, int hand, int suit);
 	inline bool RecalcMinForImpactedCells(slData *data, int hand, int suit);

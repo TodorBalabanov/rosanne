@@ -31,78 +31,76 @@ unsigned long gmUtil::m_suit_rs[] = {0, 8, 16, 24};
 int gmUtil::m_points[] = {0, 0, 0, 0, 1, 1, 2, 3};
 int gmUtil::m_total_points[] = {
 	0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0,
-1, 1, 1, 1, 1, 1, 1, 1,
-1, 1, 1, 1, 1, 1, 1, 1,
-1, 1, 1, 1, 1, 1, 1, 1,
-1, 1, 1, 1, 1, 1, 1, 1,
-2, 2, 2, 2, 2, 2, 2, 2,
-2, 2, 2, 2, 2, 2, 2, 2,
-2, 2, 2, 2, 2, 2, 2, 2,
-2, 2, 2, 2, 2, 2, 2, 2,
-3, 3, 3, 3, 3, 3, 3, 3,
-3, 3, 3, 3, 3, 3, 3, 3,
-3, 3, 3, 3, 3, 3, 3, 3,
-3, 3, 3, 3, 3, 3, 3, 3,
-4, 4, 4, 4, 4, 4, 4, 4,
-4, 4, 4, 4, 4, 4, 4, 4,
-3, 3, 3, 3, 3, 3, 3, 3,
-3, 3, 3, 3, 3, 3, 3, 3,
-4, 4, 4, 4, 4, 4, 4, 4,
-4, 4, 4, 4, 4, 4, 4, 4,
-4, 4, 4, 4, 4, 4, 4, 4,
-4, 4, 4, 4, 4, 4, 4, 4,
-5, 5, 5, 5, 5, 5, 5, 5,
-5, 5, 5, 5, 5, 5, 5, 5,
-5, 5, 5, 5, 5, 5, 5, 5,
-5, 5, 5, 5, 5, 5, 5, 5,
-6, 6, 6, 6, 6, 6, 6, 6,
-6, 6, 6, 6, 6, 6, 6, 6,
-6, 6, 6, 6, 6, 6, 6, 6,
-6, 6, 6, 6, 6, 6, 6, 6,
-7, 7, 7, 7, 7, 7, 7, 7,
-7, 7, 7, 7, 7, 7, 7, 7
+	0, 0, 0, 0, 0, 0, 0, 0,
+	1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1,
+	2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2,
+	3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3,
+	4, 4, 4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4, 4, 4,
+	3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3,
+	4, 4, 4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4, 4, 4,
+	4, 4, 4, 4, 4, 4, 4, 4,
+	5, 5, 5, 5, 5, 5, 5, 5,
+	5, 5, 5, 5, 5, 5, 5, 5,
+	5, 5, 5, 5, 5, 5, 5, 5,
+	5, 5, 5, 5, 5, 5, 5, 5,
+	6, 6, 6, 6, 6, 6, 6, 6,
+	6, 6, 6, 6, 6, 6, 6, 6,
+	6, 6, 6, 6, 6, 6, 6, 6,
+	6, 6, 6, 6, 6, 6, 6, 6,
+	7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7
 };
 wxString gmUtil::m_short_teams[] = {wxT("N/S"), wxT("E/W"), wxT("N/S"), wxT("E/W")};
 
-unsigned int gmUtil::BitsSetTable256[] =
-{
+unsigned int gmUtil::BitsSetTable256[] = {
 	0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
-		1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-		1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-		2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-		1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-		2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-		2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-		3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-		1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-		2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-		2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-		3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-		2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-		3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-		3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-		4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
+	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+	2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+	2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+	2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+	3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+	2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+	2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+	3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+	2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+	3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+	3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+	4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
 };
 
-int gmUtil::LogTable256[] =
-{
+int gmUtil::LogTable256[] = {
 	0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
-		4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-		5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-		5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-		6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-		7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
+	4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
 };
 
 //Fisher-Yates shuffle
@@ -114,44 +112,39 @@ int gmUtil::LogTable256[] =
 //         j ? random integer with 0 <= j <= i
 //         exchange a[j] and a[i]
 
-void gmUtil::ShuffleArray(int *array, unsigned long n)
-{
-	if (n <= 1){
+void gmUtil::ShuffleArray(int *array, unsigned long n) {
+	if (n <= 1) {
 		return;
 	}
 
-		unsigned long i;
-		for (i = n - 1; i >= 1; i--) {
-		    // TODO : Non linear distribution. To be corrected.
-			unsigned long j = ((unsigned long)rand()) % (i + 1);
-			int t = array[j];
-			array[j] = array[i];
-			array[i] = t;
-		}
+	unsigned long i;
+	for (i = n - 1; i >= 1; i--) {
+		// TODO : Non linear distribution. To be corrected.
+		unsigned long j = ((unsigned long)rand()) % (i + 1);
+		int t = array[j];
+		array[j] = array[i];
+		array[i] = t;
+	}
 }
 
-wxString gmUtil::PrintLong(unsigned long cards)
-{
+wxString gmUtil::PrintLong(unsigned long cards) {
 	wxString out, final;
 
 	//wxLogDebug(wxString::Format("Cards = %lu", cards));
 
 	out = _("");
 	//wxLogDebug(wxString::Format("%s%s", m_suits[highest / 8], m_values[highest % 8]));
-	for(int i = 0; i < 32; i++)
-	{
+	for(int i = 0; i < 32; i++) {
 		if(cards & (1 << i))
 			out = out + m_suits[i / 8] + m_values[i % 8] + _(",");
 	}
-	if(!out.IsEmpty())
-	{
+	if(!out.IsEmpty()) {
 		final = out.Left(out.Length() - 1);
 	}
 
 	return final;
 }
-wxString gmUtil::PrintHands(unsigned long *hands)
-{
+wxString gmUtil::PrintHands(unsigned long *hands) {
 	wxString ret_val;
 	wxString final;
 	wxString out;
@@ -164,12 +157,10 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	ret_val.Append(SPACES20 + m_long_locs[2]);
 	ret_val.Append(wxT("\n"));
 
-	for (int i = 0; i < 4; i++)
-	{
+	for (int i = 0; i < 4; i++) {
 		temp = (hands[2] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
-		for(int j = 7; j >= 0; j--)
-		{
+		for(int j = 7; j >= 0; j--) {
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");
 		}
@@ -185,13 +176,11 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	ret_val.Append(wxString::Format(wxT("%-40s%-40s"), m_long_locs[1].c_str(), m_long_locs[3].c_str()));
 	ret_val.Append(wxT("\n"));
 
-	for (int i = 0; i < 4; i++)
-	{
+	for (int i = 0; i < 4; i++) {
 		temp = (hands[1] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
-		for(int j = 7; j >= 0; j--)
-		{
+		for(int j = 7; j >= 0; j--) {
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");
 		}
@@ -201,8 +190,7 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 		temp = (hands[3] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
-		for(int j = 7; j >= 0; j--)
-		{
+		for(int j = 7; j >= 0; j--) {
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");
 		}
@@ -219,13 +207,11 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	ret_val.Append(SPACES20 + m_long_locs[0]);
 	ret_val.Append(wxT("\n"));
 
-	for (int i = 0; i < 4; i++)
-	{
+	for (int i = 0; i < 4; i++) {
 		temp = (hands[0] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
-		for(int j = 7; j >= 0; j--)
-		{
+		for(int j = 7; j >= 0; j--) {
 			if(temp & (1 << j))
 				out = out + m_values[j % 8] + _(",");
 		}
@@ -238,8 +224,7 @@ wxString gmUtil::PrintHands(unsigned long *hands)
 	return ret_val;
 }
 
-int gmUtil::GetCardIndex(wxString text)
-{
+int gmUtil::GetCardIndex(wxString text) {
 	wxString suit, value;
 	int x, y;
 	suit = text.Left(1);
@@ -279,8 +264,7 @@ int gmUtil::GetCardIndex(wxString text)
 
 	return (x * 8) + y;
 }
-bool gmUtil::SetStatusText(const wxString& text, int i)
-{
+bool gmUtil::SetStatusText(const wxString& text, int i) {
 	wxFrame *main_frame;
 	wxStatusBar *status_bar;
 
@@ -301,27 +285,22 @@ bool gmUtil::SetStatusText(const wxString& text, int i)
 
 
 
-unsigned long gmUtil::CountBitsSet(unsigned long v)
-{
+unsigned long gmUtil::CountBitsSet(unsigned long v) {
 	return BitsSetTable256[v & 0xff] +
-		BitsSetTable256[(v >> 8) & 0xff] +
-		BitsSetTable256[(v >> 16) & 0xff] +
-		BitsSetTable256[v >> 24];
+		   BitsSetTable256[(v >> 8) & 0xff] +
+		   BitsSetTable256[(v >> 16) & 0xff] +
+		   BitsSetTable256[v >> 24];
 	//unsigned int const w = v - ((v >> 1) & 0x55555555);                    // temp
 	//unsigned int const x = (w & 0x33333333) + ((w >> 2) & 0x33333333);     // temp
 	//unsigned int const c = ((x + (x >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
 	//return c;
 }
 
-unsigned long gmUtil::HighestBitSet(unsigned long v)
-{
+unsigned long gmUtil::HighestBitSet(unsigned long v) {
 	register unsigned long t, tt; // temporaries
-	if (tt = v >> 16)
-	{
+	if (tt = v >> 16) {
 		return (t = v >> 24) ? 24 + LogTable256[t] : 16 + LogTable256[tt & 0xFF];
-	}
-	else
-	{
+	} else {
 		return (t = v >> 8) ? 8 + LogTable256[t] : LogTable256[v];
 	}
 }

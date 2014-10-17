@@ -25,8 +25,7 @@
 #include "wx/fileconf.h"
 #endif
 
-enum
-{
+enum {
 	raINFO_CMD_NONE = 1,
 	raINFO_CMD_NEW_DEAL,
 	raINFO_CMD_SHOW_TRUMP
@@ -35,8 +34,7 @@ enum
 #define raINFO_SHOW_TRUMP_TEXT wxT("Show Trump")
 #define raINFO_DEAL_TEXT wxT("New Deal")
 
-typedef struct tagraINFO_DETAILS
-{
+typedef struct tagraINFO_DETAILS {
 	int deal_no;
 	int dealer;
 	int bid;
@@ -44,18 +42,17 @@ typedef struct tagraINFO_DETAILS
 	int trump;
 	int points[gmTOTAL_TEAMS];
 	int pnlties[gmTOTAL_PLAYERS];
-}raInfoDetails;
+} raInfoDetails;
 
 class raGamePanel;
 
-class raInfo: public wxPanel
-{
+class raInfo: public wxPanel {
 private:
 	DECLARE_EVENT_TABLE()
 
 	// Disallow copy constructor/assignment operators
 	raInfo(const raInfo &);
-    raInfo & operator=(const raInfo &);
+	raInfo & operator=(const raInfo &);
 
 	wxButton *m_button;
 	wxStaticText *m_dealno;

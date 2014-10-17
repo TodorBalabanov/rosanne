@@ -23,14 +23,11 @@ wxMutex raConfig::s_mutex;
 // Public methods
 //
 
-raConfig *raConfig::GetInstance()
-{
+raConfig *raConfig::GetInstance() {
 	// Double checked locking before creating an instance
-	if(!s_instance)
-	{
+	if(!s_instance) {
 		wxMutexLocker lock(s_mutex);
-		if(!lock.IsOk())
-		{
+		if(!lock.IsOk()) {
 			wxLogError(wxString::Format(wxT("Failed to acquire mutex lock. %s:%d"), wxT(__FILE__), __LINE__));
 			return NULL;
 		}
@@ -41,79 +38,65 @@ raConfig *raConfig::GetInstance()
 	return s_instance;
 }
 
-bool raConfig::Save()
-{
-	if(!m_config->Write(raCONFPATH_APP_DATA_X, m_data.app_data.x))
-	{
+bool raConfig::Save() {
+	if(!m_config->Write(raCONFPATH_APP_DATA_X, m_data.app_data.x)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_APP_DATA_Y, m_data.app_data.y))
-	{
+	if(!m_config->Write(raCONFPATH_APP_DATA_Y, m_data.app_data.y)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_APP_DATA_WIDTH, m_data.app_data.width))
-	{
+	if(!m_config->Write(raCONFPATH_APP_DATA_WIDTH, m_data.app_data.width)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_APP_DATA_HEIGHT, m_data.app_data.height))
-	{
+	if(!m_config->Write(raCONFPATH_APP_DATA_HEIGHT, m_data.app_data.height)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_APP_DATA_MAX, m_data.app_data.maximized))
-	{
+	if(!m_config->Write(raCONFPATH_APP_DATA_MAX, m_data.app_data.maximized)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_GAME_DATA_CLOCK, m_data.game_data.clockwise))
-	{
+	if(!m_config->Write(raCONFPATH_GAME_DATA_CLOCK, m_data.game_data.clockwise)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_GAME_DATA_MINBID3, m_data.game_data.min_bid3))
-	{
+	if(!m_config->Write(raCONFPATH_GAME_DATA_MINBID3, m_data.game_data.min_bid3)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_GAME_DATA_WAIVERULE4, m_data.game_data.waive_rule4))
-	{
+	if(!m_config->Write(raCONFPATH_GAME_DATA_WAIVERULE4, m_data.game_data.waive_rule4)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_GAME_DATA_SLUFFJACKS, m_data.game_data.sluff_jacks))
-	{
+	if(!m_config->Write(raCONFPATH_GAME_DATA_SLUFFJACKS, m_data.game_data.sluff_jacks)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Write(raCONFPATH_PREFS_PLAYCARDON, m_data.prefs_data.play_card_on))
-	{
+	if(!m_config->Write(raCONFPATH_PREFS_PLAYCARDON, m_data.prefs_data.play_card_on)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(!m_config->Write(raCONFPATH_PREFS_CARDBACK, m_data.prefs_data.card_back))
-	{
+	if(!m_config->Write(raCONFPATH_PREFS_CARDBACK, m_data.prefs_data.card_back)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(!m_config->Write(raCONFPATH_PREFS_AUTOPLAYSINGLE, m_data.prefs_data.auto_play_single))
-	{
+	if(!m_config->Write(raCONFPATH_PREFS_AUTOPLAYSINGLE, m_data.prefs_data.auto_play_single)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(!m_config->Write(raCONFPATH_PREFS_BIDBUBBLES, m_data.prefs_data.show_bid_bubbles))
-	{
+	if(!m_config->Write(raCONFPATH_PREFS_BIDBUBBLES, m_data.prefs_data.show_bid_bubbles)) {
 		wxLogError(wxString::Format(wxT("m_config->Write() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -121,13 +104,11 @@ bool raConfig::Save()
 	return true;
 }
 
-void raConfig::GetData(raConfData *data)
-{
+void raConfig::GetData(raConfData *data) {
 	wxMutexLocker lock(s_mutex);
 	memcpy(data, &m_data, sizeof(raConfData));
 }
-bool raConfig::SetData(raConfData *data)
-{
+bool raConfig::SetData(raConfData *data) {
 	wxMutexLocker lock(s_mutex);
 	// TODO : Sanity check incoming data
 	memcpy(&m_data, data, sizeof(raConfData));
@@ -138,8 +119,7 @@ bool raConfig::SetData(raConfData *data)
 // Private constructor/destructor
 //
 
-raConfig::raConfig()
-{
+raConfig::raConfig() {
 	memset(&m_data, 0, sizeof(m_data));
 	m_config = new wxConfig(RA_APP_NAME);
 
@@ -147,16 +127,14 @@ raConfig::raConfig()
 	// configuration data may not be present. Create it.
 
 	// Attempt to load the data from the configuration repository
-	if(!Load())
-	{
+	if(!Load()) {
 		// If load failed, the application is being run for the first time
 		// Save default settings
 		SetDefaultValues(&m_data);
 		Save();
 	}
 }
-raConfig::~raConfig()
-{
+raConfig::~raConfig() {
 	delete m_config;
 }
 
@@ -164,14 +142,12 @@ raConfig::~raConfig()
 // Private methods
 //
 
-void raConfig::Create()
-{
+void raConfig::Create() {
 	static raConfig the_instance;
 	s_instance = &the_instance;
 }
 
-void raConfig::SetDefaultValues(raConfData *data)
-{
+void raConfig::SetDefaultValues(raConfData *data) {
 	data->app_data.x = -1;
 	data->app_data.y = -1;
 	data->app_data.width = -1;
@@ -191,79 +167,65 @@ void raConfig::SetDefaultValues(raConfData *data)
 	return;
 }
 
-bool raConfig::Load()
-{
-	if(!m_config->Read(raCONFPATH_APP_DATA_X, &m_data.app_data.x))
-	{
+bool raConfig::Load() {
+	if(!m_config->Read(raCONFPATH_APP_DATA_X, &m_data.app_data.x)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_APP_DATA_Y, &m_data.app_data.y))
-	{
+	if(!m_config->Read(raCONFPATH_APP_DATA_Y, &m_data.app_data.y)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_APP_DATA_WIDTH, &m_data.app_data.width))
-	{
+	if(!m_config->Read(raCONFPATH_APP_DATA_WIDTH, &m_data.app_data.width)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_APP_DATA_HEIGHT, &m_data.app_data.height))
-	{
+	if(!m_config->Read(raCONFPATH_APP_DATA_HEIGHT, &m_data.app_data.height)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_APP_DATA_MAX, &m_data.app_data.maximized))
-	{
+	if(!m_config->Read(raCONFPATH_APP_DATA_MAX, &m_data.app_data.maximized)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_GAME_DATA_CLOCK, &m_data.game_data.clockwise))
-	{
+	if(!m_config->Read(raCONFPATH_GAME_DATA_CLOCK, &m_data.game_data.clockwise)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_GAME_DATA_MINBID3, &m_data.game_data.min_bid3))
-	{
+	if(!m_config->Read(raCONFPATH_GAME_DATA_MINBID3, &m_data.game_data.min_bid3)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_GAME_DATA_WAIVERULE4, &m_data.game_data.waive_rule4))
-	{
+	if(!m_config->Read(raCONFPATH_GAME_DATA_WAIVERULE4, &m_data.game_data.waive_rule4)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_GAME_DATA_SLUFFJACKS, &m_data.game_data.sluff_jacks))
-	{
+	if(!m_config->Read(raCONFPATH_GAME_DATA_SLUFFJACKS, &m_data.game_data.sluff_jacks)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
-	if(!m_config->Read(raCONFPATH_PREFS_PLAYCARDON, &m_data.prefs_data.play_card_on))
-	{
+	if(!m_config->Read(raCONFPATH_PREFS_PLAYCARDON, &m_data.prefs_data.play_card_on)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(!m_config->Read(raCONFPATH_PREFS_CARDBACK, &m_data.prefs_data.card_back))
-	{
+	if(!m_config->Read(raCONFPATH_PREFS_CARDBACK, &m_data.prefs_data.card_back)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(!m_config->Read(raCONFPATH_PREFS_AUTOPLAYSINGLE, &m_data.prefs_data.auto_play_single))
-	{
+	if(!m_config->Read(raCONFPATH_PREFS_AUTOPLAYSINGLE, &m_data.prefs_data.auto_play_single)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(!m_config->Read(raCONFPATH_PREFS_BIDBUBBLES, &m_data.prefs_data.show_bid_bubbles))
-	{
+	if(!m_config->Read(raCONFPATH_PREFS_BIDBUBBLES, &m_data.prefs_data.show_bid_bubbles)) {
 		wxLogError(wxString::Format(wxT("m_config->Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}

@@ -19,8 +19,7 @@
 
 #include "wx/wx.h"
 
-class ggPanel: public wxPanel
-{
+class ggPanel: public wxPanel {
 private:
 	wxBitmap *m_back, *m_work;
 	bool m_f_invalid;
@@ -28,7 +27,7 @@ private:
 	DECLARE_EVENT_TABLE()
 	// Disallow copy constructor/assignment operators
 	ggPanel(const ggPanel &);
-    ggPanel & operator=(const ggPanel &);
+	ggPanel & operator=(const ggPanel &);
 public:
 	ggPanel(const wxWindow* parent);
 	~ggPanel();
@@ -37,13 +36,13 @@ public:
 	virtual void OnPaint(wxPaintEvent &event);
 	bool RefreshScreen();
 	bool BlitToBack(wxCoord xdest, wxCoord ydest,
-		wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
-		wxCoord ysrc, int logicalFunc = wxCOPY, bool useMask = false,
-		wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+					wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
+					wxCoord ysrc, int logicalFunc = wxCOPY, bool useMask = false,
+					wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 	bool BlitToFront(wxCoord xdest, wxCoord ydest,
-		wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
-		wxCoord ysrc, int logicalFunc = wxCOPY, bool useMask = false,
-		wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+					 wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc,
+					 wxCoord ysrc, int logicalFunc = wxCOPY, bool useMask = false,
+					 wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 	bool DrawTextOnBack(wxString text, wxPoint pt, wxColour colour = wxNullColour, wxFont font = wxNullFont);
 	bool ClearDifference();
 	//bool DrawBack();

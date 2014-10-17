@@ -29,8 +29,7 @@
 #include "radlgrules.h"
 
 
-enum
-{
+enum {
 	raID_NEW_GAME = 10000,
 	raID_EXIT,
 	raID_PREFERENCES,
@@ -53,8 +52,7 @@ enum
 class raFrame;
 
 // Declare the application class
-class raApp : public wxApp
-{
+class raApp : public wxApp {
 private:
 	FILE *m_logfile;
 	wxLogStderr *m_logger;
@@ -63,7 +61,7 @@ private:
 	raFrame *m_frame;
 	// Disallow copy constructor/assignment operators
 	//raApp(const raApp &);
-    raApp & operator=(const raApp &);
+	raApp & operator=(const raApp &);
 public:
 	// Called on application startup
 	virtual bool OnInit();
@@ -75,8 +73,7 @@ public:
 };
 
 // Declare our main frame class
-class raFrame : public wxFrame
-{
+class raFrame : public wxFrame {
 public:
 	// Constructor
 	raFrame(const wxString& title);
@@ -104,7 +101,7 @@ private:
 	DECLARE_EVENT_TABLE()
 	// Disallow copy constructor/assignment operators
 	raFrame(const raFrame &);
-    raFrame & operator=(const raFrame &);
+	raFrame & operator=(const raFrame &);
 };
 
 // Implements raApp& GetApp()

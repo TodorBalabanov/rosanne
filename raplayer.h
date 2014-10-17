@@ -26,8 +26,7 @@ enum {
 	raPLAYER_TYPE_AI
 };
 
-class raPlayer
-{
+class raPlayer {
 private:
 	aiAgent m_agent;
 	int m_loc;

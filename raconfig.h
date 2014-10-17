@@ -41,8 +41,7 @@
 #define raCONFIG_PREFS_CARDBACK_BLUE 0
 #define raCONFIG_PREFS_CARDBACK_RED 1
 
-typedef struct tag_RA_CONF_APP_DATA
-{
+typedef struct tag_RA_CONF_APP_DATA {
 	int x;
 	int y;
 	int width;
@@ -50,31 +49,27 @@ typedef struct tag_RA_CONF_APP_DATA
 	bool maximized;
 } raConfAppData;
 
-typedef struct tag_RA_CONF_GAME_DATA
-{
+typedef struct tag_RA_CONF_GAME_DATA {
 	bool clockwise;
 	int min_bid3;
 	bool waive_rule4;
 	bool sluff_jacks;
 } raConfGameData;
 
-typedef struct tag_RA_CONF_PREFS_DATA
-{
+typedef struct tag_RA_CONF_PREFS_DATA {
 	int play_card_on;
 	int card_back;
 	bool auto_play_single;
 	bool show_bid_bubbles;
 } raConfPrefsData;
 
-typedef struct tag_RA_CONF_DATA
-{
+typedef struct tag_RA_CONF_DATA {
 	raConfAppData app_data;
 	raConfGameData game_data;
 	raConfPrefsData prefs_data;
 } raConfData;
 
-class raConfig
-{
+class raConfig {
 public:
 	static raConfig *GetInstance();
 	bool Save();
@@ -82,16 +77,16 @@ public:
 	bool SetData(raConfData *data);
 	// Configure to make the destructor public with Visual Studio 6 - stupid compiler
 #ifdef _MSC_VER
-	#if _MSC_VER <= 1200
+#if _MSC_VER <= 1200
 	virtual ~raConfig();
-	#endif
+#endif
 #endif
 
 private:
 
 	// Disallow copy constructor/assignment operators
 	raConfig(const raConfig &);
-    raConfig & operator=(const raConfig &);
+	raConfig & operator=(const raConfig &);
 
 	wxConfig *m_config;
 	raConfData m_data;
@@ -101,9 +96,9 @@ private:
 //	virtual ~raConfig();
 //#endif
 #ifdef _MSC_VER
-	#if _MSC_VER > 1200
+#if _MSC_VER > 1200
 	virtual ~raConfig();
-	#endif
+#endif
 #else
 	virtual ~raConfig();
 #endif

@@ -156,77 +156,65 @@ static const unsigned int SL_SUIT_LEN_PROBS[] = {699230, 2632395, 3582982, 22629
 //static const unsigned int SL_SUIT_LEN_TOTAL_PROB = 10000000;
 
 
-aiSuitLengthSolver::aiSuitLengthSolver()
-{
+aiSuitLengthSolver::aiSuitLengthSolver() {
 	return;
 }
-aiSuitLengthSolver::~aiSuitLengthSolver()
-{
+aiSuitLengthSolver::~aiSuitLengthSolver() {
 	return;
 }
 
-void aiSuitLengthSolver::InitializeProblem(slProblem *problem)
-{
-    // Problem is initialized by setting suit lengths for all spots as vacant
-    // and setting the total length for all hands and suits as zero.
+void aiSuitLengthSolver::InitializeProblem(slProblem *problem) {
+	// Problem is initialized by setting suit lengths for all spots as vacant
+	// and setting the total length for all hands and suits as zero.
 
-    memset(problem, 0, sizeof(slProblem));
-    for(int i = 0; i < slTOTAL_HANDS; i++)
-    {
-        for(int j = 0; j < slTOTAL_SUITS; j++)
-        {
-            problem->suit_length[i][j] = slVACANT;
-        }
-    }
+	memset(problem, 0, sizeof(slProblem));
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			problem->suit_length[i][j] = slVACANT;
+		}
+	}
 
-    return;
+	return;
 }
 
-void aiSuitLengthSolver::InitializePlayed(slPlayed played)
-{
-    // Played is initialized by setting suit lengths for all spots as zero
-    // and setting the total length for all hands and suits also as zero.
+void aiSuitLengthSolver::InitializePlayed(slPlayed played) {
+	// Played is initialized by setting suit lengths for all spots as zero
+	// and setting the total length for all hands and suits also as zero.
 
-    memset(played, 0, sizeof(slPlayed));
+	memset(played, 0, sizeof(slPlayed));
 
-    return;
+	return;
 }
 
-void aiSuitLengthSolver::InitializeWorkingData(slData *data)
-{
-    // Problem is initialized by setting suit lengths for all spots as vacant
-    // and setting the total length for all hands and suits as zero.
+void aiSuitLengthSolver::InitializeWorkingData(slData *data) {
+	// Problem is initialized by setting suit lengths for all spots as vacant
+	// and setting the total length for all hands and suits as zero.
 
-    memset(data, 0, sizeof(slData));
-    for(int i = 0; i < slTOTAL_HANDS; i++)
-    {
-        for(int j = 0; j < slTOTAL_SUITS; j++)
-        {
-            data->cells[i][j].suit_length = slVACANT;
-        }
-    }
+	memset(data, 0, sizeof(slData));
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			data->cells[i][j].suit_length = slVACANT;
+		}
+	}
 
-    return;
+	return;
 }
 
 
-bool aiSuitLengthSolver::SetProblem(slProblem *problem, slPlayed played)
-{
-    int hand_total_played[slTOTAL_HANDS] = {0, 0, 0, 0};
-    int suit_total_played[slTOTAL_SUITS] = {0, 0, 0, 0};
+bool aiSuitLengthSolver::SetProblem(slProblem *problem, slPlayed played) {
+	int hand_total_played[slTOTAL_HANDS] = {0, 0, 0, 0};
+	int suit_total_played[slTOTAL_SUITS] = {0, 0, 0, 0};
 
-    if(problem == NULL)
-    {
-        ::wxLogError(wxString::Format(wxT("Input variable problem for aiSuitLengthSolver::SetProblem is NULL. %s:%d"),
-                                    wxT(__FILE__), __LINE__));
-        return false;
-    }
-    if(played == NULL)
-    {
-        ::wxLogError(wxString::Format(wxT("Input variable played for aiSuitLengthSolver::SetProblem is NULL. %s:%d"),
-                                    wxT(__FILE__), __LINE__));
-        return false;
-    }
+	if(problem == NULL) {
+		::wxLogError(wxString::Format(wxT("Input variable problem for aiSuitLengthSolver::SetProblem is NULL. %s:%d"),
+									  wxT(__FILE__), __LINE__));
+		return false;
+	}
+	if(played == NULL) {
+		::wxLogError(wxString::Format(wxT("Input variable played for aiSuitLengthSolver::SetProblem is NULL. %s:%d"),
+									  wxT(__FILE__), __LINE__));
+		return false;
+	}
 
 	InitializeWorkingData(&m_saved);
 
@@ -240,72 +228,63 @@ bool aiSuitLengthSolver::SetProblem(slProblem *problem, slPlayed played)
 	// The hand_total_length and suit_total_length arrays in problem contain the list of cards to be allocatd.
 	// Both added together for should be 8
 
-    for(int i = 0; i < slTOTAL_HANDS; i++)
-    {
-        for(int j = 0; j < slTOTAL_SUITS; j++)
-        {
-            hand_total_played[i] += m_played[i][j];
-            suit_total_played[j] += m_played[i][j];
-        }
-    }
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			hand_total_played[i] += m_played[i][j];
+			suit_total_played[j] += m_played[i][j];
+		}
+	}
 
-    //wxLogDebug(PrintMatrix(m_played));
-    for(int i = 0; i < slTOTAL_HANDS; i++)
-    {
-        if((hand_total_played[i] + m_problem.hand_total_length[i]) != slLENGTH_MAX)
-        {
-            ::wxLogError(wxString::Format(wxT("No of played cards and the cards to be set does not add up to slLENGTH_MAX for hand %d. %s:%d"),
-                                        i, wxT(__FILE__), __LINE__));
-            ::wxLogError(wxString::Format(wxT("hand_total_played[%d] = %d"), i , hand_total_played[i]));
-            ::wxLogError(wxString::Format(wxT("m_problem.hand_total_length[%d] = %d"), i , m_problem.hand_total_length[i]));
-            wxASSERT(false);
-            return false;
-        }
-    }
+	//wxLogDebug(PrintMatrix(m_played));
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		if((hand_total_played[i] + m_problem.hand_total_length[i]) != slLENGTH_MAX) {
+			::wxLogError(wxString::Format(wxT("No of played cards and the cards to be set does not add up to slLENGTH_MAX for hand %d. %s:%d"),
+										  i, wxT(__FILE__), __LINE__));
+			::wxLogError(wxString::Format(wxT("hand_total_played[%d] = %d"), i , hand_total_played[i]));
+			::wxLogError(wxString::Format(wxT("m_problem.hand_total_length[%d] = %d"), i , m_problem.hand_total_length[i]));
+			wxASSERT(false);
+			return false;
+		}
+	}
 
-    for(int i = 0; i < slTOTAL_SUITS; i++)
-    {
-        if((suit_total_played[i] + m_problem.suit_total_length[i]) != slLENGTH_MAX)
-        {
-            ::wxLogError(wxString::Format(wxT("No of played cards and the cards to be set does not add up to slLENGTH_MAX for suit %d. %s:%d"),
-                                        i, wxT(__FILE__), __LINE__));
-            ::wxLogError(wxString::Format(wxT("suit_total_played[%d] = %d"), i , suit_total_played[i]));
-            ::wxLogError(wxString::Format(wxT("m_problem.suit_total_length[%d] = %d"), i , m_problem.suit_total_length[i]));
-            wxASSERT(false);
-            return false;
-        }
-    }
+	for(int i = 0; i < slTOTAL_SUITS; i++) {
+		if((suit_total_played[i] + m_problem.suit_total_length[i]) != slLENGTH_MAX) {
+			::wxLogError(wxString::Format(wxT("No of played cards and the cards to be set does not add up to slLENGTH_MAX for suit %d. %s:%d"),
+										  i, wxT(__FILE__), __LINE__));
+			::wxLogError(wxString::Format(wxT("suit_total_played[%d] = %d"), i , suit_total_played[i]));
+			::wxLogError(wxString::Format(wxT("m_problem.suit_total_length[%d] = %d"), i , m_problem.suit_total_length[i]));
+			wxASSERT(false);
+			return false;
+		}
+	}
 
 	// Copy the status of each cell (which must be zero to slLENGTH_MAX or slVACANT)
 
-	for(int i = 0; i < slTOTAL_HANDS; i++)
-	{
-	    for(int j = 0; j < slTOTAL_SUITS; j++)
-	    {
-	        wxASSERT((m_problem.suit_length[i][j] == slVACANT) ||
-                  ((m_problem.suit_length[i][j] >= 0) && (m_problem.suit_length[i][j] <= slLENGTH_MAX)));
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			wxASSERT((m_problem.suit_length[i][j] == slVACANT) ||
+					 ((m_problem.suit_length[i][j] >= 0) && (m_problem.suit_length[i][j] <= slLENGTH_MAX)));
 
-            //SetCell(&m_saved, i, j, m_problem.suit_length[i][j]);
-	        m_saved.cells[i][j].suit_length = m_problem.suit_length[i][j];
+			//SetCell(&m_saved, i, j, m_problem.suit_length[i][j]);
+			m_saved.cells[i][j].suit_length = m_problem.suit_length[i][j];
 
-	        // If the suit length for the cell is fixed already
-	        // set max and min as the fixed value.
+			// If the suit length for the cell is fixed already
+			// set max and min as the fixed value.
 
-	        if (m_problem.suit_length[i][j] != slVACANT)
-	        {
-	            m_saved.cells[i][j].max = m_problem.suit_length[i][j];
-	            m_saved.cells[i][j].min = m_problem.suit_length[i][j];
+			if (m_problem.suit_length[i][j] != slVACANT) {
+				m_saved.cells[i][j].max = m_problem.suit_length[i][j];
+				m_saved.cells[i][j].min = m_problem.suit_length[i][j];
 
-	            // Adjust the sum of maxes
-	            m_saved.hand_sum_of_maxs[i] += m_saved.cells[i][j].max;
-	            m_saved.suit_sum_of_maxs[j] += m_saved.cells[i][j].max;
+				// Adjust the sum of maxes
+				m_saved.hand_sum_of_maxs[i] += m_saved.cells[i][j].max;
+				m_saved.suit_sum_of_maxs[j] += m_saved.cells[i][j].max;
 
-	            // Adjust allocated cards
-	            m_saved.hand_allocated[i] += m_problem.suit_length[i][j];
-	            m_saved.suit_allocated[j] += m_problem.suit_length[i][j];
-	        }
+				// Adjust allocated cards
+				m_saved.hand_allocated[i] += m_problem.suit_length[i][j];
+				m_saved.suit_allocated[j] += m_problem.suit_length[i][j];
+			}
 
-	    }
+		}
 	}
 
 	// Calc max for each cell
@@ -313,247 +292,226 @@ bool aiSuitLengthSolver::SetProblem(slProblem *problem, slPlayed played)
 	// Calculate sum of maxes
 	// Calculate min
 
-    memcpy(&(m_saved.hand_total_length), &(m_problem.hand_total_length), sizeof(m_saved.hand_total_length));
-    memcpy(&(m_saved.suit_total_length), &(m_problem.suit_total_length), sizeof(m_saved.suit_total_length));
+	memcpy(&(m_saved.hand_total_length), &(m_problem.hand_total_length), sizeof(m_saved.hand_total_length));
+	memcpy(&(m_saved.suit_total_length), &(m_problem.suit_total_length), sizeof(m_saved.suit_total_length));
 
-    // Calculate max for all cells
-    // This also calculates the sum of maxes for all hands and suits internally
+	// Calculate max for all cells
+	// This also calculates the sum of maxes for all hands and suits internally
 
-    RecalcMaxForAllCells(&m_saved);
+	RecalcMaxForAllCells(&m_saved);
 
-    // Calculate min for all cells
-    // TODO: Is this required?
+	// Calculate min for all cells
+	// TODO: Is this required?
 
-    //RecalcMinForAllCells(&m_saved);
+	//RecalcMinForAllCells(&m_saved);
 
-	for(int i = 0; i < slTOTAL_HANDS; i++)
-	{
-	    for(int j = 0; j < slTOTAL_SUITS; j++)
-	    {
-	        RecalcMinForImpactedCells(&m_saved, i, j);
-	    }
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			RecalcMinForImpactedCells(&m_saved, i, j);
+		}
 
-    }
+	}
 
-    // Calcualte max for all cells. This is done again because mins would have changed.
+	// Calcualte max for all cells. This is done again because mins would have changed.
 
-    //RecalcMaxForAllCells(&m_saved);
-    //RecalcMinForAllCells(&m_saved);
-    return true;
+	//RecalcMaxForAllCells(&m_saved);
+	//RecalcMinForAllCells(&m_saved);
+	return true;
 }
 
-bool aiSuitLengthSolver::RecalcCellMax(slData *data, int hand, int suit)
-{
-    int old_max = 0;
-    int new_max = 0;
+bool aiSuitLengthSolver::RecalcCellMax(slData *data, int hand, int suit) {
+	int old_max = 0;
+	int new_max = 0;
 
-    wxASSERT(data != NULL);
-    wxASSERT(hand < slTOTAL_HANDS);
-    wxASSERT(suit < slTOTAL_SUITS);
-    wxASSERT(data->cells[hand][suit].suit_length == slVACANT);
+	wxASSERT(data != NULL);
+	wxASSERT(hand < slTOTAL_HANDS);
+	wxASSERT(suit < slTOTAL_SUITS);
+	wxASSERT(data->cells[hand][suit].suit_length == slVACANT);
 
-    int h = (data->hand_total_length[hand] - data->hand_allocated[hand] - data->hand_sum_of_vacant_mins[hand]
-             + data->cells[hand][suit].min);
-    wxASSERT(h >= 0);
-    int s = (data->suit_total_length[suit] - data->suit_allocated[suit] - data->suit_sum_of_vacant_mins[suit]
-             + data->cells[hand][suit].min);
-    wxASSERT(s >= 0);
+	int h = (data->hand_total_length[hand] - data->hand_allocated[hand] - data->hand_sum_of_vacant_mins[hand]
+			 + data->cells[hand][suit].min);
+	wxASSERT(h >= 0);
+	int s = (data->suit_total_length[suit] - data->suit_allocated[suit] - data->suit_sum_of_vacant_mins[suit]
+			 + data->cells[hand][suit].min);
+	wxASSERT(s >= 0);
 
-    // Store the old max value
+	// Store the old max value
 
-    old_max = data->cells[hand][suit].max;
+	old_max = data->cells[hand][suit].max;
 
-    // Compute the new max value
+	// Compute the new max value
 
-    new_max = std::min(h, s);
-    wxASSERT((new_max <= old_max) || (old_max == 0));
+	new_max = std::min(h, s);
+	wxASSERT((new_max <= old_max) || (old_max == 0));
 
-    data->cells[hand][suit].max = new_max;
+	data->cells[hand][suit].max = new_max;
 
-    // If the new max value is different from the older one,
-    // then the sum of max values for the hand and the suit has to be corrected
+	// If the new max value is different from the older one,
+	// then the sum of max values for the hand and the suit has to be corrected
 
-    if(new_max != old_max)
-    {
-        data->hand_sum_of_maxs[hand] -= (old_max - new_max);
-        data->suit_sum_of_maxs[suit] -= (old_max - new_max);
-        return true;
-    }
+	if(new_max != old_max) {
+		data->hand_sum_of_maxs[hand] -= (old_max - new_max);
+		data->suit_sum_of_maxs[suit] -= (old_max - new_max);
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
-bool aiSuitLengthSolver::SetCell(slData *data, int hand, int suit, int val)
-{
+bool aiSuitLengthSolver::SetCell(slData *data, int hand, int suit, int val) {
 
 #ifdef slLOG_DEBUG_SETCELL
-    wxLogDebug(wxString::Format(wxT("Entering aiSuitLengthSolver::SetCell (%d, %d) = %d"), hand, suit, val));
+	wxLogDebug(wxString::Format(wxT("Entering aiSuitLengthSolver::SetCell (%d, %d) = %d"), hand, suit, val));
 #endif
 
-    wxASSERT(data != NULL);
-    wxASSERT(hand < slTOTAL_HANDS);
-    wxASSERT(suit < slTOTAL_SUITS);
+	wxASSERT(data != NULL);
+	wxASSERT(hand < slTOTAL_HANDS);
+	wxASSERT(suit < slTOTAL_SUITS);
 
-    wxASSERT((val >= 0) || (val <= slLENGTH_MAX));
+	wxASSERT((val >= 0) || (val <= slLENGTH_MAX));
 
-    // SetCell should be recalculated only for vacant slots
+	// SetCell should be recalculated only for vacant slots
 
-    wxASSERT(data->cells[hand][suit].suit_length == slVACANT);
+	wxASSERT(data->cells[hand][suit].suit_length == slVACANT);
 
-    // Fix the suit length for the cell
+	// Fix the suit length for the cell
 
-    data->cells[hand][suit].suit_length = val;
+	data->cells[hand][suit].suit_length = val;
 
-    // As the max value for the cell is changing, correct the sum of maxes beforehand
+	// As the max value for the cell is changing, correct the sum of maxes beforehand
 
-    data->hand_sum_of_maxs[hand] -= (data->cells[hand][suit].max - val);
-    data->suit_sum_of_maxs[suit] -= (data->cells[hand][suit].max - val);
+	data->hand_sum_of_maxs[hand] -= (data->cells[hand][suit].max - val);
+	data->suit_sum_of_maxs[suit] -= (data->cells[hand][suit].max - val);
 
-    // As the min value for the cell is changing, correct the sum of mins beforehand
+	// As the min value for the cell is changing, correct the sum of mins beforehand
 
-    if(data->cells[hand][suit].min > 0)
-    {
-        data->hand_sum_of_vacant_mins[hand] -= data->cells[hand][suit].min;
-        data->suit_sum_of_vacant_mins[suit] -= data->cells[hand][suit].min;
-    }
+	if(data->cells[hand][suit].min > 0) {
+		data->hand_sum_of_vacant_mins[hand] -= data->cells[hand][suit].min;
+		data->suit_sum_of_vacant_mins[suit] -= data->cells[hand][suit].min;
+	}
 
-    // Fix the max and min as the same as the suit length
+	// Fix the max and min as the same as the suit length
 
-    data->cells[hand][suit].max = val;
-    data->cells[hand][suit].min = val;
+	data->cells[hand][suit].max = val;
+	data->cells[hand][suit].min = val;
 
-    // val number of cards have been allocated from the hand and from the suit
+	// val number of cards have been allocated from the hand and from the suit
 
-    data->hand_allocated[hand] += val;
-    data->suit_allocated[suit] += val;
-    wxASSERT(data->hand_allocated[hand] <= data->hand_total_length[hand]);
-    wxASSERT(data->suit_allocated[suit] <= data->suit_total_length[suit]);
+	data->hand_allocated[hand] += val;
+	data->suit_allocated[suit] += val;
+	wxASSERT(data->hand_allocated[hand] <= data->hand_total_length[hand]);
+	wxASSERT(data->suit_allocated[suit] <= data->suit_total_length[suit]);
 
-    // Recalculate the max for all the affected cells
+	// Recalculate the max for all the affected cells
 
-    RecalcMaxForImpactedCells(data, hand, suit);
-    RecalcMinForImpactedCells(data, hand, suit);
+	RecalcMaxForImpactedCells(data, hand, suit);
+	RecalcMinForImpactedCells(data, hand, suit);
 
-    // Recalculate the min for all the cells
+	// Recalculate the min for all the cells
 
-    //RecalcMinForAllCells(data);
+	//RecalcMinForAllCells(data);
 
-    // Calcualte max for all cells. This is done again because mins would have changed.
+	// Calcualte max for all cells. This is done again because mins would have changed.
 
-    //RecalcMaxForAllCells(data);
-    //RecalcMinForAllCells(data);
+	//RecalcMaxForAllCells(data);
+	//RecalcMinForAllCells(data);
 
-    return true;
+	return true;
 }
 
-bool aiSuitLengthSolver::RecalcMaxForImpactedCells(slData *data, int hand, int suit)
-{
-    wxASSERT(data != NULL);
-    wxASSERT(hand < slTOTAL_HANDS);
-    wxASSERT(suit < slTOTAL_SUITS);
+bool aiSuitLengthSolver::RecalcMaxForImpactedCells(slData *data, int hand, int suit) {
+	wxASSERT(data != NULL);
+	wxASSERT(hand < slTOTAL_HANDS);
+	wxASSERT(suit < slTOTAL_SUITS);
 
 #ifdef slLOG_DEBUG_SETIMPCELLS
 
-    ::wxLogDebug(wxString::Format(wxT("Entering aiSuitLengthSolver::RecalcMaxForImpactedCells for (%d, %d)"), hand, suit));
-    ::wxLogDebug(wxString::Format(wxT("Data : %s"), PrintData(data).c_str()));
+	::wxLogDebug(wxString::Format(wxT("Entering aiSuitLengthSolver::RecalcMaxForImpactedCells for (%d, %d)"), hand, suit));
+	::wxLogDebug(wxString::Format(wxT("Data : %s"), PrintData(data).c_str()));
 
 #endif
 
-    // Recalculate the max for all the affected cells
-    // Recalculate the max for all cell in hand
+	// Recalculate the max for all the affected cells
+	// Recalculate the max for all cell in hand
 
-    for(int i = 0; i < slTOTAL_SUITS; i++)
-    {
-        // Avoid recalculating for the cell for which data is being set
-        // and for non-vacant cells.
+	for(int i = 0; i < slTOTAL_SUITS; i++) {
+		// Avoid recalculating for the cell for which data is being set
+		// and for non-vacant cells.
 
-        //if((i != suit) && (data->cells[hand][i].suit_length == slVACANT))
-        if(data->cells[hand][i].suit_length == slVACANT)
-        {
-            if(RecalcCellMax(data, hand, i) == true)
-            {
-                RecalcMinForImpactedCells(data, hand, i);
-            }
-        }
-    }
-    // Recalculate the max for all cell in suit
+		//if((i != suit) && (data->cells[hand][i].suit_length == slVACANT))
+		if(data->cells[hand][i].suit_length == slVACANT) {
+			if(RecalcCellMax(data, hand, i) == true) {
+				RecalcMinForImpactedCells(data, hand, i);
+			}
+		}
+	}
+	// Recalculate the max for all cell in suit
 
-    for(int i = 0; i < slTOTAL_HANDS; i++)
-    {
-        // Avoid recalculating for the cell for which data is being set
-        // and for non-vacant cells.
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		// Avoid recalculating for the cell for which data is being set
+		// and for non-vacant cells.
 
-        //if((i != hand) && (data->cells[i][suit].suit_length == slVACANT))
-        if(data->cells[i][suit].suit_length == slVACANT)
-        {
-            if(RecalcCellMax(data, i, suit) == true)
-            {
-                RecalcMinForImpactedCells(data, i, suit);
-            }
-        }
-    }
-    return true;
+		//if((i != hand) && (data->cells[i][suit].suit_length == slVACANT))
+		if(data->cells[i][suit].suit_length == slVACANT) {
+			if(RecalcCellMax(data, i, suit) == true) {
+				RecalcMinForImpactedCells(data, i, suit);
+			}
+		}
+	}
+	return true;
 }
 
-bool aiSuitLengthSolver::RecalcMinForImpactedCells(slData *data, int hand, int suit)
-{
-    wxASSERT(data != NULL);
-    wxASSERT(hand < slTOTAL_HANDS);
-    wxASSERT(suit < slTOTAL_SUITS);
+bool aiSuitLengthSolver::RecalcMinForImpactedCells(slData *data, int hand, int suit) {
+	wxASSERT(data != NULL);
+	wxASSERT(hand < slTOTAL_HANDS);
+	wxASSERT(suit < slTOTAL_SUITS);
 
 #ifdef slLOG_DEBUG_SETIMPCELLS
 
-    ::wxLogDebug(wxString::Format(wxT("Entering aiSuitLengthSolver::RecalcMinForImpactedCells for (%d, %d)"), hand, suit));
-    ::wxLogDebug(wxString::Format(wxT("Data : %s"), PrintData(data).c_str()));
+	::wxLogDebug(wxString::Format(wxT("Entering aiSuitLengthSolver::RecalcMinForImpactedCells for (%d, %d)"), hand, suit));
+	::wxLogDebug(wxString::Format(wxT("Data : %s"), PrintData(data).c_str()));
 
 #endif
 
-    // Recalculate the min for all the affected cells
-    // Recalculate the min for all cell in hand
+	// Recalculate the min for all the affected cells
+	// Recalculate the min for all cell in hand
 
-    for(int i = 0; i < slTOTAL_SUITS; i++)
-    {
-        // Avoid recalculating for the cell for which data is being set
-        // and for non-vacant cells.
+	for(int i = 0; i < slTOTAL_SUITS; i++) {
+		// Avoid recalculating for the cell for which data is being set
+		// and for non-vacant cells.
 
-        //if((i != suit) && (data->cells[hand][i].suit_length == slVACANT))
-        if(data->cells[hand][i].suit_length == slVACANT)
-        {
-            if(RecalcCellMin(data, hand, i) == true)
-            {
-                RecalcMaxForImpactedCells(data, hand, i);
-            }
-        }
-    }
-    // Recalculate the max for all cell in suit
+		//if((i != suit) && (data->cells[hand][i].suit_length == slVACANT))
+		if(data->cells[hand][i].suit_length == slVACANT) {
+			if(RecalcCellMin(data, hand, i) == true) {
+				RecalcMaxForImpactedCells(data, hand, i);
+			}
+		}
+	}
+	// Recalculate the max for all cell in suit
 
-    for(int i = 0; i < slTOTAL_HANDS; i++)
-    {
-        // Avoid recalculating for the cell for which data is being set
-        // and for non-vacant cells.
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		// Avoid recalculating for the cell for which data is being set
+		// and for non-vacant cells.
 
-        //if((i != hand) && (data->cells[i][suit].suit_length == slVACANT))
-        if(data->cells[i][suit].suit_length == slVACANT)
-        {
-            if(RecalcCellMin(data, i, suit) == true)
-            {
-                RecalcMaxForImpactedCells(data, i, suit);
-            }
-        }
-    }
-    return true;
+		//if((i != hand) && (data->cells[i][suit].suit_length == slVACANT))
+		if(data->cells[i][suit].suit_length == slVACANT) {
+			if(RecalcCellMin(data, i, suit) == true) {
+				RecalcMaxForImpactedCells(data, i, suit);
+			}
+		}
+	}
+	return true;
 }
-bool aiSuitLengthSolver::RecalcCellMin(slData *data, int hand, int suit)
-{
-    int i = 0;
-    int j = 0;
-    int old_min = 0;
-    int new_min = 0;
+bool aiSuitLengthSolver::RecalcCellMin(slData *data, int hand, int suit) {
+	int i = 0;
+	int j = 0;
+	int old_min = 0;
+	int new_min = 0;
 
-    wxASSERT(data != NULL);
-    wxASSERT(hand < slTOTAL_HANDS);
-    wxASSERT(suit < slTOTAL_SUITS);
-    wxASSERT(data->cells[hand][suit].suit_length == slVACANT);
+	wxASSERT(data != NULL);
+	wxASSERT(hand < slTOTAL_HANDS);
+	wxASSERT(suit < slTOTAL_SUITS);
+	wxASSERT(data->cells[hand][suit].suit_length == slVACANT);
 
 //  min(c(x,y)) = MAX(
 //                       (sum(h(x)) - sum_max(h(x)) + max(c(x,y))),
@@ -563,222 +521,193 @@ bool aiSuitLengthSolver::RecalcCellMin(slData *data, int hand, int suit)
 //
 //  If min(c(x,y)) is negative, set this as zero.
 
-    i = data->hand_total_length[hand] - data->hand_sum_of_maxs[hand] + data->cells[hand][suit].max;
-    if(i < 0)
-    {
-        i = 0;
-    }
+	i = data->hand_total_length[hand] - data->hand_sum_of_maxs[hand] + data->cells[hand][suit].max;
+	if(i < 0) {
+		i = 0;
+	}
 
-    j = data->suit_total_length[suit] - data->suit_sum_of_maxs[suit] + data->cells[hand][suit].max;
-    if(j < 0)
-    {
-        j = 0;
-    }
+	j = data->suit_total_length[suit] - data->suit_sum_of_maxs[suit] + data->cells[hand][suit].max;
+	if(j < 0) {
+		j = 0;
+	}
 
-    old_min = data->cells[hand][suit].min;
-    new_min = std::max(i, j);
+	old_min = data->cells[hand][suit].min;
+	new_min = std::max(i, j);
 
-    // The new minimum should be equal to or more than the old minimum
+	// The new minimum should be equal to or more than the old minimum
 
-    wxASSERT(new_min >= old_min);
+	wxASSERT(new_min >= old_min);
 
-    data->cells[hand][suit].min = new_min;
+	data->cells[hand][suit].min = new_min;
 
-    // If the new min is different from the old min, correct the sum of vacant mins
+	// If the new min is different from the old min, correct the sum of vacant mins
 
-    if(new_min != old_min)
-    {
-        data->hand_sum_of_vacant_mins[hand] += (new_min - old_min);
-        data->suit_sum_of_vacant_mins[suit] += (new_min - old_min);
-        return true;
-    }
+	if(new_min != old_min) {
+		data->hand_sum_of_vacant_mins[hand] += (new_min - old_min);
+		data->suit_sum_of_vacant_mins[suit] += (new_min - old_min);
+		return true;
+	}
 
-    return false;
+	return false;
 }
-bool aiSuitLengthSolver::RecalcMinForAllCells(slData *data, bool * changed)
-{
-    wxASSERT(data != NULL);
+bool aiSuitLengthSolver::RecalcMinForAllCells(slData *data, bool * changed) {
+	wxASSERT(data != NULL);
 
-    // Reset the sum of min values for all hands and suits
-    //memset(data->hand_sum_of_vacant_mins, 0, sizeof(data->hand_sum_of_vacant_mins));
-    //memset(data->suit_sum_of_vacant_mins, 0, sizeof(data->suit_sum_of_vacant_mins));
+	// Reset the sum of min values for all hands and suits
+	//memset(data->hand_sum_of_vacant_mins, 0, sizeof(data->hand_sum_of_vacant_mins));
+	//memset(data->suit_sum_of_vacant_mins, 0, sizeof(data->suit_sum_of_vacant_mins));
 
-    // Calculate min for all cells
-    // At the same time, calculate the sum of mins for the hand
+	// Calculate min for all cells
+	// At the same time, calculate the sum of mins for the hand
 
-	for(int i = 0; i < slTOTAL_HANDS; i++)
-	{
-	    for(int j = 0; j < slTOTAL_SUITS; j++)
-	    {
-	        // If the suit length for a cell is fixed, then min
-	        // has already been calculated.
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			// If the suit length for a cell is fixed, then min
+			// has already been calculated.
 
-	        if(data->cells[i][j].suit_length == slVACANT)
-	        {
-                RecalcCellMin(data, i, j);
-                wxASSERT((data->cells[i][j].min >= 0) && (data->cells[i][j].min <= slLENGTH_MAX));
+			if(data->cells[i][j].suit_length == slVACANT) {
+				RecalcCellMin(data, i, j);
+				wxASSERT((data->cells[i][j].min >= 0) && (data->cells[i][j].min <= slLENGTH_MAX));
 
-                // If the min for a vacant cell is not zero, add that to the sum of mins for vacant cells
+				// If the min for a vacant cell is not zero, add that to the sum of mins for vacant cells
 
-                //if(data->cells[i][j].min > 0)
-                //{
-                //    data->hand_sum_of_vacant_mins[i] += data->cells[i][j].min;
-                //    data->suit_sum_of_vacant_mins[j] += data->cells[i][j].min;
-                //}
-	        }
+				//if(data->cells[i][j].min > 0)
+				//{
+				//    data->hand_sum_of_vacant_mins[i] += data->cells[i][j].min;
+				//    data->suit_sum_of_vacant_mins[j] += data->cells[i][j].min;
+				//}
+			}
 
-	    }
+		}
 	}
 	return true;
 }
 
-bool aiSuitLengthSolver::RecalcMaxForAllCells(slData *data)
-{
-    wxASSERT(data != NULL);
+bool aiSuitLengthSolver::RecalcMaxForAllCells(slData *data) {
+	wxASSERT(data != NULL);
 
-    // Calculate max for each cell
-    // This also calculates the sum of maxes for all hands and suits internally
+	// Calculate max for each cell
+	// This also calculates the sum of maxes for all hands and suits internally
 
-	for(int i = 0; i < slTOTAL_HANDS; i++)
-	{
-	    for(int j = 0; j < slTOTAL_SUITS; j++)
-	    {
-	        // If the suit length for a cell is fixed, then max
-	        // has already been calculated.
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			// If the suit length for a cell is fixed, then max
+			// has already been calculated.
 
-	        if(data->cells[i][j].suit_length == slVACANT)
-	        {
-                RecalcCellMax(data, i, j);
+			if(data->cells[i][j].suit_length == slVACANT) {
+				RecalcCellMax(data, i, j);
 
-	        }
-	    }
+			}
+		}
 	}
 
-    return true;
+	return true;
 }
 
 // This method picks a value between min and max, both inclusive, to fill a vacant slot.
 // However, the probability of a slot to be filled with min is different from probabilityof a slot to be filled with max.
 // Hence the relative probability is computed and stored in SL_SUIT_LEN_PROBS and this is used
 
-int aiSuitLengthSolver::GenerateRandomFill(int min, int max)
-{
-    wxASSERT(min >= 0);
-    wxASSERT(min < max);
-    wxASSERT(max <= slLENGTH_MAX);
+int aiSuitLengthSolver::GenerateRandomFill(int min, int max) {
+	wxASSERT(min >= 0);
+	wxASSERT(min < max);
+	wxASSERT(max <= slLENGTH_MAX);
 
-    unsigned int total = 0;
-    unsigned int cumul[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    unsigned int rand_val = 0;
+	unsigned int total = 0;
+	unsigned int cumul[] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	unsigned int rand_val = 0;
 
-    for(int i = min; i <= max; i++)
-    {
-        total += SL_SUIT_LEN_PROBS[i];
-        cumul[i] = total;
-    }
+	for(int i = min; i <= max; i++) {
+		total += SL_SUIT_LEN_PROBS[i];
+		cumul[i] = total;
+	}
 
 
-    rand_val = (rand() % (total + 1));
+	rand_val = (rand() % (total + 1));
 
 #ifdef slLOG_DEBUG_GENRANDFILL
-    wxLogDebug(wxString::Format(wxT("min = %d"), min));
-    wxLogDebug(wxString::Format(wxT("max = %d"), max));
-    for(int i = min; i <= max; i++)
-    {
-        wxLogDebug(wxString::Format(wxT("cumul[%d] = %u"), i, cumul[i]));
-    }
-    wxLogDebug(wxString::Format(wxT("total = %u"), total));
-    wxLogDebug(wxString::Format(wxT("rand_val = %u"), rand_val));
+	wxLogDebug(wxString::Format(wxT("min = %d"), min));
+	wxLogDebug(wxString::Format(wxT("max = %d"), max));
+	for(int i = min; i <= max; i++) {
+		wxLogDebug(wxString::Format(wxT("cumul[%d] = %u"), i, cumul[i]));
+	}
+	wxLogDebug(wxString::Format(wxT("total = %u"), total));
+	wxLogDebug(wxString::Format(wxT("rand_val = %u"), rand_val));
 #endif
-    for(int i = min; i <= max; i++)
-    {
-        if(rand_val <= cumul[i])
-        {
+	for(int i = min; i <= max; i++) {
+		if(rand_val <= cumul[i]) {
 #ifdef slLOG_DEBUG_GENRANDFILL
-            wxLogDebug(wxString::Format(wxT("GenerateRandomFill returns %d"), i));
+			wxLogDebug(wxString::Format(wxT("GenerateRandomFill returns %d"), i));
 #endif
-            return i;
-        }
-    }
-    wxASSERT_MSG(false, wxT("Control should not reach here"));
-    return -1;
+			return i;
+		}
+	}
+	wxASSERT_MSG(false, wxT("Control should not reach here"));
+	return -1;
 
 }
 
-bool aiSuitLengthSolver::GenerateRandomSolution(slSolution solution)
-{
-    int fill = 0;
+bool aiSuitLengthSolver::GenerateRandomSolution(slSolution solution) {
+	int fill = 0;
 
-    if(solution == NULL)
-    {
-        return false;
-    }
+	if(solution == NULL) {
+		return false;
+	}
 
 	memcpy(&m_working, &m_saved, sizeof(slData));
 #ifdef slLOG_DEBUG_GETRANDSOLN
-    wxLogDebug(wxT("Problem :"));
-    wxLogDebug(PrintData(&m_working));
+	wxLogDebug(wxT("Problem :"));
+	wxLogDebug(PrintData(&m_working));
 #endif
 
-	for(int i = 0; i < slTOTAL_HANDS; i++)
-	{
-	    for(int j = 0; j < slTOTAL_SUITS; j++)
-	    {
-	        // Fill only if the cell is vacant
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			// Fill only if the cell is vacant
 
-            if(m_working.cells[i][j].suit_length == slVACANT)
-            {
-                // In a vacant cell, if max and min are the same, then that is the only option.
-                // No need to try to get a random number.
+			if(m_working.cells[i][j].suit_length == slVACANT) {
+				// In a vacant cell, if max and min are the same, then that is the only option.
+				// No need to try to get a random number.
 
-                if(m_working.cells[i][j].max == m_working.cells[i][j].min)
-                {
-                    fill = m_working.cells[i][j].max;
-                }
-                else
-                {
-                    //fill = m_working.cells[i][j].min + (rand() % (m_working.cells[i][j].max - m_working.cells[i][j].min + 1));
-                    fill = GenerateRandomFill(m_working.cells[i][j].min, m_working.cells[i][j].max);
-                }
+				if(m_working.cells[i][j].max == m_working.cells[i][j].min) {
+					fill = m_working.cells[i][j].max;
+				} else {
+					//fill = m_working.cells[i][j].min + (rand() % (m_working.cells[i][j].max - m_working.cells[i][j].min + 1));
+					fill = GenerateRandomFill(m_working.cells[i][j].min, m_working.cells[i][j].max);
+				}
 #ifdef slLOG_DEBUG_GETRANDSOLN
-                ::wxLogDebug(wxString::Format(wxT("Attempting to fill (%d, %d) with %d"), i, j, fill));
+				::wxLogDebug(wxString::Format(wxT("Attempting to fill (%d, %d) with %d"), i, j, fill));
 #endif
-                SetCell(&m_working, i, j, fill);
+				SetCell(&m_working, i, j, fill);
 #ifdef slLOG_DEBUG_GETRANDSOLN
-                ::wxLogDebug(PrintData(&m_working));
+				::wxLogDebug(PrintData(&m_working));
 #endif
-            }
-	    }
+			}
+		}
 	}
 
-    // Set the solution
+	// Set the solution
 
-	for(int i = 0; i < slTOTAL_HANDS; i++)
-	{
-	    for(int j = 0; j < slTOTAL_SUITS; j++)
-	    {
-            solution[i][j] = m_working.cells[i][j].suit_length;
-	    }
+	for(int i = 0; i < slTOTAL_HANDS; i++) {
+		for(int j = 0; j < slTOTAL_SUITS; j++) {
+			solution[i][j] = m_working.cells[i][j].suit_length;
+		}
 	}
 
 #ifdef slLOG_DEBUG_GETRANDSOLN
-    ::wxLogDebug(PrintMatrix(solution));
+	::wxLogDebug(PrintMatrix(solution));
 #endif
-    return true;
+	return true;
 }
 
-wxString aiSuitLengthSolver::PrintSavedData()
-{
-    return aiSuitLengthSolver::PrintData(&m_saved);
+wxString aiSuitLengthSolver::PrintSavedData() {
+	return aiSuitLengthSolver::PrintData(&m_saved);
 }
 
-wxString aiSuitLengthSolver::PrintWorkingData()
-{
-    return aiSuitLengthSolver::PrintData(&m_working);
+wxString aiSuitLengthSolver::PrintWorkingData() {
+	return aiSuitLengthSolver::PrintData(&m_working);
 }
 
-wxString aiSuitLengthSolver::PrintData(slData *data)
-{
+wxString aiSuitLengthSolver::PrintData(slData *data) {
 	wxString out;
 	int i = 0;
 	int j = 0;
@@ -787,10 +716,9 @@ wxString aiSuitLengthSolver::PrintData(slData *data)
 	// Debug log output text is prefixed with "Debug :". Hence add a new line so that the first line is
 	// aligned with the rest
 	out.Append(wxT("\n"));
-	if(!data)
-	{
+	if(!data) {
 		::wxLogError(wxString::Format(wxT("Input variable data is null. %s:%d"),
-			wxT(__FILE__), __LINE__));
+									  wxT(__FILE__), __LINE__));
 		return out;
 	}
 
@@ -799,113 +727,101 @@ wxString aiSuitLengthSolver::PrintData(slData *data)
 	// ------+------+------+------
 
 	out.Append(wxT("       "));
-	for(i = 0; i < slTOTAL_SUITS; i++)
-	{
+	for(i = 0; i < slTOTAL_SUITS; i++) {
 		out.Append(wxString::Format(wxT("S%d    |"), i + 1));
-    }
+	}
 
-    out.Append(wxT("TotLen|Allocd|SumMax|SumMin"));
-    out.Append(wxT("\n"));
-    out.Append(wxT("------+------+------+------+------+------+------+------+------\n"));
+	out.Append(wxT("TotLen|Allocd|SumMax|SumMin"));
+	out.Append(wxT("\n"));
+	out.Append(wxT("------+------+------+------+------+------+------+------+------\n"));
 
-    // Print the rest of the table
+	// Print the rest of the table
 
-    for(i = 0; i < slTOTAL_HANDS; i++)
-    {
-        // Print the first column
-        // H1    |
-        // ------+
-        // H2    |
+	for(i = 0; i < slTOTAL_HANDS; i++) {
+		// Print the first column
+		// H1    |
+		// ------+
+		// H2    |
 
-        out.Append(wxString::Format(wxT("H%d    |"), i));
+		out.Append(wxString::Format(wxT("H%d    |"), i));
 
-        // Print cells for each hand in the format <suit_length>(<min>, <max>)
+		// Print cells for each hand in the format <suit_length>(<min>, <max>)
 
-        for(j = 0; j < slTOTAL_SUITS; j++)
-        {
-            // If the cell is vacant, an "x" is printed instead of the numberic value of slVACANT
+		for(j = 0; j < slTOTAL_SUITS; j++) {
+			// If the cell is vacant, an "x" is printed instead of the numberic value of slVACANT
 
-            if(data->cells[i][j].suit_length == slVACANT)
-            {
-                out.Append(wxT("x"));
-            }
-            else
-            {
-                out.Append(wxString::Format(wxT("%d"), data->cells[i][j].suit_length));
-            }
-            out.Append(wxString::Format(wxT("(%d,%d)|"),
-                                        data->cells[i][j].min, data->cells[i][j].max
-                                        ));
-        }
+			if(data->cells[i][j].suit_length == slVACANT) {
+				out.Append(wxT("x"));
+			} else {
+				out.Append(wxString::Format(wxT("%d"), data->cells[i][j].suit_length));
+			}
+			out.Append(wxString::Format(wxT("(%d,%d)|"),
+										data->cells[i][j].min, data->cells[i][j].max
+									   ));
+		}
 
-        // Print data for the following columns
-        // TotLen|Allocd|SumMax
+		// Print data for the following columns
+		// TotLen|Allocd|SumMax
 
-        out.Append(wxString::Format(wxT("%6d|"), data->hand_total_length[i]));
-        out.Append(wxString::Format(wxT("%6d|"), data->hand_allocated[i]));
-        out.Append(wxString::Format(wxT("%6d|"), data->hand_sum_of_maxs[i]));
-        out.Append(wxString::Format(wxT("%6d"), data->hand_sum_of_vacant_mins[i]));
-        out.Append(wxT("\n"));
-        out.Append(wxT("------+------+------+------+------+------+------+------+------\n"));
+		out.Append(wxString::Format(wxT("%6d|"), data->hand_total_length[i]));
+		out.Append(wxString::Format(wxT("%6d|"), data->hand_allocated[i]));
+		out.Append(wxString::Format(wxT("%6d|"), data->hand_sum_of_maxs[i]));
+		out.Append(wxString::Format(wxT("%6d"), data->hand_sum_of_vacant_mins[i]));
+		out.Append(wxT("\n"));
+		out.Append(wxT("------+------+------+------+------+------+------+------+------\n"));
 
-    }
+	}
 
-    // Print data for the following rows
-    // TotLen|...
-    // ------+...
-    // Allocd|...
-    // ------+...
-    // SumMax|...
-    // ------+...
-    // SumMin|...
+	// Print data for the following rows
+	// TotLen|...
+	// ------+...
+	// Allocd|...
+	// ------+...
+	// SumMax|...
+	// ------+...
+	// SumMin|...
 
-    out.Append(wxT("TotLen|"));
-    for(i = 0; i < slTOTAL_SUITS; i++)
-    {
-        out.Append(wxString::Format(wxT("%6d|"), data->suit_total_length[i]));
-    }
-    out.Append(wxT("\n"));
-    out.Append(wxT("------+------+------+------+------+\n"));
+	out.Append(wxT("TotLen|"));
+	for(i = 0; i < slTOTAL_SUITS; i++) {
+		out.Append(wxString::Format(wxT("%6d|"), data->suit_total_length[i]));
+	}
+	out.Append(wxT("\n"));
+	out.Append(wxT("------+------+------+------+------+\n"));
 
-    out.Append(wxT("Allocd|"));
-    for(i = 0; i < slTOTAL_SUITS; i++)
-    {
-        out.Append(wxString::Format(wxT("%6d|"), data->suit_allocated[i]));
-    }
-    out.Append(wxT("\n"));
-    out.Append(wxT("------+------+------+------+------+\n"));
+	out.Append(wxT("Allocd|"));
+	for(i = 0; i < slTOTAL_SUITS; i++) {
+		out.Append(wxString::Format(wxT("%6d|"), data->suit_allocated[i]));
+	}
+	out.Append(wxT("\n"));
+	out.Append(wxT("------+------+------+------+------+\n"));
 
-    out.Append(wxT("SumMax|"));
-    for(i = 0; i < slTOTAL_SUITS; i++)
-    {
-        out.Append(wxString::Format(wxT("%6d|"), data->suit_sum_of_maxs[i]));
-    }
-    out.Append(wxT("\n"));
-    out.Append(wxT("------+------+------+------+------+\n"));
+	out.Append(wxT("SumMax|"));
+	for(i = 0; i < slTOTAL_SUITS; i++) {
+		out.Append(wxString::Format(wxT("%6d|"), data->suit_sum_of_maxs[i]));
+	}
+	out.Append(wxT("\n"));
+	out.Append(wxT("------+------+------+------+------+\n"));
 
-    out.Append(wxT("SumMin|"));
-    for(i = 0; i < slTOTAL_SUITS; i++)
-    {
-        out.Append(wxString::Format(wxT("%6d|"), data->suit_sum_of_vacant_mins[i]));
-    }
-    out.Append(wxT("\n"));
+	out.Append(wxT("SumMin|"));
+	for(i = 0; i < slTOTAL_SUITS; i++) {
+		out.Append(wxString::Format(wxT("%6d|"), data->suit_sum_of_vacant_mins[i]));
+	}
+	out.Append(wxT("\n"));
 
-    return out;
+	return out;
 }
 
-wxString aiSuitLengthSolver::PrintMatrix(slMatrix matrix)
-{
-    wxString out;
+wxString aiSuitLengthSolver::PrintMatrix(slMatrix matrix) {
+	wxString out;
 	int i = 0;
 	int j = 0;
 
 	out.Empty();
 	out.Append(wxT("\n"));
 
-	if(!matrix)
-	{
+	if(!matrix) {
 		::wxLogError(wxString::Format(wxT("Input variable matrix is null. %s:%d"),
-			wxT(__FILE__), __LINE__));
+									  wxT(__FILE__), __LINE__));
 		return out;
 	}
 
@@ -914,43 +830,37 @@ wxString aiSuitLengthSolver::PrintMatrix(slMatrix matrix)
 	// --+--+--+--
 
 	out.Append(wxT("   "));
-	for(i = 0; i < slTOTAL_SUITS; i++)
-	{
+	for(i = 0; i < slTOTAL_SUITS; i++) {
 		out.Append(wxString::Format(wxT("S%d"), i + 1));
-		if(i != (slTOTAL_SUITS - 1))
-		{
-		    out.Append(wxT("|"));
+		if(i != (slTOTAL_SUITS - 1)) {
+			out.Append(wxT("|"));
 		}
-    }
-    out.Append(wxT("\n"));
-    out.Append(wxT("--+--+--+--+--\n"));
+	}
+	out.Append(wxT("\n"));
+	out.Append(wxT("--+--+--+--+--\n"));
 
-    for(i = 0; i < slTOTAL_HANDS; i++)
-    {
-        // Print the first column
-        // H1|
-        // --+
-        // H2|
+	for(i = 0; i < slTOTAL_HANDS; i++) {
+		// Print the first column
+		// H1|
+		// --+
+		// H2|
 
-        out.Append(wxString::Format(wxT("H%d|"), i));
+		out.Append(wxString::Format(wxT("H%d|"), i));
 
-        // Print cells for each hand in the format <suit_length>(<min>, <max>)
+		// Print cells for each hand in the format <suit_length>(<min>, <max>)
 
-        for(j = 0; j < slTOTAL_SUITS; j++)
-        {
-            out.Append(wxString::Format(wxT("%2d"), matrix[i][j]));
-            if(j != (slTOTAL_SUITS - 1))
-            {
-                out.Append(wxT("|"));
-            }
-        }
-        out.Append(wxT("\n"));
-        if(i != (slTOTAL_HANDS - 1))
-        {
-            out.Append(wxT("--+--+--+--+--\n"));
-        }
+		for(j = 0; j < slTOTAL_SUITS; j++) {
+			out.Append(wxString::Format(wxT("%2d"), matrix[i][j]));
+			if(j != (slTOTAL_SUITS - 1)) {
+				out.Append(wxT("|"));
+			}
+		}
+		out.Append(wxT("\n"));
+		if(i != (slTOTAL_HANDS - 1)) {
+			out.Append(wxT("--+--+--+--+--\n"));
+		}
 
-    }
+	}
 
-    return out;
+	return out;
 }

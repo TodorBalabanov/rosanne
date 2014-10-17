@@ -28,20 +28,19 @@
 #define raPREFS_CARDBACK_BLUE 0
 #define raPREFS_CARDBACK_RED 1
 
-class raDlgPrefs: public wxDialog
-{
-    DECLARE_DYNAMIC_CLASS( raDlgPrefs )
-    DECLARE_EVENT_TABLE()
+class raDlgPrefs: public wxDialog {
+	DECLARE_DYNAMIC_CLASS( raDlgPrefs )
+	DECLARE_EVENT_TABLE()
 private:
-    // Disallow copy constructor/assignment operators
+	// Disallow copy constructor/assignment operators
 	raDlgPrefs(const raDlgPrefs &);
-    raDlgPrefs & operator=(const raDlgPrefs &);
+	raDlgPrefs & operator=(const raDlgPrefs &);
 
 public:
-    raDlgPrefs( );
-    raDlgPrefs( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style);
-    void OnInitDialog( wxInitDialogEvent& event );
-    void OnPrefsBtnApplyClick( wxCommandEvent& event );
+	raDlgPrefs( );
+	raDlgPrefs( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style);
+	void OnInitDialog( wxInitDialogEvent& event );
+	void OnPrefsBtnApplyClick( wxCommandEvent& event );
 
 };
 

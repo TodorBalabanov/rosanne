@@ -49,8 +49,8 @@
 //#define raREAD_DEALER_FROM_FILE 0
 
 #if defined(raREAD_SEED_FROM_FILE) || defined(raREAD_DEALER_FROM_FILE)
-    #include <wx/wfstream.h>
-    #include <wx/fileconf.h>
+#include <wx/wfstream.h>
+#include <wx/fileconf.h>
 #endif
 
 //
@@ -73,8 +73,7 @@ END_EVENT_TABLE()
 // Constructor/s
 //
 
-raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent)
-{
+raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent) {
 	// TODO : Consider each item and move to Reset if found appropriate
 	int i, j;
 	ggCard *card = NULL;
@@ -125,8 +124,7 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent)
 	ResetGame();
 
 	// Initiate the bitmap pointer array for card faces to NULL
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_players[i].SetLocation(i);
 		m_players[i].SetType(raPLAYER_TYPE_AI);
 		//m_players[i].SetType(raPLAYER_TYPE_HUMAN);
@@ -141,15 +139,12 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent)
 		m_card_backs[i] = NULL;
 
 	// Load card faces
-	for(i = 0; i < gmTOTAL_SUITS; i++)
-	{
-		for(j = 0; j < gmTOTAL_VALUES; j++)
-		{
+	for(i = 0; i < gmTOTAL_SUITS; i++) {
+		for(j = 0; j < gmTOTAL_VALUES; j++) {
 			card = new ggCard(i, gmUtil::m_value_trans[j]);
 			wxASSERT(card);
 			m_card_faces[(i * gmTOTAL_VALUES) + j] = new wxBitmap(*card->GetFace());
-			if(!m_card_faces[(i * gmTOTAL_VALUES) + j])
-			{
+			if(!m_card_faces[(i * gmTOTAL_VALUES) + j]) {
 				wxLogError(wxString::Format(wxT("Bitmap creation failed. %s:%d"), wxT(__FILE__), __LINE__));
 				return;
 			}
@@ -162,8 +157,7 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent)
 	card = new ggCard(GG_CARD_BACK_1);
 	wxASSERT(card);
 	m_card_backs[0] = new wxBitmap(*card->GetFace());
-	if(!m_card_backs[0])
-	{
+	if(!m_card_backs[0]) {
 		wxLogError(wxString::Format(wxT("Bitmap creation failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return;
 	}
@@ -173,8 +167,7 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent)
 	card = new ggCard(GG_CARD_BACK_2);
 	wxASSERT(card);
 	m_card_backs[1] = new wxBitmap(*card->GetFace());
-	if(!m_card_backs[1])
-	{
+	if(!m_card_backs[1]) {
 		wxLogError(wxString::Format(wxT("Bitmap creation failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return;
 	}
@@ -195,15 +188,12 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent)
 //
 // Destructor/s
 //
-raGamePanel::~raGamePanel()
-{
+raGamePanel::~raGamePanel() {
 	int i, j;
 
 	// Delete card faces
-	for(i = 0; i < gmTOTAL_SUITS; i++)
-	{
-		for(j = 0; j < gmTOTAL_VALUES; j++)
-		{
+	for(i = 0; i < gmTOTAL_SUITS; i++) {
+		for(j = 0; j < gmTOTAL_VALUES; j++) {
 			if(m_card_faces[(i * gmTOTAL_VALUES) + j])
 				delete m_card_faces[(i * gmTOTAL_VALUES) + j];
 			m_card_faces[(i * gmTOTAL_VALUES) + j] = NULL;
@@ -211,8 +201,7 @@ raGamePanel::~raGamePanel()
 	}
 
 	// Delete card backs
-	for(i = 0; i < raTOTAL_CARD_BACKS; i++)
-	{
+	for(i = 0; i < raTOTAL_CARD_BACKS; i++) {
 		if(m_card_backs[i])
 			delete m_card_backs[i];
 		m_card_backs[i] = NULL;
@@ -276,8 +265,7 @@ raGamePanel::~raGamePanel()
 // Public method/s
 //
 
-bool raGamePanel::SetTile(wxBitmap *tile)
-{
+bool raGamePanel::SetTile(wxBitmap *tile) {
 	wxASSERT(tile);
 
 	// Cleanup if m_tile is already created
@@ -287,15 +275,13 @@ bool raGamePanel::SetTile(wxBitmap *tile)
 
 	// Create a new tile bitmap
 	m_tile = new wxBitmap(*tile);
-	if(!m_tile)
-	{
+	if(!m_tile) {
 		wxLogError(wxString::Format(wxT("Attempt create bitmap failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 
 	// As the tile has now changed, redraw the back buffer
-	if(!RedrawBack())
-	{
+	if(!RedrawBack()) {
 		wxLogError(wxString::Format(wxT("Attempt to redraw back buffer failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -303,16 +289,13 @@ bool raGamePanel::SetTile(wxBitmap *tile)
 	return true;
 }
 
-bool raGamePanel::SetInfoPanel(raInfo *info_panel)
-{
+bool raGamePanel::SetInfoPanel(raInfo *info_panel) {
 	wxASSERT(info_panel);
 	m_info = info_panel;
 	return true;
 }
-bool raGamePanel::NewGame(int dealer, bool immediate)
-{
-	if(!ResetGame())
-	{
+bool raGamePanel::NewGame(int dealer, bool immediate) {
+	if(!ResetGame()) {
 		wxLogError(wxString::Format(wxT("ResetGame failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -322,23 +305,18 @@ bool raGamePanel::NewGame(int dealer, bool immediate)
 	m_engine.SetDealer(dealer);
 
 	m_info->ResetDetails(true);
-	if(immediate)
-	{
-		if(!NewDeal())
-		{
+	if(immediate) {
+		if(!NewDeal()) {
 			wxLogError(wxString::Format(wxT("NewDeal failed. %s:%d"), wxT(__FILE__), __LINE__));
 			return false;
 		}
-	}
-	else
-	{
+	} else {
 		m_info->SetInstruction(wxT("New Game started. Please click on the button below to deal cards."),
-			raINFO_CMD_NEW_DEAL);
+							   raINFO_CMD_NEW_DEAL);
 	}
 	return true;
 }
-bool raGamePanel::NewDeal()
-{
+bool raGamePanel::NewDeal() {
 	int dealer = gmPLAYER_INVALID;
 //	gmRandState rs;
 //
@@ -372,114 +350,95 @@ bool raGamePanel::NewDeal()
 
 #ifdef raREAD_SEED_FROM_FILE
 	//long seed_read;
-    int i = 0;
-    gmRandState rand_state;
-    wxString seed_text;
-    wxString in_txt;
-    unsigned long in_long;
-    bool status = true;
+	int i = 0;
+	gmRandState rand_state;
+	wxString seed_text;
+	wxString in_txt;
+	unsigned long in_long;
+	bool status = true;
 
-	if(::wxFileExists(raTEST_DATA_FILE))
-	{
+	if(::wxFileExists(raTEST_DATA_FILE)) {
 		wxFFileInputStream in(raTEST_DATA_FILE);
 		wxFileConfig fcfg(in);
 
-        memset(&rand_state, 0, sizeof(gmRandState));
-        rand_state.idx = -2;
-        //seed_read = -1;
+		memset(&rand_state, 0, sizeof(gmRandState));
+		rand_state.idx = -2;
+		//seed_read = -1;
 
-        // Read the idx value
-        if(fcfg.Exists(raTEXT_IDX))
-        {
-            wxLogDebug(wxString::Format(wxT("Reading idx from %s. %s:%d"),
-				raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
-			if(!fcfg.Read(raTEXT_IDX, &(rand_state.idx)))
-			{
+		// Read the idx value
+		if(fcfg.Exists(raTEXT_IDX)) {
+			wxLogDebug(wxString::Format(wxT("Reading idx from %s. %s:%d"),
+										raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
+			if(!fcfg.Read(raTEXT_IDX, &(rand_state.idx))) {
 				wxLogError(wxString::Format(
-					wxT("Read failed for %s. %s:%d"), raTEXT_IDX, wxT(__FILE__), __LINE__));
-                status = false;
+							   wxT("Read failed for %s. %s:%d"), raTEXT_IDX, wxT(__FILE__), __LINE__));
+				status = false;
 			}
-        }
-        else
-        {
-            wxLogError(wxString::Format(
-                wxT("Could not fine %s in %s . %s:%d"), raTEXT_IDX, raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
-            status = false;
-        }
+		} else {
+			wxLogError(wxString::Format(
+						   wxT("Could not fine %s in %s . %s:%d"), raTEXT_IDX, raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
+			status = false;
+		}
 
-        // Read the state array
-        if(status == true)
-        {
-            for(i = 0; i < N32; i++)
-            {
-                seed_text = wxString::Format(wxT("%s%02d"), raTEXT_SEED, i);
-                if(fcfg.Exists(seed_text))
-                {
-                    wxLogDebug(wxString::Format(
-                        wxT("Reading %s from %s. %s:%d"),
-                        seed_text.c_str(), raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
-                    if(!fcfg.Read(seed_text, &in_txt))
-                    {
-                        wxLogError(wxString::Format(
-                            wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
-                        status = false;
-                        break;
+		// Read the state array
+		if(status == true) {
+			for(i = 0; i < N32; i++) {
+				seed_text = wxString::Format(wxT("%s%02d"), raTEXT_SEED, i);
+				if(fcfg.Exists(seed_text)) {
+					wxLogDebug(wxString::Format(
+								   wxT("Reading %s from %s. %s:%d"),
+								   seed_text.c_str(), raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
+					if(!fcfg.Read(seed_text, &in_txt)) {
+						wxLogError(wxString::Format(
+									   wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
+						status = false;
+						break;
 
-                    }
-                    wxLogDebug(wxString::Format(wxT("wxString data seed%d=%s"), i, in_txt.c_str()));
-                    in_txt.ToULong(&in_long, 16);
-                    rand_state.state_array[i] = (uint32_t)in_long;
-                    wxLogDebug(wxString::Format(wxT("uint32_t seed%02d=%08X"), i, rand_state.state_array[i]));
-                }
-                else
-                {
-                    wxLogError(wxString::Format(
-                        wxT("Could not find %s in %s. %s:%d"),
-                        seed_text.c_str(), raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
-                    status = false;
-                    break;
-                }
-            }
-        }
+					}
+					wxLogDebug(wxString::Format(wxT("wxString data seed%d=%s"), i, in_txt.c_str()));
+					in_txt.ToULong(&in_long, 16);
+					rand_state.state_array[i] = (uint32_t)in_long;
+					wxLogDebug(wxString::Format(wxT("uint32_t seed%02d=%08X"), i, rand_state.state_array[i]));
+				} else {
+					wxLogError(wxString::Format(
+								   wxT("Could not find %s in %s. %s:%d"),
+								   seed_text.c_str(), raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
+					status = false;
+					break;
+				}
+			}
+		}
 
-        if(status == true)
-        {
-            wxLogDebug(wxT("Complete state read. Setting state."));
-            gmRand::SetState(&rand_state);
-        }
+		if(status == true) {
+			wxLogDebug(wxT("Complete state read. Setting state."));
+			gmRand::SetState(&rand_state);
+		}
 	}
 #endif
 
 #ifdef raREAD_DEALER_FROM_FILE
 	long dealer_read;
-	if(::wxFileExists(raTEST_DATA_FILE))
-	{
+	if(::wxFileExists(raTEST_DATA_FILE)) {
 		wxFFileInputStream in(raTEST_DATA_FILE);
 		wxFileConfig fcfg(in);
-		if(fcfg.Exists(raTEXT_DEALER))
-		{
+		if(fcfg.Exists(raTEXT_DEALER)) {
 			wxLogDebug(wxString::Format(
-				wxT("Reading dealer from %s. %s:%d"),
-				raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
+						   wxT("Reading dealer from %s. %s:%d"),
+						   raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
 
 			dealer_read = -1;
-			if(!fcfg.Read(raTEXT_DEALER, &dealer_read))
-			{
+			if(!fcfg.Read(raTEXT_DEALER, &dealer_read)) {
 				wxLogError(wxString::Format(
-					wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
+							   wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 
-			}
-			else
-			{
+			} else {
 				dealer = (int)dealer_read;
 				wxASSERT((dealer >= 0) && (dealer < gmTOTAL_PLAYERS));
 			}
-		}
-		else
-		{
+		} else {
 			wxLogError(wxString::Format(
-				wxT("Could not find dealer in %s. %s:%d"),
-				raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
+						   wxT("Could not find dealer in %s. %s:%d"),
+						   raTEST_DATA_FILE, wxT(__FILE__), __LINE__));
 		}
 	}
 #endif
@@ -489,12 +448,10 @@ bool raGamePanel::NewDeal()
 
 	// Save the dealer information lest it gets reset
 	// while resetting the rule engine
-	if(dealer == gmPLAYER_INVALID)
-	{
+	if(dealer == gmPLAYER_INVALID) {
 		dealer = m_engine.GetDealer();
 	}
-	if(!ResetDeal())
-	{
+	if(!ResetDeal()) {
 		wxLogError(wxString::Format(wxT("ResetDeal failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -507,8 +464,7 @@ bool raGamePanel::NewDeal()
 	return true;
 }
 
-bool raGamePanel::SetClockwise(bool flag)
-{
+bool raGamePanel::SetClockwise(bool flag) {
 	gmEngineData data;
 	int i;
 
@@ -523,20 +479,17 @@ bool raGamePanel::SetClockwise(bool flag)
 	m_engine.SetData(&data, false);
 
 	// TODO : Set the direction of game play for the AI players
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_players[i].SetClockwise(flag);
 	}
 
 	m_clockwise = flag;
 	return true;
 }
-bool raGamePanel::GetClockwise()
-{
+bool raGamePanel::GetClockwise() {
 	return m_clockwise;
 }
-bool raGamePanel::ReloadFromConfig()
-{
+bool raGamePanel::ReloadFromConfig() {
 	raConfData conf_data;
 
 	raConfig::GetInstance()->GetData(&conf_data);
@@ -550,48 +503,39 @@ bool raGamePanel::ReloadFromConfig()
 
 	return true;
 }
-bool raGamePanel::ShowAuction()
-{
-	if(m_engine.GetStatus() >= gmSTATUS_BID1)
-	{
+bool raGamePanel::ShowAuction() {
+	if(m_engine.GetStatus() >= gmSTATUS_BID1) {
 		wxMessageBox(m_bid_history, wxT("Details of the auction"));
-	}
-	else
-	{
+	} else {
 		wxMessageBox(wxT("Data not available"));
 	}
 	return true;
 }
 
-bool raGamePanel::ShowLastTrick()
-{
+bool raGamePanel::ShowLastTrick() {
 	wxString out;
 	int i;
 	gmEngineData data;
 	gmTrick *trick;
 
 	m_engine.GetData(&data);
-	if((data.status >= gmSTATUS_TRICKS) && (data.trick_round > 0))
-	{
+	if((data.status >= gmSTATUS_TRICKS) && (data.trick_round > 0)) {
 		out.Append(wxT("Round - "));
 		out.Append(wxString::Format(wxT("%d"), data.trick_round));
 		out.Append(wxT("\n\n"));
 		trick = &data.tricks[data.trick_round - 1];
-		for(i = 0; i < gmTOTAL_PLAYERS; i++)
-		{
+		for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 			out.Append(gmUtil::m_long_locs[i]);
 			out.Append(wxT("\t- "));
 			wxASSERT(trick->cards[i] != gmCARD_INVALID);
 			out.Append(gmUtil::m_suits[gmGetSuit(trick->cards[i])]);
 			out.Append(gmUtil::m_values[gmGetValue(trick->cards[i])]);
-			if(trick->lead_loc == i)
-			{
+			if(trick->lead_loc == i) {
 				out.Append(wxT(" ("));
 				out.Append(wxT("Lead"));
 				out.Append(wxT(")"));
 			}
-			if(trick->winner == i)
-			{
+			if(trick->winner == i) {
 				out.Append(wxT(" ("));
 				out.Append(wxT("Winner"));
 				out.Append(wxT(")"));
@@ -599,9 +543,7 @@ bool raGamePanel::ShowLastTrick()
 			out.Append(wxT("\n"));
 		}
 		wxMessageBox(out, wxT("Last Trick"));
-	}
-	else
-	{
+	} else {
 		wxMessageBox(wxT("Data not available"));
 	}
 	return true;
@@ -610,8 +552,7 @@ bool raGamePanel::ShowLastTrick()
 //
 // Private method/s
 //
-void raGamePanel::OnSize(wxSizeEvent& event)
-{
+void raGamePanel::OnSize(wxSizeEvent& event) {
 	wxPaintEvent new_event;
 
 	// Set the location of the bid panel
@@ -624,21 +565,19 @@ void raGamePanel::OnSize(wxSizeEvent& event)
 	m_bid->Move(
 		(this->GetClientSize().GetWidth() - m_bid->GetSize().GetWidth()) / 2,
 		(this->GetClientSize().GetHeight() - m_bid->GetSize().GetHeight()) / 2
-		);
+	);
 
 	// Get all the elements assosiated with this panel resized
 	if(!Size())
 		wxLogError(wxString::Format(wxT("Attempt to size the panel failed. %s:%d"), wxT(__FILE__), __LINE__));
 
-	if(!UpdateDrawAndRefresh(false))
-	{
+	if(!UpdateDrawAndRefresh(false)) {
 		wxLogError(wxString::Format(wxT("Call to UpdateDrawAndRefresh() failed. %s:%d"), wxT(__FILE__), __LINE__));
 	}
 
 	event.Skip();
 }
-bool raGamePanel::RedrawBack(raBackDrawInfo *info)
-{
+bool raGamePanel::RedrawBack(raBackDrawInfo *info) {
 	int i, j, x, y, wt, ht, wb, hb;
 	wxMemoryDC mdc;
 	wxString loc_text;
@@ -656,8 +595,7 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 	this->GetClientSize(&wb, &hb);
 
 	// If there is a valid tile, draw the tile all over the place
-	if(m_tile)
-	{
+	if(m_tile) {
 		// Obtain the dimensions of the tile
 		wt = m_tile->GetWidth();
 		ht = m_tile->GetHeight();
@@ -676,12 +614,9 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 		// Blit repeatedly
 		mdc.SelectObject(*m_tile);
 
-		for(i = 0; i < x; i++)
-		{
-			for(j = 0; j < y;  j++)
-			{
-				if(!BlitToBack(i * wt, j * ht, wt, ht, &mdc, 0, 0))
-				{
+		for(i = 0; i < x; i++) {
+			for(j = 0; j < y;  j++) {
+				if(!BlitToBack(i * wt, j * ht, wt, ht, &mdc, 0, 0)) {
 					wxLogError(wxString::Format(wxT("Blit to back buffer failed. %s:%d"), wxT(__FILE__), __LINE__));
 					return false;
 				}
@@ -777,16 +712,13 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 	i = ((m_hand_rot * (gmTOTAL_PLAYERS - 1)) + 1) % 4;
 
 	// Calculate the starting position to draw
-	if(m_orientation == raGAME_ORIENT_ALL_HORZ)
-	{
+	if(m_orientation == raGAME_ORIENT_ALL_HORZ) {
 		x = std::max(raCARD_PANEL_RELIEF, horz_pnl_relief);
 		y = (hb - GG_CARD_HEIGHT) / 2;
 
 		// Draw the hand at the calculated location
 		DrawHand(i, x, y);
-	}
-	else
-	{
+	} else {
 		x = std::max(raCARD_PANEL_RELIEF, horz_pnl_relief);
 		y = (hb - (GG_CARD_HEIGHT + ((m_hands[i].count - 1) * raCARD_VERT_RELIEF))) / 2;
 
@@ -814,17 +746,14 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 	i = ((m_hand_rot * (gmTOTAL_PLAYERS - 1)) + 3) % 4;
 
 	// Calculate the starting position to draw
-	if(m_orientation == raGAME_ORIENT_ALL_HORZ)
-	{
+	if(m_orientation == raGAME_ORIENT_ALL_HORZ) {
 		x = (wb - std::max(raCARD_PANEL_RELIEF, horz_pnl_relief) -
-			(GG_CARD_WIDTH + ((m_hands[i].count - 1) * raCARD_HORZ_RELIEF)));
+			 (GG_CARD_WIDTH + ((m_hands[i].count - 1) * raCARD_HORZ_RELIEF)));
 		y = (hb - GG_CARD_HEIGHT) / 2;
 		// Draw the hand at the calculated location
 		DrawHand(i, x, y);
 
-	}
-	else
-	{
+	} else {
 		x = (wb - std::max(raCARD_PANEL_RELIEF, horz_pnl_relief) - GG_CARD_WIDTH);
 		y = (hb - (GG_CARD_HEIGHT + ((m_hands[i].count - 1) * raCARD_VERT_RELIEF))) / 2;
 		// Draw the hand at the calculated location
@@ -832,13 +761,10 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 	}
 
 	// Show green arrow for the next card to be played
-	if(m_trick.count < gmTOTAL_PLAYERS)
-	{
+	if(m_trick.count < gmTOTAL_PLAYERS) {
 		i = m_engine.GetTrickNextToPlay();
-		if(i != gmPLAYER_INVALID)
-		{
-			switch(i)
-			{
+		if(i != gmPLAYER_INVALID) {
+			switch(i) {
 			case 0:
 				mdc.SelectObject(*m_bmp_green_arrow_top);
 				x = (wb - raARROW_WIDTH) / 2;
@@ -888,13 +814,10 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 	DrawTextOnBack(loc_text, wxPoint(x + 1, y + 1), *wxBLACK, m_font_bold);
 	DrawTextOnBack(loc_text, wxPoint(x, y), *wxWHITE, m_font_bold);
 
-	if(m_show_bidbubbles)
-	{
+	if(m_show_bidbubbles) {
 		// If required, draw the bubble which has the bid
-		if(info)
-		{
-			if(info->draw_bid)
-			{
+		if(info) {
+			if(info->draw_bid) {
 				wxMemoryDC temp_dc1, temp_dc2;
 				wxString bubb_text;
 				int u, v;
@@ -934,7 +857,7 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 				mdc.SetBrush(wxBrush(raCLR_BUBB_FILL));
 				mdc.SetPen(wxPen(raCLR_BUBB_FILL, 0));
 				mdc.DrawRectangle(wxRect(raBUBB_UNIT_MIN, raBUBB_UNIT_MIN,
-					x - (2 * raBUBB_UNIT_MIN), y - (2 * raBUBB_UNIT_MIN)));
+										 x - (2 * raBUBB_UNIT_MIN), y - (2 * raBUBB_UNIT_MIN)));
 
 				// Draw corners
 				temp_dc1.SelectObject(*m_bmp_bubble_corner_nw);
@@ -949,8 +872,7 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 				// Draw the top and bottom edges
 				temp_dc1.SelectObject(*m_bmp_bubble_edge_top);
 				temp_dc2.SelectObject(*m_bmp_bubble_edge_bottom);
-				for(i = 1; i <= ((x / raBUBB_UNIT_MIN) - 2); i++)
-				{
+				for(i = 1; i <= ((x / raBUBB_UNIT_MIN) - 2); i++) {
 					mdc.Blit(i * raBUBB_UNIT_MIN, 0, raBUBB_UNIT_MIN, raBUBB_UNIT_MIN, &temp_dc1, 0, 0, wxCOPY, true);
 					mdc.Blit(i * raBUBB_UNIT_MIN, y - raBUBB_UNIT_MIN, raBUBB_UNIT_MIN, raBUBB_UNIT_MIN, &temp_dc2, 0, 0, wxCOPY, true);
 				}
@@ -958,8 +880,7 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 				// Draw the left and right edges
 				temp_dc1.SelectObject(*m_bmp_bubble_edge_left);
 				temp_dc2.SelectObject(*m_bmp_bubble_edge_right);
-				for(i = 1; i <= ((y / raBUBB_UNIT_MIN) - 2); i++)
-				{
+				for(i = 1; i <= ((y / raBUBB_UNIT_MIN) - 2); i++) {
 					mdc.Blit(0, i * raBUBB_UNIT_MIN, raBUBB_UNIT_MIN, raBUBB_UNIT_MIN, &temp_dc1, 0, 0, wxCOPY, true);
 					mdc.Blit(x - raBUBB_UNIT_MIN, i * raBUBB_UNIT_MIN, raBUBB_UNIT_MIN, raBUBB_UNIT_MIN, &temp_dc2, 0, 0, wxCOPY, true);
 				}
@@ -987,8 +908,7 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 				// i and j will contain the position of the bubble
 
 				wxBitmap *bmp_bubb_full = NULL;
-				switch(info->bid_loc)
-				{
+				switch(info->bid_loc) {
 				case 0:
 					u = x;
 					v = y + raBUBB_ARROW_PROTUN;
@@ -1074,13 +994,12 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info)
 	return true;
 }
 
-bool raGamePanel::DrawHand(int loc, int x, int y, int orientation)
-{
+bool raGamePanel::DrawHand(int loc, int x, int y, int orientation) {
 	int j;
 	wxMemoryDC cfdc, cbdc;
 	int player_type;
 	wxASSERT((orientation == raHAND_HORIZONTAL) ||
-		(orientation == raHAND_VERTICAL));
+			 (orientation == raHAND_VERTICAL));
 
 	player_type = m_players[loc].GetType();
 
@@ -1089,17 +1008,12 @@ bool raGamePanel::DrawHand(int loc, int x, int y, int orientation)
 		cbdc.SelectObject(*m_card_backs[m_pref_card_back]);
 #endif
 
-	if(orientation == raHAND_HORIZONTAL)
-	{
-		for(j = 0; j < m_hands[loc].count; j++)
-		{
+	if(orientation == raHAND_HORIZONTAL) {
+		for(j = 0; j < m_hands[loc].count; j++) {
 #ifdef raGAME_HIDE_AI_HANDS
-			if(player_type == raPLAYER_TYPE_AI)
-			{
+			if(player_type == raPLAYER_TYPE_AI) {
 				BlitToBack(x + (raCARD_HORZ_RELIEF * j), y, GG_CARD_WIDTH, GG_CARD_HEIGHT, &cbdc, 0, 0, wxCOPY, true);
-			}
-			else
-			{
+			} else {
 #endif
 				cfdc.SelectObject(*m_card_faces[m_hands[loc].card_indexes[j]]);
 				BlitToBack(x + (raCARD_HORZ_RELIEF * j), y, GG_CARD_WIDTH, GG_CARD_HEIGHT, &cfdc, 0, 0, wxCOPY, true);
@@ -1113,18 +1027,12 @@ bool raGamePanel::DrawHand(int loc, int x, int y, int orientation)
 			// TODO : Correction for overlapping
 			m_hand_rects[loc].Union(m_hand_card_rects[loc][j]);
 		}
-	}
-	else
-	{
-		for(j = 0; j < m_hands[loc].count; j++)
-		{
+	} else {
+		for(j = 0; j < m_hands[loc].count; j++) {
 #ifdef raGAME_HIDE_AI_HANDS
-			if(player_type == raPLAYER_TYPE_AI)
-			{
+			if(player_type == raPLAYER_TYPE_AI) {
 				BlitToBack(x, y + (raCARD_VERT_RELIEF * j), GG_CARD_WIDTH, GG_CARD_HEIGHT, &cbdc, 0, 0, wxCOPY, true);
-			}
-			else
-			{
+			} else {
 #endif
 				cfdc.SelectObject(*m_card_faces[m_hands[loc].card_indexes[j]]);
 				BlitToBack(x, y + (raCARD_VERT_RELIEF * j), GG_CARD_WIDTH, GG_CARD_HEIGHT, &cfdc, 0, 0, wxCOPY, true);
@@ -1146,8 +1054,7 @@ bool raGamePanel::DrawHand(int loc, int x, int y, int orientation)
 	return true;
 }
 
-bool raGamePanel::DrawTrick()
-{
+bool raGamePanel::DrawTrick() {
 	int i;
 	int loc;
 	wxMemoryDC mdc;
@@ -1166,57 +1073,53 @@ bool raGamePanel::DrawTrick()
 	for(i = 0; i < gmTOTAL_PLAYERS; i++)
 		m_trick_card_rects[i] = wxRect(0, 0, 0, 0);
 
-	for(i = 0; i < m_trick.count; i++)
-	{
+	for(i = 0; i < m_trick.count; i++) {
 		//loc = (m_trick.lead_loc + i) % gmTOTAL_PLAYERS;
 		loc = (m_trick.lead_loc + (i * rot_addn)) % gmTOTAL_PLAYERS;
 		mdc.SelectObject(*m_card_faces[m_trick.cards[loc]]);
-		switch(loc)
-		{
+		switch(loc) {
 		case 0:
 			// Draw at the bottom
 			m_trick_card_rects[0] = wxRect(
-				(this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2,
-				((this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2) + (GG_CARD_HEIGHT / 4),
-				GG_CARD_WIDTH, GG_CARD_HEIGHT);
+										(this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2,
+										((this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2) + (GG_CARD_HEIGHT / 4),
+										GG_CARD_WIDTH, GG_CARD_HEIGHT);
 			BlitToBack(m_trick_card_rects[0].x, m_trick_card_rects[0].y,
-				GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
+					   GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
 			break;
 		case 1:
 			m_trick_card_rects[1] = wxRect(
-				((this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2) - (GG_CARD_WIDTH / 4),
-				(this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2,
-				GG_CARD_WIDTH, GG_CARD_HEIGHT);
+										((this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2) - (GG_CARD_WIDTH / 4),
+										(this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2,
+										GG_CARD_WIDTH, GG_CARD_HEIGHT);
 			BlitToBack(m_trick_card_rects[1].x, m_trick_card_rects[1].y,
-				GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
+					   GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
 			break;
 		case 2:
 			m_trick_card_rects[2] = wxRect(
-				(this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2,
-				((this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2) - (GG_CARD_HEIGHT / 4),
-				GG_CARD_WIDTH, GG_CARD_HEIGHT);
+										(this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2,
+										((this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2) - (GG_CARD_HEIGHT / 4),
+										GG_CARD_WIDTH, GG_CARD_HEIGHT);
 			BlitToBack(m_trick_card_rects[2].x, m_trick_card_rects[2].y,
-				GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
+					   GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
 			break;
 		case 3:
 			m_trick_card_rects[3] = wxRect(
-				((this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2) + (GG_CARD_WIDTH / 4),
-				(this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2,
-				GG_CARD_WIDTH, GG_CARD_HEIGHT);
+										((this->GetClientSize().GetWidth() - GG_CARD_WIDTH) / 2) + (GG_CARD_WIDTH / 4),
+										(this->GetClientSize().GetHeight() - GG_CARD_HEIGHT) / 2,
+										GG_CARD_WIDTH, GG_CARD_HEIGHT);
 			BlitToBack(m_trick_card_rects[3].x, m_trick_card_rects[3].y,
-				GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
+					   GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true);
 			break;
 		}
 	}
 
 	// If the trick has ended, graphically indicate the winner
 	// using the red arrow
-	if(m_trick.count == gmTOTAL_PLAYERS)
-	{
+	if(m_trick.count == gmTOTAL_PLAYERS) {
 		int x = 0, y = 0;
 
-		switch(m_trick.winner)
-		{
+		switch(m_trick.winner) {
 		case 0:
 			mdc.SelectObject(*m_bmp_red_arrow_bottom);
 			x = (this->GetClientSize().GetWidth() - raARROW_WIDTH) / 2;
@@ -1241,21 +1144,19 @@ bool raGamePanel::DrawTrick()
 			break;
 		}
 		BlitToBack(x, y, raARROW_WIDTH, raARROW_WIDTH,
-			&mdc, 0, 0, wxCOPY, true);
+				   &mdc, 0, 0, wxCOPY, true);
 	}
 
 	return true;
 }
 
-bool raGamePanel::DrawTrump()
-{
+bool raGamePanel::DrawTrump() {
 	int trump_card;
 	int max_bidder;
 	int player_type;
 	wxMemoryDC mdc;
 
-	if(!m_engine.GetMaxBid(NULL, &max_bidder))
-	{
+	if(!m_engine.GetMaxBid(NULL, &max_bidder)) {
 		wxLogError(wxString::Format(wxT("GetMaxBid failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -1274,8 +1175,7 @@ bool raGamePanel::DrawTrump()
 	// 1. There is a valid trump set
 	// 2. and if the trump is not shown yet.
 
-	if((trump_card != gmCARD_INVALID) && !m_engine.IsTrumpShown())
-	{
+	if((trump_card != gmCARD_INVALID) && !m_engine.IsTrumpShown()) {
 #ifdef raGAME_HIDE_AI_HANDS
 		if(player_type == raPLAYER_TYPE_AI)
 			mdc.SelectObject(*m_card_backs[m_pref_card_back]);
@@ -1284,8 +1184,7 @@ bool raGamePanel::DrawTrump()
 			mdc.SelectObject(*m_card_faces[trump_card]);
 
 		if(!BlitToBack(raCARD_PANEL_RELIEF, raCARD_PANEL_RELIEF,
-			GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true))
-		{
+					   GG_CARD_WIDTH, GG_CARD_HEIGHT, &mdc, 0, 0, wxCOPY, true)) {
 			wxLogError(wxString::Format(wxT("BlitToBack failed. %s:%d"), wxT(__FILE__), __LINE__));
 			return false;
 		}
@@ -1294,26 +1193,21 @@ bool raGamePanel::DrawTrump()
 	return true;
 }
 
-void raGamePanel::OnInfo(raInfoEvent& event)
-{
+void raGamePanel::OnInfo(raInfoEvent& event) {
 	int ret_val;
 	//int dealer;
-	switch(event.GetCommand())
-	{
+	switch(event.GetCommand()) {
 	case raINFO_CMD_NEW_DEAL:
-		if(!NewDeal())
-		{
+		if(!NewDeal()) {
 			wxLogError(wxString::Format(wxT("NewDeal() failed. %s:%d"), wxT(__FILE__), __LINE__));
 		}
 		break;
 	case raINFO_CMD_SHOW_TRUMP:
-		if((ret_val = ShowTrump()) != 0)
-		{
+		if((ret_val = ShowTrump()) != 0) {
 			wxMessageBox(wxT("Cannot ask for trump"));
 		}
 		// Check whether the game needs to be abandoned
-		if(CheckOppTrumps() == 1)
-		{
+		if(CheckOppTrumps() == 1) {
 			EndDeal(true);
 			return;
 		}
@@ -1324,18 +1218,15 @@ void raGamePanel::OnInfo(raInfoEvent& event)
 		break;
 	}
 }
-void raGamePanel::OnBid(raBidEvent& event)
-{
+void raGamePanel::OnBid(raBidEvent& event) {
 	int ret_val;
 	int bid;
 
 	bid = event.GetBid();
 
-	if((ret_val = MakeBid(bid)) != 0)
-	{
+	if((ret_val = MakeBid(bid)) != 0) {
 		// In case of error, show appropriate message
-		switch(ret_val)
-		{
+		switch(ret_val) {
 		case gmERR_CANNOT_PASS:
 			wxMessageBox(wxT("Cannot pass."));
 			break;
@@ -1353,46 +1244,36 @@ void raGamePanel::OnBid(raBidEvent& event)
 	while(Continue());
 }
 
-void raGamePanel::OnLeftDClick(wxMouseEvent &event)
-{
+void raGamePanel::OnLeftDClick(wxMouseEvent &event) {
 	// If card play and trump selection are on double click
-	if(m_play_card_on == raCONFIG_PREFS_PLAYCARDON_DCLICK)
-	{
-		if(!OnCardClick(event.GetPosition()))
-		{
+	if(m_play_card_on == raCONFIG_PREFS_PLAYCARDON_DCLICK) {
+		if(!OnCardClick(event.GetPosition())) {
 			wxLogError(wxString::Format(wxT("OnCardClick failed. %s:%d"), wxT(__FILE__), __LINE__));
 			return;
 		}
 	}
 	return;
 }
-void raGamePanel::OnLeftUp(wxMouseEvent &event)
-{
+void raGamePanel::OnLeftUp(wxMouseEvent &event) {
 	wxPoint pt;
 	int i;
 
-	if(m_wait_trick)
-	{
+	if(m_wait_trick) {
 		pt = event.GetPosition();
-		for(i = 0; i < gmTOTAL_PLAYERS; i++)
-		{
-			if(m_trick_card_rects[i].Contains(pt))
-			{
+		for(i = 0; i < gmTOTAL_PLAYERS; i++) {
+			if(m_trick_card_rects[i].Contains(pt)) {
 				gmEngine::ResetTrick(&m_trick);
 				// Redraw back buffer and refrsh the screen
 				// to reflect acceptance of the trick
-				if(!UpdateDrawAndRefresh(false))
-				{
+				if(!UpdateDrawAndRefresh(false)) {
 					wxLogError(wxString::Format(wxT("Call to UpdateDrawAndRefresh() failed. %s:%d"), wxT(__FILE__), __LINE__));
 				}
 
 				m_wait_trick = false;
 
 				// Check if the deal has ended
-				if(HasDealEnded())
-				{
-					if(!EndDeal())
-					{
+				if(HasDealEnded()) {
+					if(!EndDeal()) {
 						wxLogError(wxString::Format(wxT("EndDeal failed. %s:%d"), wxT(__FILE__), __LINE__));
 						return;
 					}
@@ -1404,14 +1285,10 @@ void raGamePanel::OnLeftUp(wxMouseEvent &event)
 			}
 		}
 
-	}
-	else
-	{
+	} else {
 		// If card play and trump selection are on double click
-		if(m_play_card_on == raCONFIG_PREFS_PLAYCARDON_SCLICK)
-		{
-			if(!OnCardClick(event.GetPosition()))
-			{
+		if(m_play_card_on == raCONFIG_PREFS_PLAYCARDON_SCLICK) {
+			if(!OnCardClick(event.GetPosition())) {
 				wxLogError(wxString::Format(wxT("OnCardClick failed. %s:%d"), wxT(__FILE__), __LINE__));
 				return;
 			}
@@ -1420,41 +1297,31 @@ void raGamePanel::OnLeftUp(wxMouseEvent &event)
 	return;
 }
 
-int raGamePanel::GetCardAtPos(wxPoint pt, int loc)
-{
+int raGamePanel::GetCardAtPos(wxPoint pt, int loc) {
 	int i, j;
 
-	if(loc == gmPLAYER_INVALID)
-	{
+	if(loc == gmPLAYER_INVALID) {
 
 		// Check whether the position is inside any of the hands
-		for(i = 0; i < gmTOTAL_PLAYERS; i++)
-		{
+		for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 			// If so, find the card
-			if(m_hand_rects[i].Contains(pt))
-			{
+			if(m_hand_rects[i].Contains(pt)) {
 				// Consider each of the cards in the hand.
 				// This is done in reverse order is because the
 				// dimension/position of each of the cards is calculated
 				// without considering the possibility of overlapping
-				for(j = m_hands[i].count - 1; j >= 0; j--)
-				{
-					if(m_hand_card_rects[i][j].Contains(pt))
-					{
+				for(j = m_hands[i].count - 1; j >= 0; j--) {
+					if(m_hand_card_rects[i][j].Contains(pt)) {
 						//wxMessageBox(wxString::Format("Inside %d", m_hands[i].card_indexes[j]));
 						return m_hands[i].card_indexes[j];
 					}
 				}
 			}
 		}
-	}
-	else
-	{
+	} else {
 		wxASSERT((loc >= 0) && (loc < gmTOTAL_PLAYERS));
-		for(i = m_hands[loc].count - 1; i >= 0; i--)
-		{
-			if(m_hand_card_rects[loc][i].Contains(pt))
-			{
+		for(i = m_hands[loc].count - 1; i >= 0; i--) {
+			if(m_hand_card_rects[loc][i].Contains(pt)) {
 				return m_hands[loc].card_indexes[i];
 			}
 		}
@@ -1462,16 +1329,13 @@ int raGamePanel::GetCardAtPos(wxPoint pt, int loc)
 
 	return gmCARD_INVALID;
 }
-int raGamePanel::GetHandAtPos(wxPoint pt)
-{
+int raGamePanel::GetHandAtPos(wxPoint pt) {
 	int i;
 
 	// Check whether the position is inside any of the hands
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		// If so, return the player/location
-		if(m_hand_rects[i].Contains(pt))
-		{
+		if(m_hand_rects[i].Contains(pt)) {
 			return i;
 		}
 	}
@@ -1480,8 +1344,7 @@ int raGamePanel::GetHandAtPos(wxPoint pt)
 
 }
 
-bool raGamePanel::Continue()
-{
+bool raGamePanel::Continue() {
 	unsigned long hands[gmTOTAL_PLAYERS];
 	bool m_quit = false;
 	gmOutputDealInfo out_deal_info;
@@ -1516,12 +1379,9 @@ bool raGamePanel::Continue()
 	if(m_deal_ended)
 		return false;
 
-	while(!m_quit)
-	{
-		if(m_engine.IsOutputPending())
-		{
-			switch(m_engine.GetPendingOutputType())
-			{
+	while(!m_quit) {
+		if(m_engine.IsOutputPending()) {
+			switch(m_engine.GetPendingOutputType()) {
 			case gmOUTPUT_STARTED:
 				m_engine.GetOutput(NULL, NULL);
 
@@ -1542,8 +1402,7 @@ bool raGamePanel::Continue()
 				//wxLogDebug(gmUtil::PrintHands(hands));
 
 				// Update hands, redraw back buffer and refresh the screen
-				if(!UpdateDrawAndRefresh())
-				{
+				if(!UpdateDrawAndRefresh()) {
 					wxLogError(wxString::Format(wxT("UpdateDrawAndRefresh failed. %s:%d"), wxT(__FILE__), __LINE__));
 					return false;
 				}
@@ -1555,23 +1414,19 @@ bool raGamePanel::Continue()
 				// Obtain the max bidder if any
 				m_engine.GetMaxBid(&bid, &loc);
 
-				for(i = 0; i < gmTOTAL_PLAYERS; i++)
-				{
+				for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 					complete_hand = hands[i];
 					// If the player is the max bidder
 					// add the card that is set as the trump to the compelte hand
-					if(loc == i)
-					{
+					if(loc == i) {
 						complete_hand |= 1 << m_engine.GetTrumpCard();
 					}
-					if((complete_hand & raGAME_FOUR_JACKS) == raGAME_FOUR_JACKS)
-					{
+					if((complete_hand & raGAME_FOUR_JACKS) == raGAME_FOUR_JACKS) {
 						msg.Empty();
 						msg.Append(gmUtil::m_long_locs[i]);
 						msg.Append(wxT(" has all the four Jacks. This deal has been abandoned"));
 						wxMessageBox(msg, wxT("Deal abandoned"), wxICON_INFORMATION);
-						if(!EndDeal(true))
-						{
+						if(!EndDeal(true)) {
 							wxLogError(wxString::Format(wxT("EndDeal failed. %s:%d"), wxT(__FILE__), __LINE__));
 							return false;
 						}
@@ -1583,28 +1438,21 @@ bool raGamePanel::Continue()
 				// after the second round of deal.
 				// In which case, the game *can be* abandonded if decided by
 				// the player.
-				if(out_deal_info.round == gmDEAL_ROUND_2)
-				{
-					for(i = 0; i < gmTOTAL_PLAYERS; i++)
-					{
+				if(out_deal_info.round == gmDEAL_ROUND_2) {
+					for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 						// If the player is the max bidder
 						// add the card that is set as the trump to the compelte hand
 						complete_hand = hands[i];
-						if(loc == i)
-						{
+						if(loc == i) {
 							complete_hand |= 1 << m_engine.GetTrumpCard();
 						}
 
-						if(!(complete_hand & raGAME_ALL_HIGH_CARDS))
-						{
+						if(!(complete_hand & raGAME_ALL_HIGH_CARDS)) {
 							should_abandon = false;
-							if(m_players[i].GetType() == raPLAYER_TYPE_AI)
-							{
+							if(m_players[i].GetType() == raPLAYER_TYPE_AI) {
 								m_players[i].AbandonGame(&should_abandon);
 
-							}
-							else
-							{
+							} else {
 								msg.Empty();
 								msg.Append(wxT("All the cards dealt to you ("));
 								msg.Append(gmUtil::m_long_locs[i]);
@@ -1616,16 +1464,13 @@ bool raGamePanel::Continue()
 								msg.Append(wxT("\n"));
 								msg.Append(wxT("Click No to continue with the auction and deal"));
 								if(wxMessageBox(msg, wxT("Abandon the deal?"),
-									wxYES_NO | wxICON_QUESTION) == wxYES)
-								{
+												wxYES_NO | wxICON_QUESTION) == wxYES) {
 									should_abandon = true;
 								}
 							}
 
-							if(should_abandon)
-							{
-								if(m_players[i].GetType() == raPLAYER_TYPE_AI)
-								{
+							if(should_abandon) {
+								if(m_players[i].GetType() == raPLAYER_TYPE_AI) {
 									msg.Empty();
 									msg.Append(wxT("All the cards dealt to "));
 									msg.Append(gmUtil::m_long_locs[i]);
@@ -1633,12 +1478,11 @@ bool raGamePanel::Continue()
 									msg.Append(wxT("\n"));
 									msg.Append(wxT("The player has decided to abandon the deal"));
 									wxMessageBox(msg, wxT("Deal abandoned"),
-										wxOK | wxICON_INFORMATION);
+												 wxOK | wxICON_INFORMATION);
 								}
-								if(!EndDeal(true))
-								{
+								if(!EndDeal(true)) {
 									wxLogError(wxString::Format(wxT("EndDeal failed. %s:%d"),
-										wxT(__FILE__), __LINE__));
+																wxT(__FILE__), __LINE__));
 								}
 								return false;
 							}
@@ -1650,8 +1494,7 @@ bool raGamePanel::Continue()
 			case gmOUTPUT_DEAL_END:
 				memset(&out_deal_end_info, 0, sizeof(gmOutputDealEndInfo));
 				m_engine.GetOutput(NULL, &out_deal_end_info);
-				if(!EndDeal())
-				{
+				if(!EndDeal()) {
 					wxLogError(wxString::Format(wxT("EndDeal failed. %s:%d"), wxT(__FILE__), __LINE__));
 					return false;
 				}
@@ -1659,37 +1502,28 @@ bool raGamePanel::Continue()
 				m_quit = true;
 				break;
 			}
-		}
-		else if(m_engine.IsInputPending())
-		{
-			switch(m_engine.GetPendingInputType())
-			{
+		} else if(m_engine.IsInputPending()) {
+			switch(m_engine.GetPendingInputType()) {
 			case gmINPUT_BID:
-				if(!m_engine.GetPendingInputCriteria(NULL, &in_bid_info))
-				{
+				if(!m_engine.GetPendingInputCriteria(NULL, &in_bid_info)) {
 					wxLogError(wxString::Format
-						(wxT("Call to gmEngine::GetPendingInputCriteria failed. %s:%d"),
-						wxT(__FILE__), __LINE__));
+							   (wxT("Call to gmEngine::GetPendingInputCriteria failed. %s:%d"),
+								wxT(__FILE__), __LINE__));
 					return false;
 				}
 				// For the first bid is being made and if the the player
 				// does not have any cards with points, the player can
 				// choose to abandon the deal
 				m_engine.GetRules(&rules);
-				if(in_bid_info.min == rules.min_bid_1)
-				{
+				if(in_bid_info.min == rules.min_bid_1) {
 					m_engine.GetHands(hands);
-					if(!(hands[in_bid_info.player] & raGAME_ALL_HIGH_CARDS))
-					{
+					if(!(hands[in_bid_info.player] & raGAME_ALL_HIGH_CARDS)) {
 						should_abandon = false;
 						//can_abandon = true;
-						if(m_players[in_bid_info.player].GetType() == raPLAYER_TYPE_AI)
-						{
+						if(m_players[in_bid_info.player].GetType() == raPLAYER_TYPE_AI) {
 							m_players[in_bid_info.player].AbandonGame(&should_abandon);
 
-						}
-						else
-						{
+						} else {
 							msg.Empty();
 							msg.Append(wxT("All the cards dealt to you ("));
 							msg.Append(gmUtil::m_long_locs[in_bid_info.player]);
@@ -1701,16 +1535,13 @@ bool raGamePanel::Continue()
 							msg.Append(wxT("\n"));
 							msg.Append(wxT("Click No to continue and make a bid"));
 							if(wxMessageBox(msg, wxT("Abandon the deal?"),
-								wxYES_NO | wxICON_QUESTION) == wxYES)
-							{
+											wxYES_NO | wxICON_QUESTION) == wxYES) {
 								should_abandon = true;
 							}
 						}
 
-						if(should_abandon)
-						{
-							if(m_players[in_bid_info.player].GetType() == raPLAYER_TYPE_AI)
-							{
+						if(should_abandon) {
+							if(m_players[in_bid_info.player].GetType() == raPLAYER_TYPE_AI) {
 								msg.Empty();
 								msg.Append(wxT("All the cards dealt to "));
 								msg.Append(gmUtil::m_long_locs[in_bid_info.player]);
@@ -1718,12 +1549,11 @@ bool raGamePanel::Continue()
 								msg.Append(wxT("\n"));
 								msg.Append(wxT("The player has decided to abandon the deal"));
 								wxMessageBox(msg, wxT("Deal abandoned"),
-									wxOK | wxICON_INFORMATION);
+											 wxOK | wxICON_INFORMATION);
 							}
-							if(!EndDeal(true))
-							{
+							if(!EndDeal(true)) {
 								wxLogError(wxString::Format(wxT("EndDeal failed. %s:%d"),
-									wxT(__FILE__), __LINE__));
+															wxT(__FILE__), __LINE__));
 							}
 							return false;
 						}
@@ -1733,26 +1563,23 @@ bool raGamePanel::Continue()
 				// TODO : Consider whether more elaboration is required
 				// TODO : Add error check
 				m_info->SetInstruction(wxString::Format
-					(wxT("%s, please enter a bid."), gmUtil::m_long_locs[in_bid_info.player].c_str()));
+									   (wxT("%s, please enter a bid."), gmUtil::m_long_locs[in_bid_info.player].c_str()));
 
 				// Enable/disable relevant buttons in the bid panel
-				if(!m_bid->SetPassable(in_bid_info.passable))
-				{
+				if(!m_bid->SetPassable(in_bid_info.passable)) {
 					wxLogError(wxString::Format(wxT("Call to raBid::SetPassable failed. %s:%d"),
-						wxT(__FILE__), __LINE__));
+												wxT(__FILE__), __LINE__));
 					return false;
 				}
 
-				if(!m_bid->SetMinimumBid(in_bid_info.min))
-				{
+				if(!m_bid->SetMinimumBid(in_bid_info.min)) {
 					wxLogError(wxString::Format(wxT("Call to raBid::SetMinimumBid failed. %s:%d"),
-						wxT(__FILE__), __LINE__));
+												wxT(__FILE__), __LINE__));
 					return false;
 				}
 				// Try out bidding
 				// TODO : Cleanup this bloody mess!
-				if(m_players[in_bid_info.player].GetType() == raPLAYER_TYPE_AI)
-				{
+				if(m_players[in_bid_info.player].GetType() == raPLAYER_TYPE_AI) {
 					m_engine.GetData(&re_data);
 					m_players[in_bid_info.player].SetRuleEngineData(&re_data);
 
@@ -1768,10 +1595,9 @@ bool raGamePanel::Continue()
 					//if(bid != gmBID_PASS)
 					//	in_bid_info.trump = trump;
 					//in_bid_info.bid = bid;
-					if(MakeBid(bid))
-					{
+					if(MakeBid(bid)) {
 						wxLogError(wxString::Format(wxT("MakeBid failed. %s:%d"),
-							wxT(__FILE__), __LINE__));
+													wxT(__FILE__), __LINE__));
 					}
 
 					break;
@@ -1788,40 +1614,35 @@ bool raGamePanel::Continue()
 				//if(m_bid->IsShown())
 				m_bid->Show(false);
 
-				if(!m_engine.GetPendingInputCriteria(NULL, &in_trumpsel_info))
-				{
+				if(!m_engine.GetPendingInputCriteria(NULL, &in_trumpsel_info)) {
 					wxLogError(wxString::Format
-						(wxT("Call to gmEngine::GetPendingInputCriteria failed. %s:%d"),
-						wxT(__FILE__), __LINE__));
+							   (wxT("Call to gmEngine::GetPendingInputCriteria failed. %s:%d"),
+								wxT(__FILE__), __LINE__));
 					return false;
 				}
 
 				// If the player to select the trump is an AI based player
 				// obtain a bid from the player and set the same
-				if(m_players[in_trumpsel_info.player].GetType() == raPLAYER_TYPE_AI)
-				{
+				if(m_players[in_trumpsel_info.player].GetType() == raPLAYER_TYPE_AI) {
 					// Obtain trump from the AI based player
 					trump = m_players[in_trumpsel_info.player].GetTrump();
 
 					// Check for error
-					if(trump == gmCARD_INVALID)
-					{
+					if(trump == gmCARD_INVALID) {
 						wxLogError(wxString::Format
-							(wxT("GetBid failed. %s:%d"), wxT(__FILE__), __LINE__));
+								   (wxT("GetBid failed. %s:%d"), wxT(__FILE__), __LINE__));
 					}
 					wxASSERT((trump >= 0) && (trump < gmTOTAL_CARDS));
 
 					// Set the trump
-					if(SetTrump(trump))
-					{
+					if(SetTrump(trump)) {
 						wxLogError(wxString::Format
-							(wxT("SetTrump failed. %s:%d"), wxT(__FILE__), __LINE__));
+								   (wxT("SetTrump failed. %s:%d"), wxT(__FILE__), __LINE__));
 					}
 
 					// Check if the opponents have trumps after the final
 					// trump is set. If not, deal is abandoned
-					if(CheckOppTrumps() == 1)
-					{
+					if(CheckOppTrumps() == 1) {
 						m_quit = true;
 					}
 					break;
@@ -1830,7 +1651,7 @@ bool raGamePanel::Continue()
 				// TODO : Consider whether more elaboration is required
 				// TODO : Add error check
 				m_info->SetInstruction(wxString::Format
-					(wxT("%s, please select a trump."), gmUtil::m_long_locs[in_trumpsel_info.player].c_str()));
+									   (wxT("%s, please select a trump."), gmUtil::m_long_locs[in_trumpsel_info.player].c_str()));
 
 				m_quit = true;
 				break;
@@ -1844,18 +1665,16 @@ bool raGamePanel::Continue()
 				//	Refresh();
 				//}
 
-				if(!m_engine.GetPendingInputCriteria(NULL, &in_trick_info))
-				{
+				if(!m_engine.GetPendingInputCriteria(NULL, &in_trick_info)) {
 					wxLogError(wxString::Format
-						(wxT("Call to gmEngine::GetPendingInputCriteria failed. %s:%d"),
-						wxT(__FILE__), __LINE__));
+							   (wxT("Call to gmEngine::GetPendingInputCriteria failed. %s:%d"),
+								wxT(__FILE__), __LINE__));
 					return false;
 				}
 
-				if(!UpdateDrawAndRefresh(false))
-				{
+				if(!UpdateDrawAndRefresh(false)) {
 					wxLogError(wxString::Format(wxT("UpdateDrawAndRefresh() failed. %s:%d"),
-						wxT(__FILE__), __LINE__));
+												wxT(__FILE__), __LINE__));
 				}
 
 				// After applying the mask to the hand held by the player
@@ -1865,22 +1684,20 @@ bool raGamePanel::Continue()
 				if(
 					(gmUtil::CountBitsSet(in_trick_info.mask & hands[in_trick_info.player]) == 1) &&
 					(m_auto_play || (m_players[in_trick_info.player].GetType() == raPLAYER_TYPE_AI))
-					)
-				{
+				) {
 					// Begin the busy state
 					if(!::wxIsBusy())
 						BeginBusyState();
 
 					card = gmUtil::HighestBitSet(in_trick_info.mask & hands[in_trick_info.player]);
 					wxASSERT((card >= 0) && (card < gmTOTAL_CARDS));
-					if(PlayCard(card))
-					{
+					if(PlayCard(card)) {
 						wxLogError(wxString::Format
-							(wxT("PlayCard failed. %s:%d"), wxT(__FILE__), __LINE__));
+								   (wxT("PlayCard failed. %s:%d"), wxT(__FILE__), __LINE__));
 						wxLogError(wxString::Format(wxT("Card played is %s%s"),
-							gmUtil::m_suits[gmGetSuit(card)].c_str(),
-							gmUtil::m_values[gmGetValue(card)].c_str()
-							));
+													gmUtil::m_suits[gmGetSuit(card)].c_str(),
+													gmUtil::m_values[gmGetValue(card)].c_str()
+												   ));
 					}
 
 					// End the busy state
@@ -1888,8 +1705,7 @@ bool raGamePanel::Continue()
 						EndBusyState();
 
 					// Check if the deal has ended, if so quit the loop
-					if(m_deal_ended)
-					{
+					if(m_deal_ended) {
 						m_quit = true;
 						break;
 					}
@@ -1900,10 +1716,9 @@ bool raGamePanel::Continue()
 				}
 
 				// If the player to play the next card is AI,
-				if(m_players[in_trick_info.player].GetType() == raPLAYER_TYPE_AI)
-				{
+				if(m_players[in_trick_info.player].GetType() == raPLAYER_TYPE_AI) {
 					m_info->SetInstruction(wxString::Format(wxT("%s is thinking..."),
-						gmUtil::m_long_locs[in_trick_info.player].c_str()));
+															gmUtil::m_long_locs[in_trick_info.player].c_str()));
 
 					// Begin the busy state
 					if(!::wxIsBusy())
@@ -1920,23 +1735,19 @@ bool raGamePanel::Continue()
 					m_players[in_trick_info.player].SetRuleEngineData(&re_data);
 
 					card = m_players[in_trick_info.player].GetPlay();
-					if(card == -2)
-					{
+					if(card == -2) {
 						wxLogError(wxString::Format
-							(wxT("GetPlay failed. %s:%d"), wxT(__FILE__), __LINE__));
+								   (wxT("GetPlay failed. %s:%d"), wxT(__FILE__), __LINE__));
 					}
-					if(card == -1)
-					{
-						if(ShowTrump())
-						{
+					if(card == -1) {
+						if(ShowTrump()) {
 							wxLogError(wxString::Format
-								(wxT("GetPlay failed. %s:%d"), wxT(__FILE__), __LINE__));
+									   (wxT("GetPlay failed. %s:%d"), wxT(__FILE__), __LINE__));
 						}
 
 						// Check whether opponents have trumps
 						// If yes, abandon deal
-						if(CheckOppTrumps() == 1)
-						{
+						if(CheckOppTrumps() == 1) {
 							m_quit = true;
 							EndDeal(true);
 							break;
@@ -1954,14 +1765,13 @@ bool raGamePanel::Continue()
 					if(::wxIsBusy())
 						EndBusyState();
 
-					if(PlayCard(card))
-					{
+					if(PlayCard(card)) {
 						wxLogError(wxString::Format
-							(wxT("PlayCard failed. %s:%d"), wxT(__FILE__), __LINE__));
+								   (wxT("PlayCard failed. %s:%d"), wxT(__FILE__), __LINE__));
 						wxLogError(wxString::Format(wxT("Card played is %s%s"),
-							gmUtil::m_suits[gmGetSuit(card)].c_str(),
-							gmUtil::m_values[gmGetValue(card)].c_str()
-							));
+													gmUtil::m_suits[gmGetSuit(card)].c_str(),
+													gmUtil::m_values[gmGetValue(card)].c_str()
+												   ));
 					}
 
 					if(m_wait_trick)
@@ -1973,18 +1783,15 @@ bool raGamePanel::Continue()
 				// TODO : Add error check
 				if(m_play_card_on == raCONFIG_PREFS_PLAYCARDON_SCLICK)
 					instruction.sprintf(wxT("%s, please click on the card that you want to play."),
-						gmUtil::m_long_locs[in_trick_info.player].c_str());
+										gmUtil::m_long_locs[in_trick_info.player].c_str());
 				else
 					instruction.sprintf(wxT("%s, please double-click on the card that you want to play."),
-						gmUtil::m_long_locs[in_trick_info.player].c_str());
+										gmUtil::m_long_locs[in_trick_info.player].c_str());
 
-				if(in_trick_info.can_ask_trump)
-				{
+				if(in_trick_info.can_ask_trump) {
 					instruction.Append(wxT(" Or ask for trump by clicking on the button below."));
 					m_info->SetInstruction(instruction, raINFO_CMD_SHOW_TRUMP);
-				}
-				else
-				{
+				} else {
 					m_info->SetInstruction(instruction);
 				}
 				m_quit = true;
@@ -1993,8 +1800,7 @@ bool raGamePanel::Continue()
 		}
 		// If the current deal has finished, no need to keep on continuing
 		//else if(m_deal_ended)
-		if(m_deal_ended)
-		{
+		if(m_deal_ended) {
 			m_quit = true;
 			break;
 		}
@@ -2003,12 +1809,10 @@ bool raGamePanel::Continue()
 	return false;
 }
 
-bool raGamePanel::ResetDeal()
-{
+bool raGamePanel::ResetDeal() {
 	int i, j;
 
-	if(!m_engine.Reset())
-	{
+	if(!m_engine.Reset()) {
 		wxLogError(wxString::Format(wxT("Attempt to reset the rule engine failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -2024,8 +1828,7 @@ bool raGamePanel::ResetDeal()
 
 	// Initialize the position/dimentions of hands
 	// and the cards in the trick
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_hand_rects[i] = wxRect(0, 0, 0, 0);
 		m_trick_card_rects[i] = wxRect(0, 0, 0, 0);
 		//m_trick_cards[i] = gmCARD_INVALID;
@@ -2040,8 +1843,7 @@ bool raGamePanel::ResetDeal()
 	m_bid_history.Empty();
 	return true;
 }
-bool raGamePanel::ResetGame()
-{
+bool raGamePanel::ResetGame() {
 	int i;
 	raConfData data;
 
@@ -2057,12 +1859,9 @@ bool raGamePanel::ResetGame()
 	SetClockwise(data.game_data.clockwise);
 
 	// Update status bar with details
-	if(data.game_data.clockwise)
-	{
+	if(data.game_data.clockwise) {
 		gmUtil::SetStatusText(raTEXT_CLOCKWISE, raSBARPOS_CLOCK);
-	}
-	else
-	{
+	} else {
 		gmUtil::SetStatusText(raTEXT_ANTICLOCKWISE, raSBARPOS_CLOCK);
 	}
 
@@ -2083,8 +1882,7 @@ bool raGamePanel::ResetGame()
 
 	for(i = 0; i < gmTOTAL_TEAMS; i++)
 		m_game_pts[i] = 5;
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_pnlties[i] = 0;
 		m_players[i].Reset();
 		m_players[i].SetRules(&m_saved_rules);
@@ -2094,22 +1892,19 @@ bool raGamePanel::ResetGame()
 }
 
 
-bool raGamePanel::UpdateHands(unsigned long *hands)
-{
+bool raGamePanel::UpdateHands(unsigned long *hands) {
 	int i, j;
 	unsigned long cards_left;
 	//int temp;
 
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_hands[i].cards = hands[i];
 
 		memset(m_hands[i].card_indexes, 0, sizeof(m_hands[i].card_indexes));
 
 		cards_left = hands[i];
 		j = 0;
-		while(cards_left > 0)
-		{
+		while(cards_left > 0) {
 			m_hands[i].card_indexes[j] = gmUtil::HighestBitSet(cards_left);
 			cards_left &= ~(1 << m_hands[i].card_indexes[j]);
 			j++;
@@ -2121,8 +1916,7 @@ bool raGamePanel::UpdateHands(unsigned long *hands)
 	return true;
 }
 // TODO : Implement the usage of loc
-int raGamePanel::PlayCard(int card, int loc)
-{
+int raGamePanel::PlayCard(int card, int loc) {
 	gmInputTrickInfo trick_info;
 	int trick_round;
 	int ret_val;
@@ -2134,16 +1928,14 @@ int raGamePanel::PlayCard(int card, int loc)
 	// Validate the input card
 	wxASSERT((card >= 0) && (card < gmTOTAL_CARDS));
 
-	if(!m_engine.GetPendingInputCriteria(NULL, &trick_info))
-	{
+	if(!m_engine.GetPendingInputCriteria(NULL, &trick_info)) {
 		wxLogError(wxString::Format(wxT("Failed to get pending input criteria. %s:%d"),
-			wxT(__FILE__), __LINE__));
+									wxT(__FILE__), __LINE__));
 		return -1;
 	}
 
 	// Check whether the card is valid as per the mask
-	if(!(trick_info.mask & (1 << card)))
-	{
+	if(!(trick_info.mask & (1 << card))) {
 		wxASSERT(trick_info.rules);
 		return gmERR_TRICK_MASK_MISMATCH;
 	}
@@ -2155,28 +1947,25 @@ int raGamePanel::PlayCard(int card, int loc)
 
 	// Post the input and check for error
 	trick_info.card = card;
-	if((ret_val = m_engine.PostInputMessage(gmINPUT_TRICK, &trick_info)) != 0)
-	{
+	if((ret_val = m_engine.PostInputMessage(gmINPUT_TRICK, &trick_info)) != 0) {
 		return ret_val;
 	}
 
 	wxLogMessage(wxString::Format(wxT("%s plays %s%s"),
-		gmUtil::m_long_locs[trick_info.player].c_str(),
-		gmUtil::m_suits[gmGetSuit(card)].c_str(),
-		gmUtil::m_values[gmGetValue(card)].c_str()
-		));
+								  gmUtil::m_long_locs[trick_info.player].c_str(),
+								  gmUtil::m_suits[gmGetSuit(card)].c_str(),
+								  gmUtil::m_values[gmGetValue(card)].c_str()
+								 ));
 
 
 	// Update other players about the game play
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		// Update only if the player is AI
 		if((m_players[i].GetType() == raPLAYER_TYPE_AI) &&
-			(re_data.in_trick_info.player != i))
-		{
+				(re_data.in_trick_info.player != i)) {
 			// Hide information before sending
 			memcpy(&pplay_data, &re_data,
-				sizeof(gmEngineData));
+				   sizeof(gmEngineData));
 			HideInfo(&pplay_data, i);
 
 			// Inferences could be made from the mask or
@@ -2185,7 +1974,7 @@ int raGamePanel::PlayCard(int card, int loc)
 			pplay_data.in_trick_info.rules = 0;
 			m_players[i].PostPlayUpdate(&pplay_data, card);
 			memcpy(&pplay_data, &re_data,
-				sizeof(gmEngineData));
+				   sizeof(gmEngineData));
 			m_players[i].CheckAssumptions(&pplay_data);
 		}
 	}
@@ -2198,50 +1987,44 @@ int raGamePanel::PlayCard(int card, int loc)
 	m_engine.GetTrick(trick_round, &m_trick);
 
 	// Update hands, redraw back buffer and refresh the screen
-	if(!UpdateDrawAndRefresh())
-	{
+	if(!UpdateDrawAndRefresh()) {
 		wxLogError(wxString::Format(wxT("UpdateDrawAndRefresh failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return -1;
 	}
 
 	// If the trick that ended, need to wait for the user to accept the trick
-	if(m_trick.count == gmTOTAL_PLAYERS)
-	{
+	if(m_trick.count == gmTOTAL_PLAYERS) {
 		m_info->SetInstruction(wxT("Click on the cards to continue."), raINFO_CMD_NONE);
 		m_wait_trick = true;
 		// Log details of the trick ended
 		wxLogMessage(wxString::Format(wxT("Trick %d won by %s"), trick_round + 1,
-			gmUtil::m_long_locs[m_trick.winner].c_str()));
+									  gmUtil::m_long_locs[m_trick.winner].c_str()));
 	}
 
 	return 0;
 }
 
 // TODO : Implement loc
-int raGamePanel::SetTrump(int card, int loc)
-{
+int raGamePanel::SetTrump(int card, int loc) {
 	gmInputTrumpselInfo trumpsel_info;
 	int ret_val;
 
-	if(!m_engine.GetPendingInputCriteria(NULL, &trumpsel_info))
-	{
+	if(!m_engine.GetPendingInputCriteria(NULL, &trumpsel_info)) {
 		wxLogError(wxString::Format(wxT("Failed to get pending input criteria. %s:%d"),
-			wxT(__FILE__), __LINE__));
+									wxT(__FILE__), __LINE__));
 		return -1;
 	}
 
 	trumpsel_info.card = card;
 	// Post the input and check for error
-	if((ret_val = m_engine.PostInputMessage(gmINPUT_TRUMPSEL, &trumpsel_info)) != 0)
-	{
+	if((ret_val = m_engine.PostInputMessage(gmINPUT_TRUMPSEL, &trumpsel_info)) != 0) {
 		wxLogError(wxString::Format(wxT("PostInputMessage failed. %s:%d"),
-			wxT(__FILE__), __LINE__));
+									wxT(__FILE__), __LINE__));
 		return ret_val;
 	}
 
 	// Update hands, redraw back buffer and refresh the screen
-	if(!UpdateDrawAndRefresh())
-	{
+	if(!UpdateDrawAndRefresh()) {
 		wxLogError(wxString::Format(wxT("UpdateDrawAndRefresh failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return -1;
 	}
@@ -2249,8 +2032,7 @@ int raGamePanel::SetTrump(int card, int loc)
 	return 0;
 }
 
-int raGamePanel::ShowTrump(int loc)
-{
+int raGamePanel::ShowTrump(int loc) {
 	int ret_val;
 	gmInputTrickInfo in_trick_info;
 	raInfoDetails info_dtls;
@@ -2259,19 +2041,16 @@ int raGamePanel::ShowTrump(int loc)
 
 	m_engine.GetPendingInputCriteria(NULL, &in_trick_info);
 	// Check whether trump can be asked gmERR_TRICK_INVALID_TRUMP_REQ
-	if(loc != gmPLAYER_INVALID)
-	{
+	if(loc != gmPLAYER_INVALID) {
 		wxASSERT((loc >= 0) && (loc < gmTOTAL_PLAYERS));
-		if(in_trick_info.player != loc)
-		{
+		if(in_trick_info.player != loc) {
 			wxLogError(wxString::Format(wxT("Invalid request for trump to be shown. %s:%d"), wxT(__FILE__), __LINE__));
 			return gmERR_TRICK_INVALID_TRUMP_REQ;
 		}
 	}
 
 	in_trick_info.ask_trump = true;
-	if((ret_val = m_engine.PostInputMessage(gmINPUT_TRICK, &in_trick_info)) != 0)
-	{
+	if((ret_val = m_engine.PostInputMessage(gmINPUT_TRICK, &in_trick_info)) != 0) {
 		wxLogError(wxString::Format(wxT("PostInputMessage failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return ret_val;
 	}
@@ -2279,8 +2058,8 @@ int raGamePanel::ShowTrump(int loc)
 	player = in_trick_info.player;
 	msg.Append(wxString::Format(wxT("%s asked for trump."), gmUtil::m_long_locs[player].c_str()));
 	msg.Append(wxString::Format(wxT("\nTrump is %s(%s)."),
-		gmUtil::m_suits[m_engine.GetTrump()].c_str(),
-		gmUtil::m_values[gmGetValue(m_engine.GetTrumpCard())].c_str() ));
+								gmUtil::m_suits[m_engine.GetTrump()].c_str(),
+								gmUtil::m_values[gmGetValue(m_engine.GetTrumpCard())].c_str() ));
 	wxMessageBox(msg, wxT("Trump Shown"), wxOK | wxICON_INFORMATION);
 
 	// Reflect the trump in the info planel
@@ -2289,8 +2068,7 @@ int raGamePanel::ShowTrump(int loc)
 	m_info->SetDetails(&info_dtls);
 
 	// Update hands, redraw back buffer and refresh the screen
-	if(!UpdateDrawAndRefresh())
-	{
+	if(!UpdateDrawAndRefresh()) {
 		wxLogError(wxString::Format(wxT("UpdateDrawAndRefresh failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return -1;
 	}
@@ -2298,65 +2076,54 @@ int raGamePanel::ShowTrump(int loc)
 	return 0;
 }
 
-int raGamePanel::MakeBid(int bid, int loc)
-{
+int raGamePanel::MakeBid(int bid, int loc) {
 	gmInputBidInfo bid_info;
 	int ret_val;
 	raInfoDetails info_dtls;
 	raBackDrawInfo back_draw_info;
 
 	// Check if the engine is waiting for a bid input
-	if((m_engine.IsInputPending()) && (m_engine.GetPendingInputType() == gmINPUT_BID))
-	{
-		if(!m_engine.GetPendingInputCriteria(NULL, &bid_info))
-		{
+	if((m_engine.IsInputPending()) && (m_engine.GetPendingInputType() == gmINPUT_BID)) {
+		if(!m_engine.GetPendingInputCriteria(NULL, &bid_info)) {
 			wxLogError(wxString::Format(wxT("Failed to get pending input criteria. %s:%d"), wxT(__FILE__), __LINE__));
 			return -1;
 		}
 		// Check if the bid is by the correct player
-		if((loc != gmPLAYER_INVALID) && (loc != bid_info.player))
-		{
+		if((loc != gmPLAYER_INVALID) && (loc != bid_info.player)) {
 			wxLogDebug(wxString::Format(wxT("Bid by the wrong player. %s:%d"),
-				wxT(__FILE__), __LINE__));
+										wxT(__FILE__), __LINE__));
 			return gmERR_BID_BY_WRONG_PLAYER;
 		}
 
 		// If the bid is a pass,
-		if((bid == gmBID_PASS) && (!bid_info.passable))
-		{
+		if((bid == gmBID_PASS) && (!bid_info.passable)) {
 			wxLogDebug(wxString::Format(wxT("Cannot pass. %s:%d"),
-				wxT(__FILE__), __LINE__));
+										wxT(__FILE__), __LINE__));
 			return gmERR_CANNOT_PASS;
 		}
 
 		// If the bid is less than minimum
-		if((bid != gmBID_ALL) && (bid != gmBID_PASS) && (bid < bid_info.min))
-		{
+		if((bid != gmBID_ALL) && (bid != gmBID_PASS) && (bid < bid_info.min)) {
 			wxLogDebug(wxString::Format(wxT("Bid less than minimum allowed. %s:%d"),
-				wxT(__FILE__), __LINE__));
+										wxT(__FILE__), __LINE__));
 			return gmERR_BID_LESS_THAN_MIN;
 		}
 
 		bid_info.bid = bid;
 
 		// Post the input and check for error
-		if((ret_val = m_engine.PostInputMessage(gmINPUT_BID, &bid_info)) != 0)
-		{
+		if((ret_val = m_engine.PostInputMessage(gmINPUT_BID, &bid_info)) != 0) {
 			wxLogDebug(wxString::Format(wxT("PostInputMessage failed. %s:%d"),
-				wxT(__FILE__), __LINE__));
+										wxT(__FILE__), __LINE__));
 			return ret_val;
 		}
 
 		// Append to the auciton history
-		if(bid != gmBID_PASS)
-		{
+		if(bid != gmBID_PASS) {
 			wxString temp;
-			if(bid == gmBID_ALL)
-			{
+			if(bid == gmBID_ALL) {
 				temp.Append(wxT("All Tricks"));
-			}
-			else
-			{
+			} else {
 				temp.Append(wxString::Format(wxT("%d"), bid_info.bid));
 			}
 			temp.Append(wxT(" by ") + gmUtil::m_long_locs[bid_info.player] + wxT("\n"));
@@ -2367,18 +2134,15 @@ int raGamePanel::MakeBid(int bid, int loc)
 			m_bid_history.Append(temp);
 		}
 
-	}
-	else
-	{
+	} else {
 		wxLogDebug(wxString::Format(wxT(
-			"Cannot make a bid when one is not expected. %s:%d"),
-			wxT(__FILE__), __LINE__));
+										"Cannot make a bid when one is not expected. %s:%d"),
+									wxT(__FILE__), __LINE__));
 		return -1;
 	}
 
 	// Update Info panel
-	if(bid != gmBID_PASS)
-	{
+	if(bid != gmBID_PASS) {
 		m_info->GetDetails(&info_dtls);
 		info_dtls.bid = bid;
 		info_dtls.bidder = bid_info.player;
@@ -2393,14 +2157,12 @@ int raGamePanel::MakeBid(int bid, int loc)
 	back_draw_info.bid = bid_info.bid;
 	back_draw_info.bid_loc = bid_info.player;
 
-	if(m_show_bidbubbles && (bid != gmBID_PASS))
-	{
+	if(m_show_bidbubbles && (bid != gmBID_PASS)) {
 		// Hide the bid window
 		m_bid->Show(false);
 
 		// Redraw the screen with bid bubble
-		if(!UpdateDrawAndRefresh(false, &back_draw_info))
-		{
+		if(!UpdateDrawAndRefresh(false, &back_draw_info)) {
 			wxLogError(wxString::Format(wxT("UpdateDrawAndRefresh failed. %s:%d"), wxT(__FILE__), __LINE__));
 		}
 
@@ -2411,8 +2173,7 @@ int raGamePanel::MakeBid(int bid, int loc)
 	}
 
 	// Redraw the screen without bid bubble
-	if(!UpdateDrawAndRefresh())
-	{
+	if(!UpdateDrawAndRefresh()) {
 		wxLogError(wxString::Format(wxT("UpdateDrawAndRefresh failed. %s:%d"), wxT(__FILE__), __LINE__));
 	}
 
@@ -2420,17 +2181,14 @@ int raGamePanel::MakeBid(int bid, int loc)
 }
 
 
-bool raGamePanel::UpdateDrawAndRefresh(bool update, raBackDrawInfo *info)
-{
+bool raGamePanel::UpdateDrawAndRefresh(bool update, raBackDrawInfo *info) {
 	unsigned long hands[gmTOTAL_PLAYERS];
 
-	if(update)
-	{
+	if(update) {
 		m_engine.GetHands(hands);
 		//wxLogDebug(wxString::Format("%s\n %s:%d", gmUtil::PrintHands(hands).c_str(), wxT(__FILE__), __LINE__));
 		// Update hand/card positions and dimensions
-		if(!UpdateHands(hands))
-		{
+		if(!UpdateHands(hands)) {
 			wxLogError(wxString::Format(wxT("Call to UpdateHands failed. %s:%d"), wxT(__FILE__), __LINE__));
 			return false;
 		}
@@ -2438,13 +2196,11 @@ bool raGamePanel::UpdateDrawAndRefresh(bool update, raBackDrawInfo *info)
 
 	// Redraw back buffer and refrsh the screen
 	// to reflect the card play
-	if(!RedrawBack(info))
-	{
+	if(!RedrawBack(info)) {
 		wxLogError(wxString::Format(wxT("RedrawBack failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(!RefreshScreen())
-	{
+	if(!RefreshScreen()) {
 		wxLogError(wxString::Format(wxT("RefreshScreen failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
@@ -2452,50 +2208,42 @@ bool raGamePanel::UpdateDrawAndRefresh(bool update, raBackDrawInfo *info)
 	return true;
 }
 
-bool raGamePanel::HideInfo(gmEngineData *data, int player)
-{
+bool raGamePanel::HideInfo(gmEngineData *data, int player) {
 	int i;
 
 	wxASSERT((player >= 0) && (player < gmTOTAL_PLAYERS));
 
 	// Hide information that is not known the player
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
-		if(i != player)
-		{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
+		if(i != player) {
 			data->hands[i] = 0;
 		}
 	}
 
-	if((data->curr_max_bidder != player) && !data->trump_shown)
-	{
+	if((data->curr_max_bidder != player) && !data->trump_shown) {
 		data->trump_card = gmCARD_INVALID;
 		data->trump_suit = gmSUIT_INVALID;
 	}
 
 	return true;
 }
-bool raGamePanel::HasDealEnded(int *winner)
-{
+bool raGamePanel::HasDealEnded(int *winner) {
 	int bid, loc;
 	int pts[gmTOTAL_TEAMS];
 
-	if(!m_engine.GetMaxBid(&bid, &loc))
-	{
+	if(!m_engine.GetMaxBid(&bid, &loc)) {
 		wxLogError(wxString::Format(wxT("GetMaxBid failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
 	m_engine.GetPoints(pts);
 
 	// Check if the max bidders team has won the deal
-	if(pts[gmGetTeam(loc)] >= bid)
-	{
+	if(pts[gmGetTeam(loc)] >= bid) {
 		if(winner)
 			*winner = gmGetTeam(loc);
 		return true;
 	}
-	if(pts[gmGetOpponent(gmGetTeam(loc))] > (28 - bid))
-	{
+	if(pts[gmGetOpponent(gmGetTeam(loc))] > (28 - bid)) {
 		if(winner)
 			*winner = gmGetOpponent(gmGetTeam(loc));
 		return true;
@@ -2503,8 +2251,7 @@ bool raGamePanel::HasDealEnded(int *winner)
 	return false;
 
 }
-bool raGamePanel::EndDeal(bool abandon)
-{
+bool raGamePanel::EndDeal(bool abandon) {
 	int bid, loc;
 	raInfoDetails info_dtls;
 	int game_pts;
@@ -2517,16 +2264,13 @@ bool raGamePanel::EndDeal(bool abandon)
 
 	// If the game is not being abandoned,
 	// show the detail of the deal that has ended.
-	if(!abandon)
-	{
-		if(!HasDealEnded(&winner))
-		{
+	if(!abandon) {
+		if(!HasDealEnded(&winner)) {
 			wxLogError(wxString::Format(wxT("HasDealEnded failed. %s:%d"), wxT(__FILE__), __LINE__));
 			return false;
 		}
 
-		if(!m_engine.GetMaxBid(&bid, &loc))
-		{
+		if(!m_engine.GetMaxBid(&bid, &loc)) {
 			wxLogError(wxString::Format(wxT("GetMaxBid failed. %s:%d"), wxT(__FILE__), __LINE__));
 			return false;
 		}
@@ -2534,8 +2278,7 @@ bool raGamePanel::EndDeal(bool abandon)
 
 	m_info->GetDetails(&info_dtls);
 
-	if(!abandon)
-	{
+	if(!abandon) {
 		// TODO : Remove hard coding
 		// Calculate the game points to be awarded
 		// and set it in the info details
@@ -2549,26 +2292,21 @@ bool raGamePanel::EndDeal(bool abandon)
 		msg_pnlty = wxT("");
 		// If the max bidder is the winner and he has at least one
 		// penalty, one will be deducted
-		if(winner == gmGetTeam(loc))
-		{
-			if(m_pnlties[loc] > 0)
-			{
+		if(winner == gmGetTeam(loc)) {
+			if(m_pnlties[loc] > 0) {
 				m_pnlties[loc]--;
 				msg_pnlty.Append(wxT("One penalty deducted from "));
 				msg_pnlty.Append(gmUtil::m_short_locs[loc]);
 				msg_pnlty.Append(wxT("."));
 			}
-		}
-		else
+		} else
 			game_pts++;
 
 		m_game_pts[winner] += game_pts;
 		m_game_pts[gmGetOpponent(winner)] -= game_pts;
 
-		for(i = 0; i < gmTOTAL_TEAMS; i++)
-		{
-			if(m_game_pts[i] < 0)
-			{
+		for(i = 0; i < gmTOTAL_TEAMS; i++) {
+			if(m_game_pts[i] < 0) {
 				m_pnlties[i]++;
 				// TODO : Use raGetPartner
 				m_pnlties[i + 2]++;
@@ -2590,20 +2328,19 @@ bool raGamePanel::EndDeal(bool abandon)
 
 		msg_deal = wxT("");
 		msg_deal.Append(wxString::Format(wxT("Game won by %s."),
-			gmUtil::m_short_teams[winner].c_str()));
+										 gmUtil::m_short_teams[winner].c_str()));
 		msg_deal.Append(wxString::Format(wxT("\n\nHighest bid was %d by %s."),
-			bid, gmUtil::m_long_locs[loc].c_str()));
+										 bid, gmUtil::m_long_locs[loc].c_str()));
 		msg_deal.Append(wxString::Format(wxT("\n%s won %d points."),
-			gmUtil::m_short_teams[0].c_str(), m_engine.GetPoints(0)));
+										 gmUtil::m_short_teams[0].c_str(), m_engine.GetPoints(0)));
 		msg_deal.Append(wxString::Format(wxT("\n%s won %d points."),
-			gmUtil::m_short_teams[1].c_str(), m_engine.GetPoints(1)));
+										 gmUtil::m_short_teams[1].c_str(), m_engine.GetPoints(1)));
 
 		msg_deal.Append(wxString::Format(wxT("\n\n%d game point(s) awarded to %s."),
-			game_pts,
-			gmUtil::m_short_teams[winner].c_str()));
+										 game_pts,
+										 gmUtil::m_short_teams[winner].c_str()));
 
-		if(!msg_pnlty.IsEmpty())
-		{
+		if(!msg_pnlty.IsEmpty()) {
 			msg_deal.Append(wxT("\n\n"));
 			msg_deal.Append(msg_pnlty);
 		}
@@ -2617,14 +2354,13 @@ bool raGamePanel::EndDeal(bool abandon)
 		EndBusyState();
 
 	// Reset all players
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
-	{
+	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_players[i].Reset();
 		m_players[i].SetRules(&m_saved_rules);
 	}
 
 	m_info->SetInstruction(wxT(""),
-		raINFO_CMD_NEW_DEAL);
+						   raINFO_CMD_NEW_DEAL);
 
 	// Set the dealer for the next deal
 	// TODO : +1 is hardcoded.
@@ -2648,25 +2384,21 @@ bool raGamePanel::EndDeal(bool abandon)
 	m_deal_ended = true;
 	return true;
 }
-bool raGamePanel::BeginBusyState()
-{
+bool raGamePanel::BeginBusyState() {
 	::wxBeginBusyCursor();
 	return true;
 }
-bool raGamePanel::EndBusyState()
-{
+bool raGamePanel::EndBusyState() {
 	::wxEndBusyCursor();
 	return true;
 }
-int raGamePanel::CheckOppTrumps()
-{
+int raGamePanel::CheckOppTrumps() {
 	gmEngineData data;
 	wxString msg;
 	int i;
 	unsigned long opp_hands;
 
-	if(m_engine.GetStatus() == gmSTATUS_TRICKS)
-	{
+	if(m_engine.GetStatus() == gmSTATUS_TRICKS) {
 		m_engine.GetData(&data);
 		wxASSERT((data.curr_max_bidder >= 0) && (data.curr_max_bidder < gmTOTAL_PLAYERS));
 
@@ -2680,8 +2412,7 @@ int raGamePanel::CheckOppTrumps()
 		// If the opponents of the max bidder does not
 		// a single trump card among them, abandon deal
 		// and show appropriate message
-		if(!(opp_hands & gmUtil::m_suit_mask[data.trump_suit]))
-		{
+		if(!(opp_hands & gmUtil::m_suit_mask[data.trump_suit])) {
 			msg.Empty();
 			msg.Append(wxT("The trump selected for the deal is "));
 			msg.Append(gmUtil::m_suits[data.trump_suit]);
@@ -2693,8 +2424,7 @@ int raGamePanel::CheckOppTrumps()
 			msg.Append(wxT("This deal has been abandoned"));
 			wxMessageBox(msg, wxT("Deal abandoned"), wxOK | wxICON_INFORMATION);
 
-			if(!EndDeal(true))
-			{
+			if(!EndDeal(true)) {
 				wxLogError(wxString::Format(wxT("EndDeal failed. %s:%d"), wxT(__FILE__), __LINE__));
 				return -1;
 			}
@@ -2706,8 +2436,7 @@ int raGamePanel::CheckOppTrumps()
 	return 0;
 }
 
-bool raGamePanel::OnCardClick(wxPoint pt)
-{
+bool raGamePanel::OnCardClick(wxPoint pt) {
 	gmInputTrumpselInfo trumpsel_info;
 	gmInputTrickInfo trick_info;
 	int ret_val;
@@ -2721,15 +2450,12 @@ bool raGamePanel::OnCardClick(wxPoint pt)
 	//int opp_team;
 
 	// Check if the engine is waiting for input on trump selection
-	if(m_engine.IsInputPending())
-	{
-		switch(m_engine.GetPendingInputType())
-		{
+	if(m_engine.IsInputPending()) {
+		switch(m_engine.GetPendingInputType()) {
 		case gmINPUT_TRUMPSEL:
-			if(!m_engine.GetPendingInputCriteria(NULL, &trumpsel_info))
-			{
+			if(!m_engine.GetPendingInputCriteria(NULL, &trumpsel_info)) {
 				wxLogError(wxString::Format(wxT("Failed to get pending input criteria. %s:%d"),
-					wxT(__FILE__), __LINE__));
+											wxT(__FILE__), __LINE__));
 				return false;
 			}
 
@@ -2740,31 +2466,27 @@ bool raGamePanel::OnCardClick(wxPoint pt)
 			loc = GetHandAtPos(pt);
 
 			// Check whether the double-click was received inside a hand
-			if(loc == gmPLAYER_INVALID)
-			{
+			if(loc == gmPLAYER_INVALID) {
 				return true;
 			}
 
 			// Check whether the double-click was received at the correct hand
-			if(trumpsel_info.player != loc)
-			{
+			if(trumpsel_info.player != loc) {
 				return true;
 			}
 
 			// Obtain the card at the position where the double click was received
 			card = GetCardAtPos(pt);
-			if(card == gmCARD_INVALID)
-			{
+			if(card == gmCARD_INVALID) {
 				wxLogDebug(wxString::Format(wxT("Double click received, but not on a card. %s:%d"),
-					wxT(__FILE__), __LINE__));
+											wxT(__FILE__), __LINE__));
 				return true;
 			}
 
 			wxLogDebug(wxString::Format(wxT("Card index %d"), card));
 
 			// Post the input and check for error
-			if((ret_val = SetTrump(card)) != 0)
-			{
+			if((ret_val = SetTrump(card)) != 0) {
 				// In case of error, show appropriate message
 				// TODO : Add relevant cases
 				//switch(ret_val)
@@ -2787,47 +2509,41 @@ bool raGamePanel::OnCardClick(wxPoint pt)
 
 			break;
 		case gmINPUT_TRICK:
-			if(!m_engine.GetPendingInputCriteria(NULL, &trick_info))
-			{
+			if(!m_engine.GetPendingInputCriteria(NULL, &trick_info)) {
 				wxLogError(wxString::Format(wxT("Failed to get pending input criteria. %s:%d"),
-					wxT(__FILE__), __LINE__));
+											wxT(__FILE__), __LINE__));
 				return false;
 			}
 			// Obtain the hand inside which the click was received
 			loc = GetHandAtPos(pt);
 
 			// Check whether the double-click was received inside a hand
-			if(loc == gmPLAYER_INVALID)
-			{
+			if(loc == gmPLAYER_INVALID) {
 				wxLogDebug(wxString::Format(wxT("Double click received, but not inside a hand. %s:%d"),
-					wxT(__FILE__), __LINE__));
+											wxT(__FILE__), __LINE__));
 				return true;
 			}
 
 			// Check whether the double-click was received at the correct hand
-			if(trick_info.player != loc)
-			{
+			if(trick_info.player != loc) {
 				wxLogDebug(wxString::Format(wxT("Double click received, but at the wrong hand. %s:%d"),
-					wxT(__FILE__), __LINE__));
+											wxT(__FILE__), __LINE__));
 				return true;
 			}
 
 			// Obtain the card at the position where the double click was received
 			card = GetCardAtPos(pt);
-			if(card == gmCARD_INVALID)
-			{
+			if(card == gmCARD_INVALID) {
 				wxLogError(wxString::Format(wxT("Double click received inside a hand, but not on a card. %s:%d"),
-					wxT(__FILE__), __LINE__));
+											wxT(__FILE__), __LINE__));
 				return true;
 			}
 
 			// Post the input and check for error
-			if((ret_val = PlayCard(card)) != 0)
-			{
+			if((ret_val = PlayCard(card)) != 0) {
 				// In case of error, show appropriate message
 				// TODO : Add relevant cases
-				switch(ret_val)
-				{
+				switch(ret_val) {
 				case gmERR_TRICK_MASK_MISMATCH:
 
 					wxASSERT(trick_info.rules);
@@ -2836,28 +2552,19 @@ bool raGamePanel::OnCardClick(wxPoint pt)
 					// If the card did not match the mask
 					// show an error message depending on the rule
 					// that was used to create the mask
-					if(trick_info.rules & gmRULE_1)
-					{
+					if(trick_info.rules & gmRULE_1) {
 						wxMessageBox(wxT("Player who set the trump cannot lead trump"));
 						return true;
-					}
-					else if(trick_info.rules & gmRULE_2)
-					{
+					} else if(trick_info.rules & gmRULE_2) {
 						wxMessageBox(wxT("After trump was asked, trump should be played"));
 						return true;
-					}
-					else if(trick_info.rules & gmRULE_3)
-					{
+					} else if(trick_info.rules & gmRULE_3) {
 						wxMessageBox(wxT("Should follow lead suit"));
 						return true;
-					}
-					else if(trick_info.rules & gmRULE_4)
-					{
+					} else if(trick_info.rules & gmRULE_4) {
 						wxMessageBox(wxT("After the trump was shown, the same card should be played"));
 						return true;
-					}
-					else if(trick_info.rules & gmRULE_5)
-					{
+					} else if(trick_info.rules & gmRULE_5) {
 						wxMessageBox(wxT("Should not sluff a Jack"));
 						return true;
 					}
@@ -2881,8 +2588,7 @@ bool raGamePanel::OnCardClick(wxPoint pt)
 			wxLogDebug(wxString::Format(wxT("Unexpected type of pending input. %s:%d"), wxT(__FILE__), __LINE__));
 			break;
 		}
-	}
-	else
+	} else
 		wxLogDebug(wxString::Format(wxT("Bid event received when not expected. %s:%d"), wxT(__FILE__), __LINE__));
 
 	return true;

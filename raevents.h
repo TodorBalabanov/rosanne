@@ -23,20 +23,21 @@ extern const wxEventType raINFO_EVT;
 extern const wxEventType raBID_EVT;
 extern const wxEventType raUPDATE_EVT;
 
-class raInfoEvent : public wxEvent
-{
+class raInfoEvent : public wxEvent {
 	DECLARE_DYNAMIC_CLASS(raInfoEvent)
 public:
 	/** Default constructor */
 	raInfoEvent();
 	raInfoEvent(const raInfoEvent &evt);
-	wxEvent *Clone(void) const { return new raInfoEvent(*this); }
+	wxEvent *Clone(void) const {
+		return new raInfoEvent(*this);
+	}
 	void SetCommand(int cmd);
 	int GetCommand();
 private:
 	int m_cmd;
 	// Disallow copy assignment operator
-    raInfoEvent & operator=(const raInfoEvent &);
+	raInfoEvent & operator=(const raInfoEvent &);
 
 };
 
@@ -49,20 +50,21 @@ typedef void (wxEvtHandler::*raInfoEventFunction)(raInfoEvent&);
 	(wxObject *) NULL \
 	),
 
-class raBidEvent : public wxEvent
-{
+class raBidEvent : public wxEvent {
 	DECLARE_DYNAMIC_CLASS(raBidEvent)
 public:
 	/** Default constructor */
 	raBidEvent();
 	raBidEvent(const raBidEvent &evt);
-	wxEvent *Clone(void) const { return new raBidEvent(*this); }
+	wxEvent *Clone(void) const {
+		return new raBidEvent(*this);
+	}
 	void SetBid(int bid);
 	int GetBid();
 private:
 	int m_bid;
 	// Disallow copy assignment operator
-    raBidEvent & operator=(const raBidEvent &);
+	raBidEvent & operator=(const raBidEvent &);
 
 };
 
@@ -74,20 +76,21 @@ typedef void (wxEvtHandler::*raBidEventFunction)(raBidEvent&);
 	(wxObjectEventFunction)(wxEventFunction)(raBidEventFunction)&fn, \
 	(wxObject *) NULL \
 	),
-class raUpdateEvent : public wxEvent
-{
+class raUpdateEvent : public wxEvent {
 	DECLARE_DYNAMIC_CLASS(raUpdateEvent)
 public:
 	/** Default constructor */
 	raUpdateEvent();
 	raUpdateEvent(const raUpdateEvent &evt);
-	wxEvent *Clone(void) const { return new raUpdateEvent(*this); }
+	wxEvent *Clone(void) const {
+		return new raUpdateEvent(*this);
+	}
 	void SetMessage(wxString msg);
 	wxString GetMessage();
 private:
 	wxString m_msg;
 	// Disallow copy assignment operator
-    raUpdateEvent & operator=(const raUpdateEvent &);
+	raUpdateEvent & operator=(const raUpdateEvent &);
 
 };
 

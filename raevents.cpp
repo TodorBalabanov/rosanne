@@ -23,22 +23,18 @@ const wxEventType raUPDATE_EVT = wxNewEventType();
 IMPLEMENT_DYNAMIC_CLASS(raInfoEvent, wxEvent)
 //DEFINE_EVENT_TYPE(EVT_GAME_NEW)
 
-raInfoEvent::raInfoEvent() : wxEvent( raINFO_EVT )
-{
+raInfoEvent::raInfoEvent() : wxEvent( raINFO_EVT ) {
 	// TODO : Use a #defined constant here. Include relevant header in this cpp
 	m_cmd = -1;
 }
-raInfoEvent::raInfoEvent(const raInfoEvent &evt)
-{
+raInfoEvent::raInfoEvent(const raInfoEvent &evt) {
 	SetEventType(raINFO_EVT);
 	m_cmd = evt.m_cmd;
 }
-void raInfoEvent::SetCommand(int cmd)
-{
+void raInfoEvent::SetCommand(int cmd) {
 	m_cmd = cmd;
 }
-int raInfoEvent::GetCommand()
-{
+int raInfoEvent::GetCommand() {
 	return m_cmd;
 }
 
@@ -46,42 +42,34 @@ int raInfoEvent::GetCommand()
 IMPLEMENT_DYNAMIC_CLASS(raBidEvent, wxEvent)
 //DEFINE_EVENT_TYPE(EVT_GAME_NEW)
 
-raBidEvent::raBidEvent() : wxEvent( raBID_EVT )
-{
+raBidEvent::raBidEvent() : wxEvent( raBID_EVT ) {
 	// TODO : Use a #defined constant here. Include relevant header in this cpp
 	m_bid = -1;
 }
-raBidEvent::raBidEvent(const raBidEvent &evt)
-{
+raBidEvent::raBidEvent(const raBidEvent &evt) {
 	SetEventType(raBID_EVT);
 	m_bid = evt.m_bid;
 }
-void raBidEvent::SetBid(int bid)
-{
+void raBidEvent::SetBid(int bid) {
 	m_bid = bid;
 }
-int raBidEvent::GetBid()
-{
+int raBidEvent::GetBid() {
 	return m_bid;
 }
 
 IMPLEMENT_DYNAMIC_CLASS(raUpdateEvent, wxEvent)
 
-raUpdateEvent::raUpdateEvent() : wxEvent( raUPDATE_EVT )
-{
+raUpdateEvent::raUpdateEvent() : wxEvent( raUPDATE_EVT ) {
 
 }
-raUpdateEvent::raUpdateEvent(const raUpdateEvent &evt)
-{
+raUpdateEvent::raUpdateEvent(const raUpdateEvent &evt) {
 	SetEventType(raUPDATE_EVT);
 	m_msg = evt.m_msg;
 }
-void raUpdateEvent::SetMessage(wxString msg)
-{
+void raUpdateEvent::SetMessage(wxString msg) {
 	m_msg = msg;
 }
-wxString raUpdateEvent::GetMessage()
-{
+wxString raUpdateEvent::GetMessage() {
 	return m_msg;
 }
 

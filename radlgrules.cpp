@@ -35,28 +35,24 @@
 IMPLEMENT_DYNAMIC_CLASS( raDlgRules, wxDialog )
 
 BEGIN_EVENT_TABLE( raDlgRules, wxDialog )
-    EVT_INIT_DIALOG( raDlgRules::OnInitDialog )
-    EVT_BUTTON( XRCID("m_radlgrules_apply"), raDlgRules::OnRulesBtnApplyClick )
+	EVT_INIT_DIALOG( raDlgRules::OnInitDialog )
+	EVT_BUTTON( XRCID("m_radlgrules_apply"), raDlgRules::OnRulesBtnApplyClick )
 END_EVENT_TABLE()
 
-raDlgRules::raDlgRules( )
-{
+raDlgRules::raDlgRules( ) {
 }
 
-raDlgRules::raDlgRules( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
-{
+raDlgRules::raDlgRules( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style ) {
 	SetParent(parent);
-    if (!wxXmlResource::Get()->LoadDialog(this, GetParent(), _T("raDlgRules")))
-        wxLogError(wxT("Missing wxXmlResource::Get()->Load() in OnInit()?"));
-	if (GetSizer())
-	{
+	if (!wxXmlResource::Get()->LoadDialog(this, GetParent(), _T("raDlgRules")))
+		wxLogError(wxT("Missing wxXmlResource::Get()->Load() in OnInit()?"));
+	if (GetSizer()) {
 		GetSizer()->SetSizeHints(this);
 	}
 }
 
 
-void raDlgRules::OnRulesBtnApplyClick( wxCommandEvent& event )
-{
+void raDlgRules::OnRulesBtnApplyClick( wxCommandEvent& event ) {
 	wxRadioButton *radio_clockwise;
 	wxRadioButton *radio_anticlockwise;
 	wxComboBox *combo_minbid3;
@@ -72,21 +68,15 @@ void raDlgRules::OnRulesBtnApplyClick( wxCommandEvent& event )
 	check_waiverule4 = XRCCTRL(*this, "m_radlgrules_waiverule4", wxCheckBox);
 	check_sluffjacks = XRCCTRL(*this, "m_radlgrules_sluffjacks", wxCheckBox);
 
-	if(radio_clockwise->GetValue())
-	{
+	if(radio_clockwise->GetValue()) {
 		new_conf.game_data.clockwise = true;
-	}
-	else if(radio_anticlockwise->GetValue())
-	{
+	} else if(radio_anticlockwise->GetValue()) {
 		new_conf.game_data.clockwise = false;
-	}
-	else
-	{
+	} else {
 		wxLogError(wxString::Format(wxT("Unexpected value. %s:%d"), wxT(__FILE__), __LINE__));
 	}
 
-	switch(combo_minbid3->GetSelection())
-	{
+	switch(combo_minbid3->GetSelection()) {
 	case 0:
 		new_conf.game_data.min_bid3 = 23;
 		break;
@@ -104,13 +94,12 @@ void raDlgRules::OnRulesBtnApplyClick( wxCommandEvent& event )
 
 
 	raConfig::GetInstance()->SetData(&new_conf);
-    event.Skip();
+	event.Skip();
 
 	Destroy();
 }
 
-void raDlgRules::OnInitDialog( wxInitDialogEvent& event )
-{
+void raDlgRules::OnInitDialog( wxInitDialogEvent& event ) {
 	wxRadioButton *radio_clockwise;
 	wxRadioButton *radio_anticlockwise;
 	wxComboBox *combo_minbid3;
@@ -125,18 +114,14 @@ void raDlgRules::OnInitDialog( wxInitDialogEvent& event )
 	check_waiverule4 = XRCCTRL(*this, "m_radlgrules_waiverule4", wxCheckBox);
 	check_sluffjacks = XRCCTRL(*this, "m_radlgrules_sluffjacks", wxCheckBox);
 
-	if(conf_data.game_data.clockwise)
-	{
+	if(conf_data.game_data.clockwise) {
 		radio_clockwise->SetValue(true);
-	}
-	else
-	{
+	} else {
 		radio_anticlockwise->SetValue(true);
 	}
 
 	wxASSERT((conf_data.game_data.min_bid3 == 23) || (conf_data.game_data.min_bid3 == 24));
-	switch(conf_data.game_data.min_bid3)
-	{
+	switch(conf_data.game_data.min_bid3) {
 	case 23:
 		combo_minbid3->SetSelection(0);
 		break;
@@ -152,7 +137,7 @@ void raDlgRules::OnInitDialog( wxInitDialogEvent& event )
 	check_sluffjacks->SetValue(conf_data.game_data.sluff_jacks);
 
 
-    event.Skip();
+	event.Skip();
 }
 
 

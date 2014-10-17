@@ -30,8 +30,7 @@
 //#define raUPDATE_APPURL "http://rosanne.sourceforge.net"
 
 
-class raUpdate : public wxThread
-{
+class raUpdate : public wxThread {
 public:
 	raUpdate();
 	virtual void* Entry();
@@ -42,7 +41,7 @@ private:
 	int CheckForUpdate(wxString *new_ver = NULL);
 	// Disallow copy constructor/assignment operators
 	raUpdate(const raUpdate &);
-    raUpdate & operator=(const raUpdate &);
+	raUpdate & operator=(const raUpdate &);
 
 };
 
