@@ -49,7 +49,11 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 	memset(data[i], 0, aiBID_SAMPLE * sizeof(int));
 	}*/
 	int data[4][29];
-	memset(data, 0, 4 * 29 * sizeof(int));
+	for(int i=0;i<4;i++){
+		for(int j=0;j<29;j++){
+			data[i][j]= 0;
+		}
+	}
 
 #ifdef raAI_LOG_GETBID
 	wxLogDebug(gmUtil::PrintLong(cards));
@@ -78,7 +82,9 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 
 		//Initialize the hands
 		unsigned long hands[4];
-		memset(hands, 0, sizeof(hands));
+		for (int i=0; i<4; i++){
+			hands [i]=0;
+		}
 
 		// Simplifying the problem, assume the current player is South
 		// Add the cards already dealt to South
@@ -338,7 +344,9 @@ int aiAgent::GetPlay(unsigned long mask) {
 									wxT(__FILE__), __LINE__));
 		return -2;
 	}
-	memset(deal_hands, 0, sizeof(deal_hands));
+	for (int i=0; i<30; i++){
+		deal_hands[i]=NULL;
+	}
 	for(i = 0; i < 30; i++) {
 		deal_hands[i] = new unsigned long[gmTOTAL_PLAYERS];
 		if(!deal_hands[i]) {
@@ -346,14 +354,21 @@ int aiAgent::GetPlay(unsigned long mask) {
 										wxT(__FILE__), __LINE__));
 			return -2;
 		}
-		memset(deal_hands[i], 0, sizeof(unsigned long));
+		for (int j=0; j<gmTOTAL_PLAYERS; j++){
+			deal_hands[i][j]=0;
+		}
 	}
 
 	//
 	// Generate deals and moves, play each and find the best move
 	//
 
-	memset(&evals, 0, sizeof(evals));
+	for(int i=0; i<gmTOTAL_VALUES; i++){
+		evals[i].eval=0;
+		evals[i].count=0;
+		evals[i].valid=false;
+	}
+
 	//memset(&evals_trump, 0, sizeof(evals_trump));
 	memcpy(&work_data, &data, sizeof(gmEngineData));
 	memcpy(&bkp_data, &work_data, sizeof(gmEngineData));
@@ -969,7 +984,9 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 	//
 	// Allocate the known cards straightaway
 	//
-	memset(known_alloc, 0, sizeof(known_alloc));
+	for(int i=0; i<gmTOTAL_PLAYERS;i++){
+		known_alloc[i]=0;
+	}
 
 	// Cards beloning to self are known. Allocate those first
 	known_alloc[m_loc] = data->hands[m_loc];
@@ -1026,7 +1043,11 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 	solver.SetProblem(&problem, played);
 	for(i = 0; i < count; i++) {
 		// Get a random solution
-		memset(&solution, 0, sizeof(solution));
+		for(int i=0;i<slTOTAL_HANDS;i++){
+			for(int j=0;j<slTOTAL_SUITS;j++){
+				solution[i][j]=0;
+			}
+		}
 		solver.GenerateRandomSolution(solution);
 
 		// If the trump card needs to be added to the max bidders hand, do that
@@ -1488,7 +1509,9 @@ bool aiAgent::EstimatePoints(unsigned long *hands, int trump, int trick_no, int 
 	int total_pts;
 
 	// Set both ints in eval to 0
-	memset(eval, 0, 2 * sizeof(int));
+	for (int i=0; i<2; i++) {
+		eval [i]=0;
+	}
 
 	all_cards =  hands[0] | hands[1] | hands[2] | hands[3];
 	total_pts = gmTotalPoints(all_cards);
