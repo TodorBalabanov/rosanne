@@ -965,7 +965,6 @@ bool aiAgent::GenerateSLProblem(gmEngineData *data, slProblem *problem, slPlayed
 //	return true;
 //}
 bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count, int trump) {
-	int i, j, k, l;
 	slProblem problem;
 	slPlayed played;
 	slSolution solution;
@@ -1002,20 +1001,20 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 		known_alloc[data->curr_max_bidder] |= (1 << data->trump_card);
 
 	// Consider the allocated cards as played
-	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
+	for(int i = 0; i < gmTOTAL_PLAYERS; i++) {
 		cards_played |= known_alloc[i];
 	}
 
 	// Get the list of cards to be dealt for each suit
-	for(i = 0; i < gmTOTAL_SUITS; i++) {
+	for(int i = 0; i < gmTOTAL_SUITS; i++) {
 		cards_played |= data->played_cards[i];
 		to_deal_count[i] = 0;
 	}
 
 	// For each suit, create an array of the cards to be dealt
-	for(i = 0; i < gmTOTAL_SUITS; i++) {
+	for(int i = 0; i < gmTOTAL_SUITS; i++) {
 		temp = (~cards_played) & gmUtil::m_suit_mask[i];
-		j = 0;
+		int j = 0;
 		while(temp) {
 			to_deal[i][j] = gmUtil::HighestBitSet(temp);
 			temp &= ~(1 << to_deal[i][j]);
@@ -1041,7 +1040,7 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 
 	// Set the problem
 	solver.SetProblem(&problem, played);
-	for(i = 0; i < count; i++) {
+	for(int c = 0; c < count; c++) {
 		// Get a random solution
 		for(int i=0;i<slTOTAL_HANDS;i++){
 			for(int j=0;j<slTOTAL_SUITS;j++){
@@ -1068,25 +1067,25 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 
 #endif
 
-		memcpy(deals[i], known_alloc, sizeof(known_alloc));
+		memcpy(deals[c], known_alloc, sizeof(known_alloc));
 
 		// For each array shuffle the cards to be dealt
-		for(j = 0; j < gmTOTAL_SUITS; j++) {
+		for(int j = 0; j < gmTOTAL_SUITS; j++) {
 			gmUtil::ShuffleArray(to_deal[j], to_deal_count[j]);
 		}
 		//wxLogDebug(aiSuitLengthSolver::PrintSolution(&solution));
 
 		// For each player deal the undealt cards
-		for(k = 0; k < gmTOTAL_SUITS; k++) {
-			l = 0;
-			for(j = 0; j < gmTOTAL_PLAYERS; j++) {
+		for(int k = 0; k < gmTOTAL_SUITS; k++) {
+			int l = 0;
+			for(int j = 0; j < gmTOTAL_PLAYERS; j++) {
 				//wxLogDebug(wxString::Format("Compare with solution %d %d",
 				//	(int)gmUtil::CountBitsSet(deals[i][j] & gmUtil::m_suit_mask[k]),
 				//	solution.suit_length[j][k]));
-				wxASSERT((int)gmUtil::CountBitsSet(deals[i][j] & gmUtil::m_suit_mask[k]) <= solution[j][k]);
-				while((int)gmUtil::CountBitsSet(deals[i][j] & gmUtil::m_suit_mask[k]) < solution[j][k]) {
+				wxASSERT((int)gmUtil::CountBitsSet(deals[c][j] & gmUtil::m_suit_mask[k]) <= solution[j][k]);
+				while((int)gmUtil::CountBitsSet(deals[c][j] & gmUtil::m_suit_mask[k]) < solution[j][k]) {
 					wxASSERT(l < to_deal_count[k]);
-					deals[i][j] |= (1 << to_deal[k][l]);
+					deals[c][j] |= (1 << to_deal[k][l]);
 					l++;
 				}
 			}
