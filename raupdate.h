@@ -20,24 +20,17 @@
 #include "racommon.h"
 #include "raevents.h"
 #include "wx/thread.h"
-//#include "wx/filesys.h"
-//#include "wx/fs_inet.h"
 #include "wx/protocol/http.h"
 #include "wx/url.h"
 
 #define raUPDATE_VER wxT("1")
 #define raUPDATE_URL wxT("http://rosanne.sourceforge.net/ver.txt")
-//#define raUPDATE_APPURL "http://rosanne.sourceforge.net"
-
 
 class raUpdate : public wxThread {
 public:
 	raUpdate();
 	virtual void* Entry();
 private:
-	//wxString m_new_ver;
-	//wxFSFile *m_f;
-	//wxFileSystem *m_fs;
 	int CheckForUpdate(wxString *new_ver = NULL);
 	// Disallow copy constructor/assignment operators
 	raUpdate(const raUpdate &);

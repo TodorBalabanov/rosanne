@@ -116,11 +116,11 @@ bool raInfo::SetDetails(raInfoDetails *details) {
 	m_epnlty->SetLabel(wxString::Format(wxT("%s-%d"),
 										gmUtil::m_short_locs[3].c_str(), details->pnlties[3]));
 
-	memcpy(&m_details, details, sizeof(raInfoDetails));
+	m_details = *details;
 	return true;
 }
 void raInfo::GetDetails(raInfoDetails *details) {
-	memcpy(details, &m_details, sizeof(raInfoDetails));
+	*details = m_details;
 }
 
 bool raInfo::SetInstruction(wxString instruction, int cmd) {

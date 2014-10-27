@@ -1964,8 +1964,7 @@ int raGamePanel::PlayCard(int card, int loc) {
 		if((m_players[i].GetType() == raPLAYER_TYPE_AI) &&
 				(re_data.in_trick_info.player != i)) {
 			// Hide information before sending
-			memcpy(&pplay_data, &re_data,
-				   sizeof(gmEngineData));
+			pplay_data = re_data;
 			HideInfo(&pplay_data, i);
 
 			// Inferences could be made from the mask or
@@ -1973,8 +1972,7 @@ int raGamePanel::PlayCard(int card, int loc) {
 			pplay_data.in_trick_info.mask = 0;
 			pplay_data.in_trick_info.rules = 0;
 			m_players[i].PostPlayUpdate(&pplay_data, card);
-			memcpy(&pplay_data, &re_data,
-				   sizeof(gmEngineData));
+			pplay_data = re_data;
 			m_players[i].CheckAssumptions(&pplay_data);
 		}
 	}

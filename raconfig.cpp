@@ -106,12 +106,13 @@ bool raConfig::Save() {
 
 void raConfig::GetData(raConfData *data) {
 	wxMutexLocker lock(s_mutex);
-	memcpy(data, &m_data, sizeof(raConfData));
+	*data = m_data;
 }
+
 bool raConfig::SetData(raConfData *data) {
 	wxMutexLocker lock(s_mutex);
 	// TODO : Sanity check incoming data
-	memcpy(&m_data, data, sizeof(raConfData));
+	m_data = *data;
 	return true;
 }
 

@@ -26,10 +26,7 @@
 #include "wx/wx.h"
 #endif
 
-//#include "ra/racommon.h"
 #include "gmutil.h"
-
-
 
 enum {
 	gmSTATUS_NOT_STARTED = 0,
@@ -89,16 +86,32 @@ enum {
 #define gmJACK 0x80
 #define gmALL_CARDS 0xFFFFFFFF
 
-typedef struct tagGM_RULES {
+class gmRules {
+public:
 	int rot_addn;
 	int min_bid_1;
 	int min_bid_2;
 	int min_bid_3;
 	bool waive_rule_4;
 	bool sluff_jacks;
-} gmRules, *pgmRules;
 
-typedef struct tagGM_TRICK {
+	gmRules& operator=(const gmRules& value) {
+		rot_addn = value.rot_addn;
+		min_bid_1 = value.min_bid_1;
+		min_bid_2 = value.min_bid_2;
+		min_bid_3 = value.min_bid_3;
+		waive_rule_4 = value.waive_rule_4;
+		sluff_jacks = value.sluff_jacks;
+
+		return(*this);
+	}
+};
+
+typedef gmRules* pgmRules;
+
+class gmTrick {
+public:
+
 	bool trumped;
 	int cards[gmTOTAL_PLAYERS];
 	int lead_suit;
@@ -106,51 +119,121 @@ typedef struct tagGM_TRICK {
 	int count;
 	int points;
 	int winner;
-	//bool wait;
-} gmTrick, *pgmTrick;
+
+	gmTrick& operator=(const gmTrick& value) {
+		trumped = value.trumped;
+		for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+			cards[i] = value.cards[i];
+		}
+		lead_suit = value.lead_suit;
+		lead_loc = value.lead_loc;
+		count = value.count;
+		points = value.points;
+		winner = value.winner;
+
+		return(*this);
+	}
+};
 
 #define gmNext(X) ((X + m_data.rules.rot_addn) % gmTOTAL_PLAYERS)
 #define gmTrickNext ((m_data.tricks[m_data.trick_round].lead_loc + (m_data.tricks[m_data.trick_round].count * m_data.rules.rot_addn)) % 4)
 #define gmWinnerCard (m_data.tricks[m_data.trick_round].cards[m_data.tricks[m_data.trick_round].winner])
 
-typedef struct tagGM_OUTPUT_DEAL_INFO {
+class gmOutputDealInfo {
+public:
+
 	int round;
 	unsigned long hands[gmTOTAL_PLAYERS];
-} gmOutputDealInfo;
+
+	gmOutputDealInfo& operator=(const gmOutputDealInfo& value) {
+		round = value.round;
+
+		for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+			hands[i] = value.hands[i];
+		}
+
+		return(*this);
+	}
+};
 
 typedef struct tagGM_OUTPUT_TRICK_INFO {
 	int points[gmTOTAL_TEAMS];
 	gmTrick trick;
 } gmOutputTrickInfo;
 
-typedef struct tagGM_OUTPUT_DEAL_END_INFO {
-	int winner;
-} gmOutputDealEndInfo;
+class gmOutputDealEndInfo {
+public:
 
-typedef struct tagGM_INPUT_BID_INFO {
+	int winner;
+
+	gmOutputDealEndInfo& operator=(const gmOutputDealEndInfo& value) {
+		winner = value.winner;
+
+		return(*this);
+	}
+};
+
+class gmInputBidInfo {
+public:
+
 	int player;
 	int min;
-	//int max;
 	bool passable;
 	int bid;
 	int round;
-} gmInputBidInfo;
 
-typedef struct tagGM_INPUT_TRUMPSEL_INFO {
+	gmInputBidInfo& operator=(const gmInputBidInfo& value) {
+		player = value.player;
+		min = value.min;
+		passable = value.passable;
+		bid = value.bid;
+		round = value.round;
+
+		return(*this);
+	}
+};
+
+class gmInputTrumpselInfo {
+
+public:
+
 	int card;
 	int player;
-} gmInputTrumpselInfo;
 
-typedef struct tagGM_INPUT_TRICK_INFO {
+	gmInputTrumpselInfo& operator=(const gmInputTrumpselInfo& value) {
+		card = value.card;
+		player = value.player;
+
+		return(*this);
+	}
+};
+
+class gmInputTrickInfo {
+
+public:
+
 	int player;
 	bool can_ask_trump;
 	bool ask_trump;
 	unsigned long mask;
 	int card;
 	unsigned long rules;
-} gmInputTrickInfo;
 
-typedef struct tagGM_ENGINE_DATA {
+	gmInputTrickInfo& operator=(const gmInputTrickInfo& value) {
+		player = value.player;
+		can_ask_trump = value.can_ask_trump;
+		ask_trump = value.ask_trump;
+		mask = value.mask;
+		card = value.card;
+		rules = value.rules;
+
+		return(*this);
+	}
+};
+
+class gmEngineData {
+public:
+
 	bool ok;
 	bool feedback;
 
@@ -160,7 +243,6 @@ typedef struct tagGM_ENGINE_DATA {
 	int dealer;
 
 	int shuffled[gmTOTAL_CARDS];
-	//int deal_pos;
 
 	// Variables related to messaging
 	bool output_pending;
@@ -196,11 +278,72 @@ typedef struct tagGM_ENGINE_DATA {
 	// Related to output messages
 	gmOutputDealInfo out_deal_info;
 	gmOutputDealEndInfo out_deal_end_info;
+
 	// Structures to hold data related to the pending input message
 	gmInputBidInfo in_bid_info;
 	gmInputTrumpselInfo in_trumpsel_info;
 	gmInputTrickInfo in_trick_info;
-} gmEngineData;
+
+	gmEngineData& operator=(const gmEngineData& value) {
+		ok = value.ok;
+		feedback = value.feedback;
+		rules = value.rules;
+		status = value.status;
+		dealer = value.dealer;
+
+		for(int i=0; i<gmTOTAL_CARDS; i++) {
+			shuffled[i] = value.shuffled[i];
+		}
+
+		output_pending = value.output_pending;
+		input_pending = value.input_pending;
+		output_type = value.output_type;
+		input_type = value.input_type;
+		first_bid = value.first_bid;
+		curr_max_bid = value.curr_max_bid;
+		curr_max_bidder = value.curr_max_bidder;
+		last_bidder = value.last_bidder;
+
+		for(int i=0; i<gmTOTAL_BID_ROUNDS; i++) {
+			for(int j=0; j<gmTOTAL_PLAYERS; j++) {
+				bid_hist[i][j] = value.bid_hist[i][j];
+			}
+		}
+
+		passed_round1 = value.passed_round1;
+		trump_suit = value.trump_suit;
+		trump_card = value.trump_card;
+
+		for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+			hands[i] = value.hands[i];
+		}
+
+		for(int i=0; i<gmTOTAL_TEAMS; i++) {
+			pts[i] = value.pts[i];
+		}
+
+		trick_round = value.trick_round;
+
+		for(int i=0; i<gmTOTAL_TRICKS; i++) {
+			tricks[i] = value.tricks[i];
+		}
+
+		for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+			played_cards[i] = value.played_cards[i];
+		}
+
+		should_trump = value.should_trump;
+		should_play_trump_card = value.should_play_trump_card;
+		trump_shown = value.trump_shown;
+		out_deal_info = value.out_deal_info;
+		out_deal_end_info = value.out_deal_end_info;
+		in_bid_info = value.in_bid_info;
+		in_trumpsel_info = value.in_trumpsel_info;
+		in_trick_info = value.in_trick_info;
+
+		return(*this);
+	}
+};
 
 /*typedef struct tagGM_OUPUT
 {
@@ -218,14 +361,13 @@ private:
 	bool SetDealEndOutput();
 	// Disallow copy constructor/assignment operators
 	gmEngine(const gmEngine &);
-	gmEngine & operator=(const gmEngine &);
 
 public:
 	// Initialization of the gmEngineData structure used by each gmEngine instance (m_data) is a costly affair
 	// because 1) the structure is huge 2) there are multiple loops to be run to initiate certian data elements.
 	// At one point of time, approx 30% of the entire run time was taken by gmEntine.Reset. To speed things up,
 	// a static m_init of type gmEngineData is created and is initiated manually when the first instance of gmEngine is
-	// called. Once this is done, all further initializations of this struct is done be a memcpy from m_init.
+	// called. Once this is done, all further initializations of this struct is done be a memory copy from m_init.
 	static gmEngineData m_init;
 	static void InitCache();
 	static bool m_init_ok;

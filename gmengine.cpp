@@ -23,7 +23,6 @@
 #include <wx/fileconf.h>
 #endif
 
-//#include "gm/gmengineinit.cpp"
 //
 // Constructor
 //
@@ -69,10 +68,10 @@ bool gmEngine::Reset(gmEngineData *data) {
 	bool feedback;
 	gmRules rules;
 	feedback = data->feedback;
-	memcpy(&rules, &(data->rules), sizeof(gmRules));
-	memcpy(data, &gmEngine::m_init, sizeof(gmEngineData));
+	rules = data->rules;
+	*data = gmEngine::m_init;
 	data->feedback = feedback;
-	memcpy(&(data->rules), &rules, sizeof(gmRules));
+	data->rules = rules;
 	return true;
 }
 
@@ -342,9 +341,10 @@ bool gmEngine::Continue() {
 
 		if(m_data.feedback) {
 			m_data.out_deal_info.round = gmDEAL_ROUND_1;
-			//TODO : Is this memcpy correct?
-			memcpy(&m_data.out_deal_info.hands, &m_data.hands,
-				   sizeof(m_data.hands));
+			//TODO : Is this memory copy correct?
+			for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+				m_data.out_deal_info.hands[i] = m_data.hands[i];
+			}
 
 			// Set output pending
 			SetOutput(gmOUTPUT_DEAL);
@@ -540,9 +540,10 @@ bool gmEngine::Continue() {
 
 		if(m_data.feedback) {
 			m_data.out_deal_info.round = gmDEAL_ROUND_2;
-			// TODO : Is this memcpy correct?
-			memcpy(&m_data.out_deal_info.hands,
-				   &m_data.hands, sizeof(m_data.hands));
+			// TODO : Is this memory copy correct?
+			for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+				m_data.out_deal_info.hands[i] = m_data.hands[i];
+			}
 
 			// Set output pending
 			SetOutput(gmOUTPUT_DEAL);
@@ -644,15 +645,15 @@ bool gmEngine::GetOutput(int *output_type, void *output) {
 		return false;
 
 	if(output_type)
-		*output_type = m_data.output_type;
+		*(int*)output_type = m_data.output_type;
 	switch(m_data.output_type) {
 	case gmOUTPUT_STARTED:
 		break;
 	case gmOUTPUT_DEAL:
-		memcpy(output, &m_data.out_deal_info, sizeof(gmOutputDealInfo));
+		*(gmOutputDealInfo*)output = m_data.out_deal_info;
 		break;
 	case gmOUTPUT_DEAL_END:
-		memcpy(output, &m_data.out_deal_end_info, sizeof(gmOutputDealEndInfo));
+		*(gmOutputDealEndInfo*)output = m_data.out_deal_end_info;
 		break;
 	default:
 		wxLogDebug(wxString::Format(wxT("Inside default in switch. File - %s Line - %d"), wxT(__FILE__), __LINE__));
@@ -696,13 +697,13 @@ bool gmEngine::GetPendingInputCriteria(int *input_type, void *input) {
 
 	switch(m_data.input_type) {
 	case gmINPUT_BID:
-		memcpy(input, &m_data.in_bid_info, sizeof(gmInputBidInfo));
+		*(gmInputBidInfo*)input = m_data.in_bid_info;
 		break;
 	case gmINPUT_TRUMPSEL:
-		memcpy(input, &m_data.in_trumpsel_info, sizeof(gmInputTrumpselInfo));
+		*(gmInputTrumpselInfo*)input = m_data.in_trumpsel_info;
 		break;
 	case gmINPUT_TRICK:
-		memcpy(input, &m_data.in_trick_info, sizeof(gmInputTrickInfo));
+		*(gmInputTrickInfo*)input = m_data.in_trick_info;
 		break;
 	default:
 		wxLogDebug(wxString::Format(wxT("Inside default in switch. File - %s Line - %d"), wxT(__FILE__), __LINE__));
@@ -944,11 +945,6 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 
 			// Add points to the total of the winning team
 			m_data.pts[m_data.tricks[m_data.trick_round - 1].winner % gmTOTAL_TEAMS] += m_data.tricks[m_data.trick_round - 1].points;
-
-			//TODO : For the trick ended, post and output message
-			//out_trick_info = new raOutputTrickInfo;
-			//memcpy(out_trick_info->points, m_data.pts, sizeof(m_data.pts));
-			//memcpy(&out_trick_info->trick, &m_data.tricks[m_data.trick_round - 1], sizeof(gmTrick));
 		}
 
 		break;
@@ -969,20 +965,24 @@ void gmEngine::SetFeedback(bool feedback) {
 }
 
 void gmEngine::GetRules(gmRules *rules) {
-	memcpy(rules, &m_data.rules, sizeof(gmRules));
+	*rules = m_data.rules;
 }
 void gmEngine::SetRules(gmRules *rules) {
-	memcpy(&m_data.rules, rules, sizeof(gmRules));
+	m_data.rules = *rules;
 }
 void gmEngine::GetHands(unsigned long *hands) {
-	memcpy(hands, m_data.hands, sizeof(m_data.hands));
+	for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+		hands[i] = m_data.hands[i];
+	}
 }
 void gmEngine::GetCardsPlayed(unsigned long *cards) {
-	memcpy(cards, m_data.played_cards, sizeof(m_data.played_cards));
+	for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+		cards[i] = m_data.played_cards[i];
+	}
 }
 void gmEngine::GetTrick(int trick_round, gmTrick *trick) {
 	wxASSERT((trick_round >= 0) && (trick_round < gmTOTAL_TRICKS));
-	memcpy(trick, &m_data.tricks[trick_round], sizeof(gmTrick));
+	*trick = m_data.tricks[trick_round];
 }
 void gmEngine::GetTrick(gmTrick *trick) {
 	GetTrick(m_data.trick_round, trick);
@@ -998,7 +998,9 @@ int gmEngine::GetPoints(int team) {
 }
 void gmEngine::GetPoints(int *pts) {
 	wxASSERT(pts);
-	memcpy(pts, m_data.pts, sizeof(m_data.pts));
+	for(int i=0; i<gmTOTAL_TEAMS; i++) {
+		pts[i] = m_data.pts[i];
+	}
 }
 
 int gmEngine::GetTrump() {
@@ -1027,14 +1029,16 @@ void gmEngine::ResetTrick(gmTrick *trick) {
 	trick->trumped = false;
 	trick->winner = gmPLAYER_INVALID;
 }
+
 bool gmEngine::GetData(gmEngineData *data) {
-	memcpy(data, &m_data, sizeof(gmEngineData));
+	*data = m_data;
 	return true;
 }
+
 bool gmEngine::SetData(gmEngineData *data, bool check) {
 	// TODO : Add error checks and remove wxASSERT
 	wxASSERT(!check);
-	memcpy(&m_data, data, sizeof(gmEngineData));
+	m_data = *data;
 	return true;
 }
 

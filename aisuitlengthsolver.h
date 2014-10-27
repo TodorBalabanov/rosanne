@@ -16,9 +16,7 @@
 
 #ifndef _AI_SUITLENGTHSOLVER_H_
 #define _AI_SUITLENGTHSOLVER_H_
-//#include <assert.h>
-//#include <memory.h>
-//#include <stdio.h>
+
 #include "wx/wx.h"
 
 #define slLENGTH_MAX 8
@@ -42,11 +40,32 @@ typedef slMatrix slSolution;
 // The data which represents the problem which is provided as one of the inputs to the
 // suit length solver.
 
-typedef struct slPROBLEM {
+class slProblem {
+public:
+
 	slMatrix suit_length;
 	int suit_total_length[slTOTAL_SUITS];
 	int hand_total_length[slTOTAL_HANDS];
-} slProblem;
+
+	slProblem& operator=(const slProblem& value) {
+		for(int i=0; i<slTOTAL_HANDS; i++) {
+			for(int j=0; j<slTOTAL_SUITS; j++) {
+				suit_length[i][j] = value.suit_length[i][j];
+			}
+		}
+
+		for(int j=0; j<slTOTAL_SUITS; j++) {
+			suit_total_length[j] = value.suit_total_length[j];
+		}
+
+		for(int i=0; i<slTOTAL_HANDS; i++) {
+			hand_total_length[i] = value.hand_total_length[i];
+		}
+
+		return(*this);
+	}
+
+};
 
 // Working data for computing the solution.
 
@@ -60,7 +79,11 @@ typedef struct slCELL {
 	int max;
 	int suit_length;
 } slCell;
-typedef struct slDATA {
+
+class slData {
+
+public:
+
 	slCell cells[slTOTAL_HANDS][slTOTAL_SUITS];
 
 	int suit_total_length[slTOTAL_SUITS];
@@ -76,7 +99,31 @@ typedef struct slDATA {
 	int suit_sum_of_vacant_mins[slTOTAL_SUITS];
 	int hand_sum_of_vacant_mins[slTOTAL_HANDS];
 
-} slData;
+	slData& operator=(const slData& value) {
+		for(int i=0; i<slTOTAL_HANDS; i++) {
+			for(int j=0; j<slTOTAL_SUITS; j++) {
+				cells[i][j] = value.cells[i][j];
+			}
+		}
+
+		for(int j=0; j<slTOTAL_SUITS; j++) {
+			suit_total_length[j] = value.suit_total_length[j];
+			suit_allocated[j] = value.suit_allocated[j];
+			suit_sum_of_maxs[j] = value.suit_sum_of_maxs[j];
+			suit_sum_of_vacant_mins[j] = value.suit_sum_of_vacant_mins[j];
+		}
+
+		for(int i=0; i<slTOTAL_HANDS; i++) {
+			hand_total_length[i] = value.hand_total_length[i];
+			hand_allocated[i] = value.hand_allocated[i];
+			hand_sum_of_maxs[i] = value.hand_sum_of_maxs[i];
+			hand_sum_of_vacant_mins[i] = value.hand_sum_of_vacant_mins[i];
+		}
+
+		return(*this);
+	}
+
+};
 
 class aiSuitLengthSolver {
 private:

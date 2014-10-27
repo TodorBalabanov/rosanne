@@ -22,7 +22,7 @@
 #include "wx/fs_zip.h"
 #include "wx/xrc/xmlres.h"
 #include "wx/image.h"
-//#include "wx/thread.h"
+
 #define GG_CARD_CARD_COUNT 52
 
 #define GG_CARD_SPADES 3

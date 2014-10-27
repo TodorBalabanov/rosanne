@@ -376,9 +376,6 @@ bool raFrame::ShowRules() {
 	return true;
 }
 
-
-//#include "mondrian.xpm"
-
 raFrame::raFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
 	wxBitmap tile(tile_xpm);
 	wxBitmap bmp_new_game(new_game_xpm);

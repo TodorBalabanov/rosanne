@@ -233,8 +233,12 @@ bool aiSuitLengthSolver::SetProblem(slProblem *problem, slPlayed played) {
 
 	// Create a copy of the problem
 
-	memcpy(&m_problem, problem, sizeof(slProblem));
-	memcpy(m_played, played, sizeof(slPlayed));
+	m_problem = *problem;
+	for(int i=0; i<slTOTAL_HANDS; i++) {
+		for(int j=0; j<slTOTAL_SUITS; j++) {
+			m_played[i][j] = played[i][j];
+		}
+	}
 
 	// Check the sanity of data.
 	// The array played contains the list of played cards.
@@ -304,9 +308,12 @@ bool aiSuitLengthSolver::SetProblem(slProblem *problem, slPlayed played) {
 	// Zero or -1 will not affect alloc
 	// Calculate sum of maxes
 	// Calculate min
-
-	memcpy(&(m_saved.hand_total_length), &(m_problem.hand_total_length), sizeof(m_saved.hand_total_length));
-	memcpy(&(m_saved.suit_total_length), &(m_problem.suit_total_length), sizeof(m_saved.suit_total_length));
+	for(int i=0; i<slTOTAL_HANDS; i++) {
+		m_saved.hand_total_length[i] = m_problem.hand_total_length[i];
+	}
+	for(int j=0; j<slTOTAL_SUITS; j++) {
+		m_saved.suit_total_length[j] = m_problem.suit_total_length[j];
+	}
 
 	// Calculate max for all cells
 	// This also calculates the sum of maxes for all hands and suits internally
@@ -566,13 +573,8 @@ bool aiSuitLengthSolver::RecalcCellMin(slData *data, int hand, int suit) {
 bool aiSuitLengthSolver::RecalcMinForAllCells(slData *data, bool * changed) {
 	wxASSERT(data != NULL);
 
-	// Reset the sum of min values for all hands and suits
-	//memset(data->hand_sum_of_vacant_mins, 0, sizeof(data->hand_sum_of_vacant_mins));
-	//memset(data->suit_sum_of_vacant_mins, 0, sizeof(data->suit_sum_of_vacant_mins));
-
 	// Calculate min for all cells
 	// At the same time, calculate the sum of mins for the hand
-
 	for(int i = 0; i < slTOTAL_HANDS; i++) {
 		for(int j = 0; j < slTOTAL_SUITS; j++) {
 			// If the suit length for a cell is fixed, then min
@@ -581,14 +583,6 @@ bool aiSuitLengthSolver::RecalcMinForAllCells(slData *data, bool * changed) {
 			if(data->cells[i][j].suit_length == slVACANT) {
 				RecalcCellMin(data, i, j);
 				wxASSERT((data->cells[i][j].min >= 0) && (data->cells[i][j].min <= slLENGTH_MAX));
-
-				// If the min for a vacant cell is not zero, add that to the sum of mins for vacant cells
-
-				//if(data->cells[i][j].min > 0)
-				//{
-				//    data->hand_sum_of_vacant_mins[i] += data->cells[i][j].min;
-				//    data->suit_sum_of_vacant_mins[j] += data->cells[i][j].min;
-				//}
 			}
 
 		}
@@ -667,7 +661,8 @@ bool aiSuitLengthSolver::GenerateRandomSolution(slSolution solution) {
 		return false;
 	}
 
-	memcpy(&m_working, &m_saved, sizeof(slData));
+	m_working = m_saved;
+
 #ifdef slLOG_DEBUG_GETRANDSOLN
 	wxLogDebug(wxT("Problem :"));
 	wxLogDebug(PrintData(&m_working));

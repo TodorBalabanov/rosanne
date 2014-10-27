@@ -27,17 +27,6 @@
 #include "wx/wx.h"
 #endif
 
-//#include "bh/bh.h"
-
-// Including images
-//#include "main_icon_16.xpm"
-//#include "new_game.xpm"
-//#include "exit.xpm"
-//#include "options.xpm"
-//#include "help.xpm"
-
-
-
 #define RA_APP_MAJOR_VER wxT("1")
 #define RA_APP_MINOR_VER wxT("0")
 #define RA_APP_REL_TYPE wxT("b")

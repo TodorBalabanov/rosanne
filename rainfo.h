@@ -34,7 +34,8 @@ enum {
 #define raINFO_SHOW_TRUMP_TEXT wxT("Show Trump")
 #define raINFO_DEAL_TEXT wxT("New Deal")
 
-typedef struct tagraINFO_DETAILS {
+class raInfoDetails {
+public:
 	int deal_no;
 	int dealer;
 	int bid;
@@ -42,7 +43,23 @@ typedef struct tagraINFO_DETAILS {
 	int trump;
 	int points[gmTOTAL_TEAMS];
 	int pnlties[gmTOTAL_PLAYERS];
-} raInfoDetails;
+
+	raInfoDetails& operator=(const raInfoDetails& value) {
+		deal_no = value.deal_no;
+		dealer = value.dealer;
+		bid = value.bid;
+		bidder = value.bidder;
+		trump = value.trump;
+		for(int i=0; i<gmTOTAL_TEAMS; i++) {
+			points[i] = value.points[i];
+		}
+		for(int i=0; i<gmTOTAL_PLAYERS; i++) {
+			pnlties[i] = value.pnlties[i];
+		}
+
+		return(*this);
+	}
+};
 
 class raGamePanel;
 

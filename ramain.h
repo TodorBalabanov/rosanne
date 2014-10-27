@@ -17,8 +17,6 @@
 #ifndef _RAMAIN_H_
 #define _RAMAIN_H_
 
-//#include "wx/wx.h"
-
 #include "racommon.h"
 #include "ragamepanel.h"
 #include "rainfo.h"
@@ -27,7 +25,6 @@
 #include "radlgabout.h"
 #include "radlgprefs.h"
 #include "radlgrules.h"
-
 
 enum {
 	raID_NEW_GAME = 10000,
