@@ -361,7 +361,10 @@ bool raGamePanel::NewDeal() {
 		wxFFileInputStream in(raTEST_DATA_FILE);
 		wxFileConfig fcfg(in);
 
-		memset(&rand_state, 0, sizeof(gmRandState));
+		for (int i=0; i<N32; i++){
+			rand_state.state_array[i]=0;
+		}
+		rand_state.idx=0;
 		rand_state.idx = -2;
 		//seed_read = -1;
 
@@ -1360,7 +1363,6 @@ bool raGamePanel::Continue() {
 	int trump;
 	int card;
 	//int old_deal_no;
-	int i;
 	//wxString msg_game;
 	wxString msg;
 	int loc;
@@ -1394,7 +1396,10 @@ bool raGamePanel::Continue() {
 				m_info->SetInstruction(wxT("Deal started."), raINFO_CMD_NONE);
 				break;
 			case gmOUTPUT_DEAL:
-				memset(&out_deal_info, 0, sizeof(gmOutputDealInfo));
+				out_deal_info.round=0;
+				for (int i=0; i<gmTOTAL_PLAYERS; i++){
+					out_deal_info.hands[i]=0;
+				}
 				m_engine.GetOutput(NULL, &out_deal_info);
 				m_info->SetInstruction(wxT("Cards dealt."), raINFO_CMD_NONE);
 
@@ -1414,7 +1419,7 @@ bool raGamePanel::Continue() {
 				// Obtain the max bidder if any
 				m_engine.GetMaxBid(&bid, &loc);
 
-				for(i = 0; i < gmTOTAL_PLAYERS; i++) {
+				for(int i = 0; i < gmTOTAL_PLAYERS; i++) {
 					complete_hand = hands[i];
 					// If the player is the max bidder
 					// add the card that is set as the trump to the compelte hand
@@ -1439,7 +1444,7 @@ bool raGamePanel::Continue() {
 				// In which case, the game *can be* abandonded if decided by
 				// the player.
 				if(out_deal_info.round == gmDEAL_ROUND_2) {
-					for(i = 0; i < gmTOTAL_PLAYERS; i++) {
+					for(int i = 0; i < gmTOTAL_PLAYERS; i++) {
 						// If the player is the max bidder
 						// add the card that is set as the trump to the compelte hand
 						complete_hand = hands[i];
@@ -1492,7 +1497,7 @@ bool raGamePanel::Continue() {
 
 				break;
 			case gmOUTPUT_DEAL_END:
-				memset(&out_deal_end_info, 0, sizeof(gmOutputDealEndInfo));
+				out_deal_end_info.winner=0;
 				m_engine.GetOutput(NULL, &out_deal_end_info);
 				if(!EndDeal()) {
 					wxLogError(wxString::Format(wxT("EndDeal failed. %s:%d"), wxT(__FILE__), __LINE__));
@@ -1821,7 +1826,13 @@ bool raGamePanel::ResetDeal() {
 	m_deal_ended = false;
 
 	// Initialize the hand information to zeros
-	memset(m_hands, 0, sizeof(m_hands));
+	for (int i =0;i<gmTOTAL_PLAYERS;i++){
+		m_hands[i].cards=0;
+		m_hands[i].count=0;
+		for (int j=0; j<raMAX_CARDS_PER_HAND; j++){
+			m_hands[i].card_indexes [j]=0;
+		}
+	}
 
 	// Initialize the trick
 	gmEngine::ResetTrick(&m_trick);
@@ -1847,7 +1858,12 @@ bool raGamePanel::ResetGame() {
 	int i;
 	raConfData data;
 
-	memset(&m_saved_rules, 0, sizeof(gmRules));
+	m_saved_rules.rot_addn=0;
+	m_saved_rules.min_bid_1=0;
+	m_saved_rules.min_bid_2=0;
+	m_saved_rules.min_bid_3=0;
+	m_saved_rules.waive_rule_4=false;
+	m_saved_rules.sluff_jacks=false;
 
 	raConfig::GetInstance()->GetData(&data);
 
@@ -1900,7 +1916,9 @@ bool raGamePanel::UpdateHands(unsigned long *hands) {
 	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_hands[i].cards = hands[i];
 
-		memset(m_hands[i].card_indexes, 0, sizeof(m_hands[i].card_indexes));
+		for(int k=0;k<raMAX_CARDS_PER_HAND;k++){
+			m_hands[i].card_indexes[k]=0;
+		}
 
 		cards_left = hands[i];
 		j = 0;

@@ -76,16 +76,83 @@ bool gmEngine::Reset(gmEngineData *data) {
 }
 
 void gmEngine::InitCache() {
-	int i, j;
-	memset(&m_init, 0, sizeof(gmEngineData));
-
+	m_init.ok=false;
+	m_init.feedback=false;
+	m_init.rules.min_bid_1=0;
+	m_init.rules.min_bid_2=0;
+	m_init.rules.min_bid_3=0;
+	m_init.rules.sluff_jacks=false;
+	m_init.rules.waive_rule_4=false;
+	m_init.status=0;
+	m_init.dealer=0;
+	for (int i=0; i<gmTOTAL_CARDS;i++){
+		m_init.shuffled[i]=0;
+	}
+	m_init.output_pending=false;
+	m_init.input_pending=false;
+	m_init.input_type=0;
+	m_init.output_type=0;
+	m_init.first_bid=false;
+	m_init.curr_max_bid=0;
+	m_init.curr_max_bidder=0;
+	m_init.last_bidder=0;
+	for (int i=0; i<gmTOTAL_BID_ROUNDS;i++){
+		for(int j=0; j<gmTOTAL_PLAYERS;j++){
+			m_init.bid_hist [i][j]=false;
+		}
+	}
+	m_init.passed_round1 = 0;
+	m_init.trump_suit = 0;
+	m_init.trump_card = 0;
+	for (int i = 0;i<gmTOTAL_PLAYERS;i++){
+		m_init.hands[i] = 0;
+	}
+	for (int i= 0;i<gmTOTAL_TEAMS;i++){
+		m_init.pts[i]=0;
+	}
+	m_init.trick_round = 0;
+	for (int i= 0;i<gmTOTAL_TRICKS;i++){
+		m_init.tricks[i].trumped=false;
+		for(int j = 0; j < gmTOTAL_PLAYERS;j++){
+			m_init.tricks[i].cards[j] = 0;
+		}
+		m_init.tricks[i].lead_suit = 0;
+		m_init.tricks[i].lead_loc = 0;
+		m_init.tricks[i].count = 0;
+		m_init.tricks[i].points = 0;
+		m_init.tricks[i].winner = 0;
+	}
+	for (int i=0; i<gmTOTAL_PLAYERS; i++){
+		m_init.played_cards[i]=0;
+	}
+	m_init.should_trump= false;
+	m_init.should_play_trump_card= false;
+	m_init.trump_shown= false;
+	m_init.out_deal_info.round=0;
+	for (int i=0;i<gmTOTAL_PLAYERS;i++){
+		m_init.out_deal_info.hands[i]=0;
+	}
+	m_init.out_deal_end_info.winner=0;
+	m_init.in_bid_info.player=0;
+	m_init.in_bid_info.min=0;
+	m_init.in_bid_info.passable=false;
+	m_init.in_bid_info.bid=0;
+	m_init.in_bid_info.round=0;
+	m_init.in_trumpsel_info.card=0;
+	m_init.in_trumpsel_info.player=0;
+	m_init.in_trick_info.player=0;
+	m_init.in_trick_info.can_ask_trump=false;
+	m_init.in_trick_info.ask_trump=false;
+	m_init.in_trick_info.mask=0;
+	m_init.in_trick_info.card=0;
+	m_init.in_trick_info.rules=0;
 	//TODO : Reduce the number of loops
 
 	gmEngine::m_init.status = gmSTATUS_NOT_STARTED;
 	gmEngine::m_init.dealer = 0;
 
 	// Filling m_shuffled with values for all the 32 cards
-	for(i = 0; i < gmTOTAL_CARDS; i++)
+	for(int i = 0; i < gmTOTAL_CARDS; i++)
 		gmEngine::m_init.shuffled[i] = i;
 
 	// Neither input or output is pending at the start
@@ -93,7 +160,7 @@ void gmEngine::InitCache() {
 	gmEngine::m_init.output_pending = false;
 
 	// Reset the hands
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
+	for(int i = 0; i < gmTOTAL_PLAYERS; i++)
 		gmEngine::m_init.hands[i] = 0;
 
 	// Resetting variables related to bidding
@@ -101,8 +168,8 @@ void gmEngine::InitCache() {
 	gmEngine::m_init.curr_max_bid = 0;
 	gmEngine::m_init.curr_max_bidder = gmPLAYER_INVALID;
 	gmEngine::m_init.last_bidder = gmPLAYER_INVALID;
-	for(i = 0; i < gmTOTAL_BID_ROUNDS; i++)
-		for(j = 0; j < gmTOTAL_PLAYERS; j++)
+	for(int i = 0; i < gmTOTAL_BID_ROUNDS; i++)
+		for(int j = 0; j < gmTOTAL_PLAYERS; j++)
 			gmEngine::m_init.bid_hist[i][j] = false;
 	gmEngine::m_init.passed_round1 = 0;
 
@@ -111,10 +178,10 @@ void gmEngine::InitCache() {
 	gmEngine::m_init.trump_suit = gmSUIT_INVALID;
 
 	// Resetting variables related to tricks
-	for(i = 0; i < gmTOTAL_TEAMS; i++)
+	for(int i = 0; i < gmTOTAL_TEAMS; i++)
 		gmEngine::m_init.pts[i] = 0;
 
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
+	for(int i = 0; i < gmTOTAL_PLAYERS; i++)
 		gmEngine::m_init.played_cards[i] = 0;
 
 	gmEngine::m_init.trick_round = 0;
@@ -123,8 +190,8 @@ void gmEngine::InitCache() {
 	gmEngine::m_init.trump_shown = false;
 
 	// TODO : Use ResetTrick
-	for(i = 0; i < gmTOTAL_TRICKS; i++) {
-		for(j = 0; j < gmTOTAL_PLAYERS; j++)
+	for(int i = 0; i < gmTOTAL_TRICKS; i++) {
+		for(int j = 0; j < gmTOTAL_PLAYERS; j++)
 			gmEngine::m_init.tricks[i].cards[j] = gmCARD_INVALID;
 		gmEngine::m_init.tricks[i].count = 0;
 		gmEngine::m_init.tricks[i].lead_loc = gmPLAYER_INVALID;

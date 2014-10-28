@@ -121,7 +121,19 @@ bool raConfig::SetData(raConfData *data) {
 //
 
 raConfig::raConfig() {
-	memset(&m_data, 0, sizeof(m_data));
+	m_data.app_data.x = 0;
+	m_data.app_data.y = 0;
+	m_data.app_data.width = 0;
+	m_data.app_data.height = 0;
+	m_data.app_data.maximized = false;
+	m_data.game_data.clockwise = false;
+	m_data.game_data.min_bid3 = 0;
+	m_data.game_data.waive_rule4 = false;
+	m_data.game_data.sluff_jacks = false;
+	m_data.prefs_data.play_card_on = 0;
+	m_data.prefs_data.card_back = 0;
+	m_data.prefs_data.auto_play_single = false;
+	m_data.prefs_data.show_bid_bubbles = false;
 	m_config = new wxConfig(RA_APP_NAME);
 
 	// If the application is being run for the first time,

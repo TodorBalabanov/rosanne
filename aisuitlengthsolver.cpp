@@ -202,8 +202,28 @@ void aiSuitLengthSolver::InitializePlayed(slPlayed played) {
 void aiSuitLengthSolver::InitializeWorkingData(slData *data) {
 	// Problem is initialized by setting suit lengths for all spots as vacant
 	// and setting the total length for all hands and suits as zero.
+	for(int i=0; i<slTOTAL_HANDS; i++) {
+		for(int j=0; j<slTOTAL_SUITS; j++) {
+			data->cells[i][j].min = 0;
+			data->cells[i][j].max = 0;
+			data->cells[i][j].suit_length = 0;
+		}
+	}
 
-	memset(data, 0, sizeof(slData));
+	for(int j=0; j<slTOTAL_SUITS; j++) {
+		data->suit_total_length[j] = 0;
+		data->suit_allocated[j] = 0;
+		data->suit_sum_of_maxs[j] = 0;
+		data->suit_sum_of_vacant_mins[j] = 0;
+	}
+
+	for(int i=0; i<slTOTAL_HANDS; i++) {
+		data->hand_total_length[i] = 0;
+		data->hand_allocated[i] = 0;
+		data->hand_sum_of_maxs[i] = 0;
+		data->hand_sum_of_vacant_mins[i] = 0;
+	}
+
 	for(int i = 0; i < slTOTAL_HANDS; i++) {
 		for(int j = 0; j < slTOTAL_SUITS; j++) {
 			data->cells[i][j].suit_length = slVACANT;

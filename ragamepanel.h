@@ -77,7 +77,6 @@ typedef struct tagRA_HAND_CARD {
 typedef struct tagRA_HAND {
 	unsigned long cards;
 	int count;
-	//raHandCard card_info[raMAX_CARDS_PER_HAND];
 	int card_indexes[raMAX_CARDS_PER_HAND];
 } raHand, *praHand;
 
