@@ -67,7 +67,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 		// Get the rest of the cards into undealt
 		int k = 0;
 		for(int i = 0; i < 32; i++)
-			if(!(cards & (1 << i)))
+			if(!(cards & (((unsigned long)1) << i)))
 				undealt[k++] = i;
 
 		//Shuffle the undealt
@@ -87,7 +87,7 @@ bool aiAgent::GetBid(unsigned long cards, int *bid, int *trump, int min, bool fo
 		// Deal the undealt cards
 		k = 0;
 		for(int i = /*8 - */initial; i < 32; i++)
-			hands[i / 8] |= 1 << undealt[k++];
+			hands[i / 8] |= ((unsigned long)1) << undealt[k++];
 
 #ifdef raAI_LOG_GETBID
 		wxLogDebug("#############################");
@@ -206,7 +206,7 @@ bool aiAgent::GetBid(int *bid, int *trump, int min, bool force_bid) {
 	if(max_bidder == m_loc) {
 		trump_card = m_engine.GetTrumpCard();
 		wxASSERT((trump_card >= 0) && (trump_card < gmTOTAL_CARDS));
-		cards |= (1 << trump_card);
+		cards |= (((unsigned long)1) << trump_card);
 	}
 
 	wxASSERT(gmUtil::CountBitsSet(cards) <= 8);
@@ -256,7 +256,7 @@ int aiAgent::GetTrump(unsigned long hand, int suit) {
 	// select smallest as the trump
 	if((gmUtil::CountBitsSet(trump_cards & 0x0000000F0)) >= 2) {
 		for(i = 4; i < 8; i++)
-			if(trump_cards & (1 << i)) {
+			if(trump_cards & (((unsigned long)1) << i)) {
 				ret_val = (suit * 8) + i;
 				break;
 			}
@@ -272,7 +272,7 @@ int aiAgent::GetTrump(unsigned long hand, int suit) {
 	}
 
 	// Make sure that the trump card selected exists in the hand
-	wxASSERT(hand & (1 << ret_val));
+	wxASSERT(hand & (((unsigned long)1) << ret_val));
 	return ret_val;
 }
 
@@ -310,7 +310,7 @@ int aiAgent::GetPlay(unsigned long mask) {
 	wxLogDebug(m_engine.GetLoggable());
 	wxLogDebug("Trump candidates :");
 	for(i = 0; i < gmTOTAL_SUITS; i++) {
-		if(m_trump_cards & (1 << i))
+		if(m_trump_cards & (((unsigned long)1) << i))
 			wxLogDebug(gmUtil::m_suits[i].c_str());
 	}
 #endif
@@ -561,7 +561,7 @@ int aiAgent::GetPlay(unsigned long mask) {
 #endif
 		for(k = 0; k < gmTOTAL_SUITS; k++) {
 			// If the trump is not possible ignore
-			if(!(m_trump_cards & (1 << k)))
+			if(!(m_trump_cards & (((unsigned long)1) << k)))
 				continue;
 
 			work_data.trump_suit = k;
@@ -601,10 +601,10 @@ int aiAgent::GetPlay(unsigned long mask) {
 				work_data.trump_card = GetTrump(work_data.hands[work_data.curr_max_bidder], work_data.trump_suit);
 
 				wxASSERT((work_data.trump_card > gmCARD_INVALID) && (work_data.trump_card < gmTOTAL_CARDS));
-				wxASSERT(work_data.hands[work_data.curr_max_bidder] & (1 << work_data.trump_card));
+				wxASSERT(work_data.hands[work_data.curr_max_bidder] & (((unsigned long)1) << work_data.trump_card));
 
 				// Remove the trump card from the max bidder's hand
-				work_data.hands[work_data.curr_max_bidder] &= ~(1 << work_data.trump_card);
+				work_data.hands[work_data.curr_max_bidder] &= ~(((unsigned long)1) << work_data.trump_card);
 
 				for(j = 0; j < move_count; j++) {
 					rule_engine.SetData(&work_data, false);
@@ -832,7 +832,7 @@ bool aiAgent::GenerateSLProblem(gmEngineData *data, slProblem *problem, slPlayed
 	// Hence remove this from the total suit length for the max bidder and the trump suit.
 	// The suit length should be incremented manually for all solutions for the slot [max bidder][trump].
 	if((data->trump_shown) && (m_loc != data->curr_max_bidder)) {
-		if(!(data->played_cards[data->curr_max_bidder] & (1 << data->trump_card))) {
+		if(!(data->played_cards[data->curr_max_bidder] & (((unsigned long)1) << data->trump_card))) {
 			--(problem->hand_total_length[data->curr_max_bidder]);
 			--(problem->suit_total_length[trump]);
 			++(played[data->curr_max_bidder][trump]);
@@ -845,7 +845,7 @@ bool aiAgent::GenerateSLProblem(gmEngineData *data, slProblem *problem, slPlayed
 		for(j = 0; j < gmTOTAL_SUITS; j++) {
 			//problem->cells[i][j].max =
 			//std::min(problem->hand_total_length[i], problem->suit_total_length[j]);
-			if(m_nulls[i] & (1 << j)) {
+			if(m_nulls[i] & (((unsigned long)1) << j)) {
 				//problem->cells[i][j].min = 0;
 				//problem->cells[i][j].max = 0;
 				problem->suit_length[i][j] = 0;
@@ -914,12 +914,12 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 	// If self is the max bidder and if the trump is not shown
 	// Add the card that is set as the trump to hand
 	if((!data->trump_shown) && (m_loc == data->curr_max_bidder))
-		known_alloc[m_loc] |= (1 << data->trump_card);
+		known_alloc[m_loc] |= (((unsigned long)1) << data->trump_card);
 
 	// If trump is shown and the card that was set as trump is not
 	// played yet, add the same to the max bidders hand
-	if(data->trump_shown && (!(data->played_cards[data->curr_max_bidder] & (1 << data->trump_card))))
-		known_alloc[data->curr_max_bidder] |= (1 << data->trump_card);
+	if(data->trump_shown && (!(data->played_cards[data->curr_max_bidder] & (((unsigned long)1) << data->trump_card))))
+		known_alloc[data->curr_max_bidder] |= (((unsigned long)1) << data->trump_card);
 
 	// Consider the allocated cards as played
 	for(int i = 0; i < gmTOTAL_PLAYERS; i++) {
@@ -938,7 +938,7 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 		int j = 0;
 		while(temp) {
 			to_deal[i][j] = gmUtil::HighestBitSet(temp);
-			temp &= ~(1 << to_deal[i][j]);
+			temp &= ~(((unsigned long)1) << to_deal[i][j]);
 			j++;
 		}
 		to_deal_count[i] = j;
@@ -1002,7 +1002,7 @@ bool aiAgent::GenerateDeals(gmEngineData *data, unsigned long **deals, int count
 				wxASSERT((int)gmUtil::CountBitsSet(deals[c][j] & gmUtil::m_suit_mask[k]) <= solution[j][k]);
 				while((int)gmUtil::CountBitsSet(deals[c][j] & gmUtil::m_suit_mask[k]) < solution[j][k]) {
 					wxASSERT(l < to_deal_count[k]);
-					deals[c][j] |= (1 << to_deal[k][l]);
+					deals[c][j] |= (((unsigned long)1) << to_deal[k][l]);
 					l++;
 				}
 			}
@@ -1074,9 +1074,9 @@ bool aiAgent::PostPlayUpdate(gmEngineData *data, int card) {
 				// (8 - data->trick_round) > (8 - cards_left)
 				if(data->trick_round < cards_left) {
 					//wxLogDebug(wxString::Format("%s is not the trump", gmUtil::m_suits[suit].c_str()));
-					m_trump_cards &= ~(1 << suit);
+					m_trump_cards &= ~(((unsigned long)1) << suit);
 				} else {
-					m_notrump_suspects |= (1 << suit);
+					m_notrump_suspects |= (((unsigned long)1) << suit);
 				}
 			}
 
@@ -1084,11 +1084,11 @@ bool aiAgent::PostPlayUpdate(gmEngineData *data, int card) {
 			// which is not any of the suspects, the suspicion is valid
 			if(m_notrump_suspects) {
 				for(i = 0; i < gmTOTAL_SUITS; i++) {
-					if((m_notrump_suspects & (1 << i)) && (i != suit)) {
+					if((m_notrump_suspects & (((unsigned long)1) << i)) && (i != suit)) {
 						// Remove the suit from the list of possible trump suits
-						m_trump_cards &= ~(1 << i);
+						m_trump_cards &= ~(((unsigned long)1) << i);
 						// Remove the suit from the list of suspects
-						m_notrump_suspects &= ~(1 << i);
+						m_notrump_suspects &= ~(((unsigned long)1) << i);
 					}
 				}
 			}
@@ -1110,13 +1110,13 @@ bool aiAgent::PostPlayUpdate(gmEngineData *data, int card) {
 				(data->in_trick_info.player == data->curr_max_bidder) &&
 				(!data->trump_shown)
 			) {
-				m_mb_null_susp |= (1 << data->tricks[data->trick_round].lead_suit);
+				m_mb_null_susp |= (((unsigned long)1) << data->tricks[data->trick_round].lead_suit);
 			}
 			// If the player playing the card is not the max bidder
 			// we can safely assume that the suit length for the player
 			// is zero
 			else {
-				m_nulls[data->in_trick_info.player] |= (1 << data->tricks[data->trick_round].lead_suit);
+				m_nulls[data->in_trick_info.player] |= (((unsigned long)1) << data->tricks[data->trick_round].lead_suit);
 			}
 		}
 	}
@@ -1126,10 +1126,10 @@ bool aiAgent::PostPlayUpdate(gmEngineData *data, int card) {
 	// for those
 	if((data->trump_shown) && (m_mb_null_susp)) {
 		for(i = 0; i < gmTOTAL_SUITS; i++) {
-			if((m_mb_null_susp & (1 << i)) && (i != data->trump_suit)) {
-				m_nulls[data->curr_max_bidder] |= (1 << i);
+			if((m_mb_null_susp & (((unsigned long)1) << i)) && (i != data->trump_suit)) {
+				m_nulls[data->curr_max_bidder] |= (((unsigned long)1) << i);
 				// Remove from the suspect list
-				m_mb_null_susp &= ~(1 << i);
+				m_mb_null_susp &= ~(((unsigned long)1) << i);
 			}
 		}
 	}
@@ -1144,20 +1144,20 @@ bool aiAgent::PostPlayUpdate(gmEngineData *data, int card) {
 
 		// Add the card that is being played first
 		if(card != gmCARD_INVALID) {
-			cards_played |= (1 << card);
+			cards_played |= (((unsigned long)1) << card);
 		}
 
 		// Add the cards played so far (previous tricks and the current one)
 		for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 			cards_played |= data->played_cards[i];
 			if(data->tricks[data->trick_round].cards[i] != gmCARD_INVALID)
-				cards_played |= (1 << data->tricks[data->trick_round].cards[i]);
+				cards_played |= (((unsigned long)1) << data->tricks[data->trick_round].cards[i]);
 		}
 
 		for(i = 0; i < gmTOTAL_SUITS; i++) {
 			if(gmUtil::CountBitsSet((cards_played | data->hands[m_loc]) &
 									gmUtil::m_suit_mask[i])>= gmTOTAL_VALUES) {
-				m_trump_cards &= ~(1 << i);
+				m_trump_cards &= ~(((unsigned long)1) << i);
 			}
 		}
 	}
@@ -1170,7 +1170,7 @@ bool aiAgent::CheckAssumptions(gmEngineData *data) {
 #ifdef raAI_LOG_CHECKASSUMPTIONS
 #endif
 	for(i = 0; i < gmTOTAL_SUITS; i++) {
-		if(!(m_trump_cards & (1 << i))) {
+		if(!(m_trump_cards & (((unsigned long)1) << i))) {
 			if(data->trump_suit == i) {
 				wxLogDebug(wxT("Dummy"));
 			}
@@ -1180,7 +1180,7 @@ bool aiAgent::CheckAssumptions(gmEngineData *data) {
 	int j;
 	for(j = 0; j < gmTOTAL_PLAYERS; j++) {
 		for(i = 0; i < gmTOTAL_SUITS; i++) {
-			if(m_nulls[j] & (1 << i)) {
+			if(m_nulls[j] & (((unsigned long)1) << i)) {
 				wxASSERT(!(data->hands[j] & gmUtil::m_suit_mask[i]));
 			}
 		}
@@ -1457,7 +1457,7 @@ bool aiAgent::GenerateMoves(gmEngine *node, aiMove *moves, int *count, int type)
 			moves[i].ask_trump = false;
 			moves[i].card = gmUtil::HighestBitSet(cards_left);
 			moves[i].rank = -100;
-			cards_left &= ~(1 << moves[i].card);
+			cards_left &= ~(((unsigned long)1) << moves[i].card);
 			i++;
 		}
 	}
@@ -1500,7 +1500,7 @@ bool aiAgent::GenerateMoves(gmEngine *node, aiMove *moves, int *count, int type)
 				moves[i].ask_trump = true;
 				moves[i].card = gmUtil::HighestBitSet(cards_left);
 				moves[i].rank = -100;
-				cards_left &= ~(1 << moves[i].card);
+				cards_left &= ~(((unsigned long)1) << moves[i].card);
 				i++;
 			}
 
@@ -1571,7 +1571,7 @@ bool aiAgent::RankMove(gmEngineData *data, aiMove *move) {
 	suit = gmGetSuit(move->card);
 	wxASSERT((suit > gmSUIT_INVALID) && (suit < gmTOTAL_SUITS));
 	value = gmGetValue(move->card);
-	ucard = (unsigned long)(1 << move->card);
+	ucard = (((unsigned long)1) << move->card);
 	wxASSERT(ucard);
 
 	if(!trick->count)
@@ -1596,7 +1596,7 @@ bool aiAgent::RankMove(gmEngineData *data, aiMove *move) {
 	// Combine all the cards played so far in the trick
 	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
 		if(trick->cards[i] != gmCARD_INVALID) {
-			trick_cards |= (1 << trick->cards[i]);
+			trick_cards |= (((unsigned long)1) << trick->cards[i]);
 		}
 	}
 
@@ -1673,8 +1673,8 @@ bool aiAgent::RankMove(gmEngineData *data, aiMove *move) {
 		trick->trumped && (trick->winner == gmGetPartner(next_to_play))
 	) {
 		if(
-			(opp1_played || (!opp1_played && (opp1_cards_suit || (!opp1_cards_suit && (opp1_cards_trump < (unsigned long)(1 << trick->cards[trick->winner])))))) &&
-			(opp2_played || (!opp2_played && (opp2_cards_suit || (!opp2_cards_suit && (opp2_cards_trump < (unsigned long)(1 << trick->cards[trick->winner]))))))
+			(opp1_played || (!opp1_played && (opp1_cards_suit || (!opp1_cards_suit && (opp1_cards_trump < (unsigned long)(((unsigned long)1) << trick->cards[trick->winner])))))) &&
+			(opp2_played || (!opp2_played && (opp2_cards_suit || (!opp2_cards_suit && (opp2_cards_trump < (unsigned long)(((unsigned long)1) << trick->cards[trick->winner]))))))
 		) {
 			partner_trumps = true;
 		}
@@ -1686,7 +1686,7 @@ bool aiAgent::RankMove(gmEngineData *data, aiMove *move) {
 		// and if opponents cannot over-trump
 		if(
 			(
-				(trick->trumped && (partner_cards_trump > (unsigned long)(1 << trick->cards[trick->winner]))) ||
+				(trick->trumped && (partner_cards_trump > (unsigned long)(((unsigned long)1) << trick->cards[trick->winner]))) ||
 				(!trick->trumped && partner_cards_trump && !partner_cards_suit)
 			)&&
 			(opp1_played || (!opp1_played && (opp1_cards_suit || (!opp1_cards_suit && (opp1_cards_trump < partner_cards_trump))))) &&

@@ -65,7 +65,7 @@ int gmUtil::m_total_points[] = {
 };
 wxString gmUtil::m_short_teams[] = {wxT("N/S"), wxT("E/W"), wxT("N/S"), wxT("E/W")};
 
-unsigned int gmUtil::BitsSetTable256[] = {
+unsigned int gmUtil::BitsSetTable256[256] = {
 	0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
 	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
 	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
@@ -84,7 +84,7 @@ unsigned int gmUtil::BitsSetTable256[] = {
 	4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
 };
 
-int gmUtil::LogTable256[] = {
+int gmUtil::LogTable256[256] = {
 	0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
 	4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
 	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
@@ -135,7 +135,7 @@ wxString gmUtil::PrintLong(unsigned long cards) {
 	out = _("");
 	//wxLogDebug(wxString::Format("%s%s", m_suits[highest / 8], m_values[highest % 8]));
 	for(int i = 0; i < 32; i++) {
-		if(cards & (1 << i))
+		if(cards & (((unsigned long)1) << i))
 			out = out + m_suits[i / 8] + m_values[i % 8] + _(",");
 	}
 	if(!out.IsEmpty()) {
@@ -161,7 +161,7 @@ wxString gmUtil::PrintHands(unsigned long *hands) {
 		temp = (hands[2] & m_suit_mask[i]) >> m_suit_rs[i];
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		for(int j = 7; j >= 0; j--) {
-			if(temp & (1 << j))
+			if(temp & (((unsigned long)1) << j))
 				out = out + m_values[j % 8] + _(",");
 		}
 
@@ -181,7 +181,7 @@ wxString gmUtil::PrintHands(unsigned long *hands) {
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
 		for(int j = 7; j >= 0; j--) {
-			if(temp & (1 << j))
+			if(temp & (((unsigned long)1) << j))
 				out = out + m_values[j % 8] + _(",");
 		}
 
@@ -191,7 +191,7 @@ wxString gmUtil::PrintHands(unsigned long *hands) {
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
 		for(int j = 7; j >= 0; j--) {
-			if(temp & (1 << j))
+			if(temp & (((unsigned long)1) << j))
 				out = out + m_values[j % 8] + _(",");
 		}
 
@@ -212,7 +212,7 @@ wxString gmUtil::PrintHands(unsigned long *hands) {
 		out = wxString::Format(wxT("%s - "), m_suits[i].c_str());
 		//for(j = 0; j < 8; j++)
 		for(int j = 7; j >= 0; j--) {
-			if(temp & (1 << j))
+			if(temp & (((unsigned long)1) << j))
 				out = out + m_values[j % 8] + _(",");
 		}
 
@@ -290,14 +290,10 @@ unsigned long gmUtil::CountBitsSet(unsigned long v) {
 		   BitsSetTable256[(v >> 8) & 0xff] +
 		   BitsSetTable256[(v >> 16) & 0xff] +
 		   BitsSetTable256[v >> 24];
-	//unsigned int const w = v - ((v >> 1) & 0x55555555);                    // temp
-	//unsigned int const x = (w & 0x33333333) + ((w >> 2) & 0x33333333);     // temp
-	//unsigned int const c = ((x + (x >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
-	//return c;
 }
 
 unsigned long gmUtil::HighestBitSet(unsigned long v) {
-	register unsigned long t, tt; // temporaries
+	static unsigned long t, tt; // temporaries
 	if (tt = v >> 16) {
 		return (t = v >> 24) ? 24 + LogTable256[t] : 16 + LogTable256[tt & 0xFF];
 	} else {

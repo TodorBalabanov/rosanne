@@ -1424,7 +1424,7 @@ bool raGamePanel::Continue() {
 					// If the player is the max bidder
 					// add the card that is set as the trump to the compelte hand
 					if(loc == i) {
-						complete_hand |= 1 << m_engine.GetTrumpCard();
+						complete_hand |= ((unsigned long)1) << m_engine.GetTrumpCard();
 					}
 					if((complete_hand & raGAME_FOUR_JACKS) == raGAME_FOUR_JACKS) {
 						msg.Empty();
@@ -1449,7 +1449,7 @@ bool raGamePanel::Continue() {
 						// add the card that is set as the trump to the compelte hand
 						complete_hand = hands[i];
 						if(loc == i) {
-							complete_hand |= 1 << m_engine.GetTrumpCard();
+							complete_hand |= ((unsigned long)1) << m_engine.GetTrumpCard();
 						}
 
 						if(!(complete_hand & raGAME_ALL_HIGH_CARDS)) {
@@ -1924,7 +1924,7 @@ bool raGamePanel::UpdateHands(unsigned long *hands) {
 		j = 0;
 		while(cards_left > 0) {
 			m_hands[i].card_indexes[j] = gmUtil::HighestBitSet(cards_left);
-			cards_left &= ~(1 << m_hands[i].card_indexes[j]);
+			cards_left &= ~(((unsigned long)1) << m_hands[i].card_indexes[j]);
 			j++;
 		}
 		m_hands[i].count = j;
@@ -1953,7 +1953,7 @@ int raGamePanel::PlayCard(int card, int loc) {
 	}
 
 	// Check whether the card is valid as per the mask
-	if(!(trick_info.mask & (1 << card))) {
+	if(!(trick_info.mask & (((unsigned long)1) << card))) {
 		wxASSERT(trick_info.rules);
 		return gmERR_TRICK_MASK_MISMATCH;
 	}

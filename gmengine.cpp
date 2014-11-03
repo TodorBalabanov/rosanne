@@ -276,7 +276,7 @@ bool gmEngine::Shuffle() {
 											   wxT(__FILE__), __LINE__));
 								break;
 							} else {
-								cards_read[k - 1][i] |= (1 << idx);
+								cards_read[k - 1][i] |= (((unsigned long)1) << idx);
 								count_read++;
 							}
 
@@ -313,7 +313,7 @@ bool gmEngine::Shuffle() {
 			int * unassigned = new int[gmTOTAL_CARDS - count_read];
 			j = 0;
 			for(i = 0; i < gmTOTAL_CARDS; i++) {
-				if(!(all_read & (1 << i)))
+				if(!(all_read & (((unsigned long)1) << i)))
 					unassigned[j++] = i;
 			}
 			wxASSERT(j == (gmTOTAL_CARDS - count_read));
@@ -332,8 +332,8 @@ bool gmEngine::Shuffle() {
 						j++;
 						m_data.shuffled[l] = gmUtil::HighestBitSet(temp);
 						flags[l] = true;
-						temp &= ~(1 << m_data.shuffled[l]);
-						//temp &= ~(1 << gmUtil::HighestBitSet(temp));
+						temp &= ~(((unsigned long)1) << m_data.shuffled[l]);
+						//temp &= ~(((unsigned long)1) << gmUtil::HighestBitSet(temp));
 					}
 					wxASSERT(j == (int)(gmUtil::CountBitsSet(cards_read[k][i])));
 				}
@@ -403,8 +403,9 @@ bool gmEngine::Continue() {
 		}
 
 		// Deal round 1
-		for(i = 0; i < gmTOTAL_CARDS / 2; i++)
-			m_data.hands[i / 4] |= (1 << m_data.shuffled[i]);
+		for(i = 0; i < gmTOTAL_CARDS / 2; i++) {
+			m_data.hands[i / 4] |= (((unsigned long)1) << m_data.shuffled[i]);
+		}
 
 		if(m_data.feedback) {
 			m_data.out_deal_info.round = gmDEAL_ROUND_1;
@@ -467,7 +468,7 @@ bool gmEngine::Continue() {
 
 				return false;
 			}
-			u |= (1 << i);
+			u |= (((unsigned long)1) << i);
 			i = gmNext(i);
 		}
 		// Before moving to round 2 of the auction,
@@ -504,7 +505,7 @@ bool gmEngine::Continue() {
 			if(
 				!m_data.bid_hist[1][i] &&
 				(i != m_data.curr_max_bidder) &&
-				!(m_data.passed_round1 & (1 << i))
+				!(m_data.passed_round1 & (((unsigned long)1) << i))
 			) {
 				// Fill data in the input bid structure
 				m_data.in_bid_info.player = i;
@@ -523,7 +524,7 @@ bool gmEngine::Continue() {
 
 				return false;
 			}
-			u |= (1 << i);
+			u |= (((unsigned long)1) << i);
 			i = gmNext(i);
 		}
 		// Before moving to round 3 of the auction,
@@ -573,7 +574,7 @@ bool gmEngine::Continue() {
 
 				return false;
 			}
-			u |= (1 << i);
+			u |= (((unsigned long)1) << i);
 			i = gmNext(i);
 		}
 		// Before moving to round 3 of the auction,
@@ -601,9 +602,10 @@ bool gmEngine::Continue() {
 
 	case gmSTATUS_DEAL2:
 		// Deal round 1
-		for(i = 0; i < gmTOTAL_CARDS / 2; i++)
+		for(i = 0; i < gmTOTAL_CARDS / 2; i++) {
 			m_data.hands[i / 4] |=
-				(1 << m_data.shuffled[i + (gmTOTAL_CARDS / 2)]);
+				(((unsigned long)1) << m_data.shuffled[i + (gmTOTAL_CARDS / 2)]);
+		}
 
 		if(m_data.feedback) {
 			m_data.out_deal_info.round = gmDEAL_ROUND_2;
@@ -675,7 +677,7 @@ bool gmEngine::Continue() {
 					if(m_data.tricks[m_data.trick_round].count) {
 						// If trump is shown the Jack of trumps can be played
 						if(m_data.trump_shown) {
-							jacks &= ~(gmJACK << gmUtil::m_suit_rs[m_data.trump_suit]);
+							jacks &= ~((unsigned long)gmJACK << gmUtil::m_suit_rs[m_data.trump_suit]);
 						}
 						m_data.in_trick_info.mask = gmALL_CARDS & ~(jacks);
 						m_data.in_trick_info.rules = gmRULE_5;
@@ -811,7 +813,7 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 			// If a player is passing in round 1, keep a note of the same,
 			// so that the player cannot bid in round 2
 			if(exist_bid_info->round == 0)
-				m_data.passed_round1 |= (1 << exist_bid_info->player);
+				m_data.passed_round1 |= (((unsigned long)1) << exist_bid_info->player);
 			break;
 		}
 
@@ -822,7 +824,7 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 		// If there is an existing trump, invalidate the same
 		// and add the card back to the max bidder
 		if(m_data.trump_card != gmCARD_INVALID) {
-			m_data.hands[m_data.curr_max_bidder] |= (1 << m_data.trump_card);
+			m_data.hands[m_data.curr_max_bidder] |= (((unsigned long)1) << m_data.trump_card);
 			m_data.trump_card = gmCARD_INVALID;
 			m_data.trump_suit = gmSUIT_INVALID;
 		}
@@ -849,7 +851,7 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 		wxASSERT(in_trumpsel_info->card < gmTOTAL_CARDS);
 
 		// Verify that the card exists in the highest bidders hand
-		if(!(m_data.hands[exist_trumpsel_info->player] & (1 << in_trumpsel_info->card)))
+		if(!(m_data.hands[exist_trumpsel_info->player] & (((unsigned long)1) << in_trumpsel_info->card)))
 			return gmERR_TRUMPSEL_NONEXIST_CARD;
 
 		// Set the trump card
@@ -858,7 +860,7 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 
 		// TODO : Do this earlier, when the bid is made
 		// Remove the trump card from the highest bidders hand
-		m_data.hands[exist_trumpsel_info->player] &= ~(1 << m_data.trump_card);
+		m_data.hands[exist_trumpsel_info->player] &= ~(((unsigned long)1) << m_data.trump_card);
 
 		// As soon as a trump is selected, the status can be incremented
 		//m_data.status++;
@@ -881,11 +883,11 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 			m_data.should_trump = true;
 
 			// Add the trump card to max bidder's hand
-			m_data.hands[m_data.curr_max_bidder] |= (1 << m_data.trump_card);
+			m_data.hands[m_data.curr_max_bidder] |= (((unsigned long)1) << m_data.trump_card);
 
 			if(exist_trick_info->player == m_data.curr_max_bidder) {
 				m_data.should_play_trump_card = true;
-				m_data.in_trick_info.mask = (1 << m_data.trump_card);
+				m_data.in_trick_info.mask = (((unsigned long)1) << m_data.trump_card);
 			} else {
 				// Check if the player who asked for trump has
 				// at least a single trump. If that is the case,
@@ -906,12 +908,12 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 		// then one such card should be played
 		if(
 			(m_data.hands[exist_trick_info->player] & exist_trick_info->mask) &&
-			!(exist_trick_info->mask & (1 << in_trick_info->card))
+			!(exist_trick_info->mask & (((unsigned long)1) << in_trick_info->card))
 		)
 			return gmERR_TRICK_MASK_MISMATCH;
 
 		// Check whether the card played actually exists in the players hand
-		if(!(m_data.hands[exist_trick_info->player] & (1 << in_trick_info->card)))
+		if(!(m_data.hands[exist_trick_info->player] & (((unsigned long)1) << in_trick_info->card)))
 			return gmERR_TRICK_CARD_NOT_IN_HAND;
 
 		// If the first card to be played in the round
@@ -985,9 +987,9 @@ int gmEngine::PostInputMessage(int input_type, void *input) {
 		// Set the card
 		m_data.tricks[m_data.trick_round].cards[exist_trick_info->player] = in_trick_info->card;
 		// Remove the card from the hand of the player who played it
-		m_data.hands[exist_trick_info->player] &= ~(1 << in_trick_info->card);
+		m_data.hands[exist_trick_info->player] &= ~(((unsigned long)1) << in_trick_info->card);
 		// Add the card to the list of cards played by the player
-		m_data.played_cards[exist_trick_info->player] |= (1 << in_trick_info->card);
+		m_data.played_cards[exist_trick_info->player] |= (((unsigned long)1) << in_trick_info->card);
 		// Increment the number of cards played in this round
 		m_data.tricks[m_data.trick_round].count++;
 		// Increment the total points
@@ -1277,7 +1279,7 @@ unsigned long gmEngine::GenerateMask(unsigned long *rules) {
 	// he/she must play the very same card
 	else if(m_data.should_play_trump_card && (!m_data.rules.waive_rule_4)) {
 		wxASSERT(m_data.trump_card != gmCARD_INVALID);
-		mask  = 1 << m_data.trump_card;
+		mask  = ((unsigned long)1) << m_data.trump_card;
 		temp |= gmRULE_4;
 	}
 	// Rule 2 :
