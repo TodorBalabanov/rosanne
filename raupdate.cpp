@@ -18,14 +18,11 @@
 
 raUpdate::raUpdate() {
 }
+
 void* raUpdate::Entry() {
-	int ret_val;
-	wxString new_var;
-	wxString msg;
+	wxString new_var = wxT("");
 
-	new_var = wxT("");
-
-	ret_val = CheckForUpdate(&new_var);
+	int ret_val = CheckForUpdate(&new_var);
 	wxASSERT(ret_val <= 2);
 
 	if(ret_val < 0) {
@@ -33,7 +30,7 @@ void* raUpdate::Entry() {
 	} else if(ret_val == 0) {
 		wxLogMessage(wxT("Check for update done successfully"));
 	} else if(ret_val > 0) {
-		msg = wxT("");
+		wxString msg = wxT("");
 		msg.Append(wxT("A new version "));
 		if(!new_var.IsEmpty()) {
 			msg.Append(new_var);
@@ -45,7 +42,6 @@ void* raUpdate::Entry() {
 		msg.Append(wxT("Please download from "));
 		msg.Append(ra_APP_URL);
 		msg.Append(wxT("."));
-		//wxMessageBox(msg, wxT("Update"));
 
 		wxFrame *main_frame;
 		main_frame = NULL;
@@ -82,12 +78,6 @@ int raUpdate::CheckForUpdate(wxString *new_ver) {
 
 	http = wxDynamicCast ( &addr.GetProtocol(), wxHTTP );
 	if ( http ) {
-		//http->SetHeader ( wxT("User-agent"),
-		//	wxT("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.8) Gecko/20050511 Firefox/1.0.4") );
-		//http->SetHeader ( wxT("Accept"), wxT("*/*") );
-		//http->SetHeader ( wxT("Accept-Encoding"), wxT("gzip,deflate" ) );
-		//http->SetHeader ( wxT("Accept-Language"), wxT("en") );
-		//http->SetHeader ( wxT("Accept-Charset"), wxT("ISO-8859-1,utf-8;q=0.7,*;q=0.7") );
 		http->SetHeader ( wxT("Pragma"), wxT("no-cache") );
 	}
 	in = addr.GetInputStream();
@@ -114,8 +104,9 @@ int raUpdate::CheckForUpdate(wxString *new_ver) {
 		data[size] = '\0';
 		str = new wxString(data);
 
-		if(data)
+		if(data) {
 			delete [] data;
+		}
 
 		// Get the version of the version information
 		// This is the first field in the pipe delimited input

@@ -35,17 +35,19 @@
 //#define aiLOG_GENERATESLPROBLEM 1
 //#define aiLOG_GENERATEDEALS 0
 
-typedef struct RA_AI_MOVE {
+class aiMove {
+public:
 	int card;
 	bool ask_trump;
 	int rank;
-} aiMove;
+} ;
 
-typedef struct RA_AI_EVAL {
+class aiEval {
+public:
 	int eval;
 	int count;
 	bool valid;
-} aiEval;
+} ;
 
 class aiAgent {
 private:

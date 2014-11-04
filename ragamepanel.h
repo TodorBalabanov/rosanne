@@ -43,15 +43,12 @@
 #define raGAME_ALL_LOW_CARDS (0x0F0F0F0F)
 #define raGAME_ALL_HIGH_CARDS (0xF0F0F0F0)
 
-
 // For testing purposes
 #define raTEST_DATA_FILE wxT("ra_test_data.ini")
 #define raTEXT_SEED wxT("rand/seed")
 #define raTEXT_IDX wxT("rand/idx")
 #define raTEXT_DEALER wxT("deal/dealer")
 #define raTEXT_DEAL_ROUND wxT("deal_round")
-
-
 
 enum {
 	raHAND_VERTICAL = 0,
@@ -64,27 +61,30 @@ enum {
 };
 
 // TODO : If raHandCard is no longer used, remove
-typedef struct tagRA_HAND_CARD {
-	//int suit;
-	//int value;
+class raHandCard {
+public:
 	int index;
 	int x;
 	int y;
 	int width;
 	int height;
-} raHandCard, *praHandCard;
+};
+typedef raHandCard* praHandCard;
 
-typedef struct tagRA_HAND {
+class raHand {
+public:
 	unsigned long cards;
 	int count;
 	int card_indexes[raMAX_CARDS_PER_HAND];
-} raHand, *praHand;
+};
+typedef raHand* praHand;
 
-typedef struct tagRA_BACK_DRAW_INFO {
+class raBackDrawInfo {
+public:
 	bool draw_bid;
 	int bid_loc;
 	int bid;
-} raBackDrawInfo;
+};
 
 class raGamePanel: public ggPanel {
 private:
@@ -108,7 +108,6 @@ private:
 	int m_hand_rot;
 
 	// Related to the display of cards played in a trick
-	//int m_trick_cards[gmTOTAL_PLAYERS];
 	gmTrick m_trick;
 	wxRect m_trick_card_rects[gmTOTAL_PLAYERS];
 	bool m_wait_trick;
@@ -197,7 +196,6 @@ private:
 	int ShowTrump(int loc = gmPLAYER_INVALID);
 	int MakeBid(int bid, int loc = gmPLAYER_INVALID);
 	bool UpdateDrawAndRefresh(bool udpate = true, raBackDrawInfo *info = NULL);
-	//bool UpdateTrick(gmTrick *trick);
 	bool HideInfo(gmEngineData *data, int player);
 	bool HasDealEnded(int *winner = NULL);
 	bool EndDeal(bool abandon = false);
@@ -218,4 +216,5 @@ public:
 	bool ShowAuction();
 	bool ShowLastTrick();
 };
+
 #endif

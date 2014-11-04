@@ -156,10 +156,11 @@ public:
 	}
 };
 
-typedef struct tagGM_OUTPUT_TRICK_INFO {
+class gmOutputTrickInfo {
+public:
 	int points[gmTOTAL_TEAMS];
 	gmTrick trick;
-} gmOutputTrickInfo;
+} ;
 
 class gmOutputDealEndInfo {
 public:
@@ -344,13 +345,6 @@ public:
 		return(*this);
 	}
 };
-
-/*typedef struct tagGM_OUPUT
-{
-	int type;
-	void *output;
-} raOutput, *praOutput;*/
-
 
 class gmEngine {
 private:

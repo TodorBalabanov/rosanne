@@ -21,14 +21,15 @@ BEGIN_EVENT_TABLE(raInfo, wxPanel)
 	EVT_BUTTON(XRCID("m_rainfo_btn"), raInfo::OnButtonClick)
 END_EVENT_TABLE()
 
-raInfo::raInfo(wxWindow* parent) { //: wxPanel((wxWindow*)parent)
+raInfo::raInfo(wxWindow* parent) {
 	m_game = NULL;
 	m_curr_cmd = raINFO_CMD_NONE;
 
 	ResetDetails();
 
-	if (!wxXmlResource::Get()->LoadPanel(this, parent, wxT("raInfo")))
+	if (!wxXmlResource::Get()->LoadPanel(this, parent, wxT("raInfo"))) {
 		wxLogError(wxT("Missing wxXmlResource::Get()->Load() in OnInit()?"));
+	}
 
 	m_button = XRCCTRL(*this, "m_rainfo_btn", wxButton);
 	m_dealno = XRCCTRL(*this, "m_rainfo_dealno", wxStaticText);
@@ -39,7 +40,6 @@ raInfo::raInfo(wxWindow* parent) { //: wxPanel((wxWindow*)parent)
 	m_nspts = XRCCTRL(*this, "m_rainfo_nspts", wxStaticText);
 	m_ewpts = XRCCTRL(*this, "m_rainfo_ewpts", wxStaticText);
 
-
 	m_spnlty = XRCCTRL(*this, "m_rainfo_spnlty", wxStaticText);
 	m_npnlty = XRCCTRL(*this, "m_rainfo_npnlty", wxStaticText);
 	m_epnlty = XRCCTRL(*this, "m_rainfo_epnlty", wxStaticText);
@@ -49,18 +49,13 @@ raInfo::raInfo(wxWindow* parent) { //: wxPanel((wxWindow*)parent)
 
 	m_button->Show(false);
 
-
 	SetDetails(&m_details);
-
-	return;
-
 }
+
 raInfo::~raInfo() {
-	return;
 }
 
 bool raInfo::SetDetails(raInfoDetails *details) {
-
 	// Validate input data and set the deal number
 	if(details->deal_no < 0) {
 		wxLogError(wxString::Format(wxT("Negative deal number passed. %s:%d"), wxT(__FILE__), __LINE__));
@@ -74,11 +69,11 @@ bool raInfo::SetDetails(raInfoDetails *details) {
 		return false;
 	}
 
-	if(details->dealer == gmPLAYER_INVALID)
+	if(details->dealer == gmPLAYER_INVALID) {
 		m_dealer->SetLabel(wxT("N/A"));
-	else
+	} else {
 		m_dealer->SetLabel((wxString::Format(wxT("%s"), gmUtil::m_long_locs[details->dealer].c_str())));
-
+	}
 
 	// Validate input data and set the bidder
 	if((details->bidder < gmPLAYER_INVALID) || (details->bidder > gmTOTAL_PLAYERS)) {
@@ -86,12 +81,13 @@ bool raInfo::SetDetails(raInfoDetails *details) {
 		return false;
 	}
 
-	if(details->bidder == gmPLAYER_INVALID)
+	if(details->bidder == gmPLAYER_INVALID) {
 		m_bid->SetLabel(wxT("N/A"));
-	else if (details->bid == gmBID_ALL)
+	} else if (details->bid == gmBID_ALL) {
 		m_bid->SetLabel(wxString::Format(wxT("All by %s"), gmUtil::m_long_locs[details->bidder].c_str()));
-	else
+	} else {
 		m_bid->SetLabel(wxString::Format(wxT("%d by %s"), details->bid, gmUtil::m_long_locs[details->bidder].c_str()));
+	}
 
 	// Validate input data and set the trump
 	if((details->trump < gmSUIT_INVALID) || (details->trump > gmTOTAL_SUITS)) {
@@ -99,10 +95,11 @@ bool raInfo::SetDetails(raInfoDetails *details) {
 		return false;
 	}
 
-	if(details->trump == gmSUIT_INVALID)
+	if(details->trump == gmSUIT_INVALID) {
 		m_trump->SetLabel(wxString::Format(wxT("Not Shown")));
-	else
+	} else {
 		m_trump->SetLabel(wxString::Format(wxT("%s"), gmUtil::m_suits[details->trump].c_str()));
+	}
 
 	m_nspts->SetLabel(wxString::Format(wxT("%d"), details->points[0]));
 	m_ewpts->SetLabel(wxString::Format(wxT("%d"), details->points[1]));
@@ -117,8 +114,10 @@ bool raInfo::SetDetails(raInfoDetails *details) {
 										gmUtil::m_short_locs[3].c_str(), details->pnlties[3]));
 
 	m_details = *details;
+
 	return true;
 }
+
 void raInfo::GetDetails(raInfoDetails *details) {
 	*details = m_details;
 }
@@ -154,17 +153,19 @@ bool raInfo::SetInstruction(wxString instruction, int cmd) {
 	// Set the instuction text, wrap and fit
 
 	m_instr->SetLabel(m_instruction);
+
 	//TODO : Remove hardcoding of 10
 	m_instr->Wrap(this->GetClientSize().GetWidth() - (2 * 10));
 	m_instr->Update();
 	m_instr->Refresh();
 
-
 	return true;
 }
+
 bool raInfo::SetGamePanel(raGamePanel *game_panel) {
 	wxASSERT(game_panel);
 	m_game = game_panel;
+
 	return true;
 }
 
@@ -184,6 +185,7 @@ bool raInfo::ResetDetails(bool refresh) {
 	if(refresh) {
 		SetDetails(&m_details);
 	}
+
 	return true;
 }
 

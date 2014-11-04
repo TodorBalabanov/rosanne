@@ -94,7 +94,6 @@ bool raApp::OnInit() {
 	wxLogMessage(wxString::Format(wxT("N32 = %d"), N32));
 	wxLogMessage(wxT(""));
 
-
 	//For usage of sockets or derived classes such as wxFTP in a secondary thread
 	wxSocketBase::Initialize();
 
@@ -102,7 +101,6 @@ bool raApp::OnInit() {
 	// calling the wxXmlResource::Get()->Load() from OnInit()
 	wxXmlResource::Get()->InitAllHandlers();
 	wxFileSystem::AddHandler(new wxZipFSHandler);
-
 
 	if(!wxFile::Exists(raGUI_XRS)) {
 		::wxMessageBox(wxString::Format(wxT("Compiled resource file \"%s\" does not exist."), raGUI_XRS),
@@ -155,6 +153,7 @@ bool raApp::OnInit() {
 
 	return true;
 }
+
 int raApp::OnRun() {
 	// Check for updates
 	m_update = NULL;
@@ -172,7 +171,6 @@ int raApp::OnRun() {
 	wxApp::OnRun();
 	return 0;
 }
-
 
 int raApp::OnExit() {
 	// Save settings
@@ -242,14 +240,11 @@ void raApp::LogDetailsForDebug() {
 	}
 	wxLogMessage(out);
 	wxLogMessage(wxT(""));
-
 }
 
 void raFrame::OnAbout(wxCommandEvent& event) {
 	raDlgAbout about;
-	if(!wxXmlResource::Get()->LoadDialog(&about, this, wxT("raDlgAbout")))
-
-	{
+	if(!wxXmlResource::Get()->LoadDialog(&about, this, wxT("raDlgAbout"))){
 		wxLogError(wxString::Format(wxT("Attempt to save settings failed. %s:%d"), wxT(__FILE__), __LINE__));
 	}
 	about.ShowModal();
@@ -259,6 +254,7 @@ void raFrame::OnQuit(wxCommandEvent& event) {
 	// Destroy the frame
 	Close();
 }
+
 void raFrame::OnGameNew(wxCommandEvent& event) {
 	m_game->NewGame(raGetRandPlayer());
 }
@@ -309,28 +305,24 @@ void raFrame::OnPreferences(wxCommandEvent& event) {
 	if(!ShowPreferences()) {
 		wxLogError(wxString::Format(wxT("ShowPreferences() failed. %s:%d"), wxT(__FILE__), __LINE__));
 	}
-	//event.Skip();
 }
 
 void raFrame::OnRules(wxCommandEvent& event) {
 	if(!ShowRules()) {
 		wxLogError(wxString::Format(wxT("ShowRules() failed. %s:%d"), wxT(__FILE__), __LINE__));
 	}
-	//event.Skip();
 }
 
 void raFrame::OnAuction(wxCommandEvent& event) {
 	if(!m_game->ShowAuction()) {
 		wxLogError(wxString::Format(wxT("ShowAuction() failed. %s:%d"), wxT(__FILE__), __LINE__));
 	}
-	//event.Skip();
 }
 
 void raFrame::OnLastTrick(wxCommandEvent& event) {
 	if(!m_game->ShowLastTrick()) {
 		wxLogError(wxString::Format(wxT("ShowLastTricks() failed. %s:%d"), wxT(__FILE__), __LINE__));
 	}
-	//event.Skip();
 }
 
 void raFrame::OnSize(wxSizeEvent& event) {
@@ -340,10 +332,12 @@ void raFrame::OnSize(wxSizeEvent& event) {
 	}
 	event.Skip();
 }
+
 void raFrame::OnUpdate(raUpdateEvent& event) {
 	wxMessageBox(event.GetMessage());
 	event.Skip();
 }
+
 bool raFrame::ShowPreferences() {
 	raDlgPrefs dlg_prefs;
 
@@ -387,7 +381,6 @@ raFrame::raFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
 	wxBitmap bmp_help(help_xpm);
 	wxBitmap bmp_about(about_xpm);
 
-
 	wxMenuBar *menu_bar = NULL;
 	wxMenu *game_menu = NULL;
 	wxMenu *help_menu = NULL;
@@ -395,8 +388,6 @@ raFrame::raFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
 	wxMenu *view_menu = NULL;
 
 	wxMenuItem *game_new = NULL;
-	//wxMenuItem *game_open = NULL;
-	//wxMenuItem *game_save = NULL;
 	wxMenuItem *game_exit = NULL;
 
 	wxMenuItem *opt_prefs = NULL;
@@ -425,10 +416,6 @@ raFrame::raFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
 	game_new = new wxMenuItem(game_menu, raID_NEW_GAME, wxT("&New"));
 	game_new->SetBitmap(bmp_new_game);
 	game_menu->Append(game_new);
-	//game_open = new wxMenuItem(game_menu, wxID_OPEN, wxT("&Open"));
-	//game_menu->Append(game_open);
-	//game_save = new wxMenuItem(game_menu, wxID_SAVE, wxT("&Save"));
-	//game_menu->Append(game_save);
 	game_exit = new wxMenuItem(game_menu, raID_EXIT, wxT("E&xit"));
 	game_exit->SetBitmap(bmp_exit);
 	game_menu->Append(game_exit);
@@ -464,9 +451,6 @@ raFrame::raFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
 	// ... and attach this menu bar to the frame
 	SetMenuBar(menu_bar);
 
-	//game_open->Enable(false);
-	//game_save->Enable(false);
-	//opt_prefs->Enable(false);
 	help_conts->Enable(false);
 
 	// Create the Tool Bar
@@ -490,16 +474,12 @@ raFrame::raFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
 
 	// Create the main splitter control
 	m_split_main = new wxSplitterWindow(this);
-	//m_split_main->SetWindowStyle(m_split_main->GetWindowStyle() & ~wxSP_3D);
 	m_split_main->Refresh();
 	m_split_main->SetSashGravity(0.0);
 	m_info = new raInfo(m_split_main);
-	//m_info->SetWindowStyle(wxSUNKEN_BORDER );
 
 	m_game = new raGamePanel(m_split_main);
-	//tile.LoadFile("tile.bmp", wxBITMAP_TYPE_BMP);
 	m_game->SetTile(&tile);
-	//m_game->SetWindowStyle(wxSUNKEN_BORDER);
 
 	m_game->SetInfoPanel(m_info);
 	m_info->SetGamePanel(m_game);

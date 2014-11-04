@@ -34,7 +34,7 @@ private:
 	int m_trump;
 public:
 	raPlayer();
-	~raPlayer();
+	virtual ~raPlayer();
 	void SetLocation(int loc);
 	int GetLocation();
 	int GetType();

@@ -88,12 +88,12 @@ public:
 	void OnUpdate(raUpdateEvent& event);
 
 private:
-	wxSplitterWindow *m_split_main;//, *m_split_vert;
+	wxSplitterWindow *m_split_main;
 	raGamePanel *m_game;
 	raInfo *m_info;
 	bool ShowPreferences();
 	bool ShowRules();
-	//raUpdate *m_update;
+
 	// This class handles events
 	DECLARE_EVENT_TABLE()
 	// Disallow copy constructor/assignment operators

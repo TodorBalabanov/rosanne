@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include "ragamepanel.h"
 #include "wx/sstream.h"
 #include "gmrand.h"
@@ -45,18 +44,11 @@
 #include "bubble_edge_top.xpm"
 
 #define raGAME_HIDE_AI_HANDS 1
-//#define raREAD_SEED_FROM_FILE 0
-//#define raREAD_DEALER_FROM_FILE 0
 
 #if defined(raREAD_SEED_FROM_FILE) || defined(raREAD_DEALER_FROM_FILE)
 #include <wx/wfstream.h>
 #include <wx/fileconf.h>
 #endif
-
-//
-//extern uint32_t *psfmt32;
-//extern int idxof(int);
-//extern int idx;
 
 BEGIN_EVENT_TABLE(raGamePanel, ggPanel)
 	EVT_SIZE(raGamePanel::OnSize)
@@ -64,7 +56,6 @@ BEGIN_EVENT_TABLE(raGamePanel, ggPanel)
 	EVT_BID(raGamePanel::OnBid)
 	EVT_LEFT_DCLICK(raGamePanel::OnLeftDClick)
 	EVT_LEFT_UP(raGamePanel::OnLeftUp)
-	//EVT_ERASE_BACKGROUND(wxcTable::OnErase)
 END_EVENT_TABLE()
 
 // TODO : For all wxMessageBox-es, provide appropriate heading, icon etc
@@ -75,7 +66,6 @@ END_EVENT_TABLE()
 
 raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent) {
 	// TODO : Consider each item and move to Reset if found appropriate
-	int i, j;
 	ggCard *card = NULL;
 
 	m_hand_rot = 0;
@@ -87,7 +77,6 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent) {
 	m_play_card_on = raCONFIG_PREFS_PLAYCARDON_SCLICK;
 	m_auto_play = true;
 	m_show_bidbubbles = true;
-
 
 	// Set the properties of the bold font to be used to write the text
 	// especially locations
@@ -124,23 +113,24 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent) {
 	ResetGame();
 
 	// Initiate the bitmap pointer array for card faces to NULL
-	for(i = 0; i < gmTOTAL_PLAYERS; i++) {
+	for(int i = 0; i < gmTOTAL_PLAYERS; i++) {
 		m_players[i].SetLocation(i);
 		m_players[i].SetType(raPLAYER_TYPE_AI);
-		//m_players[i].SetType(raPLAYER_TYPE_HUMAN);
 	}
 	m_players[0].SetType(raPLAYER_TYPE_HUMAN);
 
-	for(i = 0; i < gmTOTAL_CARDS; i++)
+	for(int i = 0; i < gmTOTAL_CARDS; i++) {
 		m_card_faces[i] = NULL;
+	}
 
 	// Initiate the bitmap pointer array for card backs to NULL
-	for(i = 0; i < raTOTAL_CARD_BACKS; i++)
+	for(int i = 0; i < raTOTAL_CARD_BACKS; i++) {
 		m_card_backs[i] = NULL;
+	}
 
 	// Load card faces
-	for(i = 0; i < gmTOTAL_SUITS; i++) {
-		for(j = 0; j < gmTOTAL_VALUES; j++) {
+	for(int i = 0; i < gmTOTAL_SUITS; i++) {
+		for(int j = 0; j < gmTOTAL_VALUES; j++) {
 			card = new ggCard(i, gmUtil::m_value_trans[j]);
 			wxASSERT(card);
 			m_card_faces[(i * gmTOTAL_VALUES) + j] = new wxBitmap(*card->GetFace());
@@ -178,9 +168,6 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent) {
 
 	// TODO : Should DrawBack be called here?
 	m_bid = new raBid(this);
-	//m_bid->SetSize(2 * GG_CARD_WIDTH, 2 * GG_CARD_HEIGHT);
-	//m_bid->SetWindowStyle(wxRAISED_BORDER);
-	//m_bid->Refresh();
 	m_bid->Show(false);
 	m_bid->SetGamePanel(this);
 }
@@ -189,21 +176,21 @@ raGamePanel::raGamePanel(const wxWindow* parent): ggPanel((wxWindow*)parent) {
 // Destructor/s
 //
 raGamePanel::~raGamePanel() {
-	int i, j;
-
 	// Delete card faces
-	for(i = 0; i < gmTOTAL_SUITS; i++) {
-		for(j = 0; j < gmTOTAL_VALUES; j++) {
-			if(m_card_faces[(i * gmTOTAL_VALUES) + j])
+	for(int i = 0; i < gmTOTAL_SUITS; i++) {
+		for(int j = 0; j < gmTOTAL_VALUES; j++) {
+			if(m_card_faces[(i * gmTOTAL_VALUES) + j]) {
 				delete m_card_faces[(i * gmTOTAL_VALUES) + j];
+			}
 			m_card_faces[(i * gmTOTAL_VALUES) + j] = NULL;
 		}
 	}
 
 	// Delete card backs
-	for(i = 0; i < raTOTAL_CARD_BACKS; i++) {
-		if(m_card_backs[i])
+	for(int i = 0; i < raTOTAL_CARD_BACKS; i++) {
+		if(m_card_backs[i]) {
 			delete m_card_backs[i];
+		}
 		m_card_backs[i] = NULL;
 	}
 
@@ -294,13 +281,16 @@ bool raGamePanel::SetInfoPanel(raInfo *info_panel) {
 	m_info = info_panel;
 	return true;
 }
+
 bool raGamePanel::NewGame(int dealer, bool immediate) {
 	if(!ResetGame()) {
 		wxLogError(wxString::Format(wxT("ResetGame failed. %s:%d"), wxT(__FILE__), __LINE__));
 		return false;
 	}
-	if(dealer == gmPLAYER_INVALID)
+
+	if(dealer == gmPLAYER_INVALID) {
 		dealer = 0;
+	}
 
 	m_engine.SetDealer(dealer);
 
@@ -316,40 +306,11 @@ bool raGamePanel::NewGame(int dealer, bool immediate) {
 	}
 	return true;
 }
+
 bool raGamePanel::NewDeal() {
 	int dealer = gmPLAYER_INVALID;
-//	gmRandState rs;
-//
-//    rs.state_array[0]=0x9076251A;
-//    rs.state_array[1]=0xF4A30A9F;
-//    rs.state_array[2]=0xACE20BA7;
-//    rs.state_array[3]=0x62C0533A;
-//    rs.state_array[4]=0xDD296836;
-//    rs.state_array[5]=0xB3351062;
-//    rs.state_array[6]=0xA231279E;
-//    rs.state_array[7]=0x9F543675;
-//    rs.state_array[8]=0xCDDF4354;
-//    rs.state_array[9]=0x422D0262;
-//    rs.state_array[10]=0x41BD47A6;
-//    rs.state_array[11]=0x1DAE363B;
-//    rs.state_array[12]=0x6F4558F2;
-//    rs.state_array[13]=0x2D38925A;
-//    rs.state_array[14]=0xFF2EE03B;
-//    rs.state_array[15]=0xE9EDA6B6;
-//    rs.state_array[16]=0xB8341066;
-//    rs.state_array[17]=0x53B16599;
-//    rs.state_array[18]=0xB17473E9;
-//    rs.state_array[19]=0x485452D0;
-//
-//    rs.idx=1;
-//    gmRand::SetState(&rs);
-//
-//    dealer = 2;
-
-
 
 #ifdef raREAD_SEED_FROM_FILE
-	//long seed_read;
 	int i = 0;
 	gmRandState rand_state;
 	wxString seed_text;
@@ -366,7 +327,6 @@ bool raGamePanel::NewDeal() {
 		}
 		rand_state.idx=0;
 		rand_state.idx = -2;
-		//seed_read = -1;
 
 		// Read the idx value
 		if(fcfg.Exists(raTEXT_IDX)) {
@@ -396,7 +356,6 @@ bool raGamePanel::NewDeal() {
 									   wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
 						status = false;
 						break;
-
 					}
 					wxLogDebug(wxString::Format(wxT("wxString data seed%d=%s"), i, in_txt.c_str()));
 					in_txt.ToULong(&in_long, 16);
@@ -433,7 +392,6 @@ bool raGamePanel::NewDeal() {
 			if(!fcfg.Read(raTEXT_DEALER, &dealer_read)) {
 				wxLogError(wxString::Format(
 							   wxT("Read failed. %s:%d"), wxT(__FILE__), __LINE__));
-
 			} else {
 				dealer = (int)dealer_read;
 				wxASSERT((dealer >= 0) && (dealer < gmTOTAL_PLAYERS));
@@ -447,7 +405,6 @@ bool raGamePanel::NewDeal() {
 #endif
 
 	wxLogMessage(gmRand::PrintState());
-
 
 	// Save the dealer information lest it gets reset
 	// while resetting the rule engine
@@ -489,9 +446,11 @@ bool raGamePanel::SetClockwise(bool flag) {
 	m_clockwise = flag;
 	return true;
 }
+
 bool raGamePanel::GetClockwise() {
 	return m_clockwise;
 }
+
 bool raGamePanel::ReloadFromConfig() {
 	raConfData conf_data;
 
@@ -506,28 +465,29 @@ bool raGamePanel::ReloadFromConfig() {
 
 	return true;
 }
+
 bool raGamePanel::ShowAuction() {
 	if(m_engine.GetStatus() >= gmSTATUS_BID1) {
 		wxMessageBox(m_bid_history, wxT("Details of the auction"));
 	} else {
 		wxMessageBox(wxT("Data not available"));
 	}
+
 	return true;
 }
 
 bool raGamePanel::ShowLastTrick() {
-	wxString out;
-	int i;
 	gmEngineData data;
-	gmTrick *trick;
-
 	m_engine.GetData(&data);
+
 	if((data.status >= gmSTATUS_TRICKS) && (data.trick_round > 0)) {
+		wxString out;
+
 		out.Append(wxT("Round - "));
 		out.Append(wxString::Format(wxT("%d"), data.trick_round));
 		out.Append(wxT("\n\n"));
-		trick = &data.tricks[data.trick_round - 1];
-		for(i = 0; i < gmTOTAL_PLAYERS; i++) {
+		gmTrick *trick = &data.tricks[data.trick_round - 1];
+		for(int i = 0; i < gmTOTAL_PLAYERS; i++) {
 			out.Append(gmUtil::m_long_locs[i]);
 			out.Append(wxT("\t- "));
 			wxASSERT(trick->cards[i] != gmCARD_INVALID);
@@ -549,6 +509,7 @@ bool raGamePanel::ShowLastTrick() {
 	} else {
 		wxMessageBox(wxT("Data not available"));
 	}
+
 	return true;
 }
 
@@ -556,23 +517,16 @@ bool raGamePanel::ShowLastTrick() {
 // Private method/s
 //
 void raGamePanel::OnSize(wxSizeEvent& event) {
-	wxPaintEvent new_event;
-
 	// Set the location of the bid panel
-	//m_bid->SetSize(
-	//	(this->GetClientSize().GetWidth() - m_bid->GetSize().GetWidth()) / 2,
-	//	(this->GetClientSize().GetHeight() - m_bid->GetSize().GetHeight()) / 2,
-	//	m_bid->GetSize().GetWidth(),
-	//	m_bid->GetSize().GetHeight()
-	//	);
 	m_bid->Move(
 		(this->GetClientSize().GetWidth() - m_bid->GetSize().GetWidth()) / 2,
 		(this->GetClientSize().GetHeight() - m_bid->GetSize().GetHeight()) / 2
 	);
 
 	// Get all the elements assosiated with this panel resized
-	if(!Size())
+	if(!Size()) {
 		wxLogError(wxString::Format(wxT("Attempt to size the panel failed. %s:%d"), wxT(__FILE__), __LINE__));
+	}
 
 	if(!UpdateDrawAndRefresh(false)) {
 		wxLogError(wxString::Format(wxT("Call to UpdateDrawAndRefresh() failed. %s:%d"), wxT(__FILE__), __LINE__));
@@ -580,17 +534,13 @@ void raGamePanel::OnSize(wxSizeEvent& event) {
 
 	event.Skip();
 }
+
 bool raGamePanel::RedrawBack(raBackDrawInfo *info) {
 	int i, j, x, y, wt, ht, wb, hb;
 	wxMemoryDC mdc;
 	wxString loc_text;
 	int text_width, text_height;
 	int horz_pnl_relief = 0, vert_pnl_relief = 0;
-
-	//wxBitmap bmp_green_arrow_bottom(green_arrow_bottom_xpm);
-	//wxBitmap bmp_green_arrow_top(green_arrow_top_xpm);
-	//wxBitmap bmp_green_arrow_right(green_arrow_right_xpm);
-	//wxBitmap bmp_green_arrow_left(green_arrow_left_xpm);
 
 	// Obtain the dimensions of the back buffer
 	wb = 0;
@@ -617,8 +567,8 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info) {
 		// Blit repeatedly
 		mdc.SelectObject(*m_tile);
 
-		for(i = 0; i < x; i++) {
-			for(j = 0; j < y;  j++) {
+		for(int i = 0; i < x; i++) {
+			for(int j = 0; j < y;  j++) {
 				if(!BlitToBack(i * wt, j * ht, wt, ht, &mdc, 0, 0)) {
 					wxLogError(wxString::Format(wxT("Blit to back buffer failed. %s:%d"), wxT(__FILE__), __LINE__));
 					return false;
@@ -631,7 +581,7 @@ bool raGamePanel::RedrawBack(raBackDrawInfo *info) {
 	}
 
 	// Invalidate the existing hand positions and dimensions
-	for(i = 0; i < gmTOTAL_PLAYERS; i++)
+	for(int i = 0; i < gmTOTAL_PLAYERS; i++)
 		m_hand_rects[i] = wxRect(0, 0, 0, 0);
 
 	mdc.SetFont(m_font_bold);
@@ -2609,6 +2559,3 @@ bool raGamePanel::OnCardClick(wxPoint pt) {
 
 	return true;
 }
-
-
-

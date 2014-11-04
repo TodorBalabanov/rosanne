@@ -107,7 +107,6 @@ private:
 
 	wxStaticText *m_instr;
 
-
 	int m_curr_cmd;
 	raGamePanel *m_game;
 	raInfoDetails m_details;
@@ -116,7 +115,7 @@ private:
 	void OnButtonClick(wxCommandEvent &event);
 public:
 	raInfo(wxWindow* parent);
-	~raInfo();
+	virtual ~raInfo();
 	bool SetDetails(raInfoDetails *details);
 	void GetDetails(raInfoDetails *details);
 	bool SetInstruction(wxString instruction, int cmd = raINFO_CMD_NONE);

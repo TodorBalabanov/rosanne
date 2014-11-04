@@ -41,27 +41,30 @@
 #define raCONFIG_PREFS_CARDBACK_BLUE 0
 #define raCONFIG_PREFS_CARDBACK_RED 1
 
-typedef struct tag_RA_CONF_APP_DATA {
+class raConfAppData{
+public:
 	int x;
 	int y;
 	int width;
 	int height;
 	bool maximized;
-} raConfAppData;
+} ;
 
-typedef struct tag_RA_CONF_GAME_DATA {
+class raConfGameData {
+public:
 	bool clockwise;
 	int min_bid3;
 	bool waive_rule4;
 	bool sluff_jacks;
-} raConfGameData;
+} ;
 
-typedef struct tag_RA_CONF_PREFS_DATA {
+class raConfPrefsData {
+public:
 	int play_card_on;
 	int card_back;
 	bool auto_play_single;
 	bool show_bid_bubbles;
-} raConfPrefsData;
+} ;
 
 class raConfData {
 public:

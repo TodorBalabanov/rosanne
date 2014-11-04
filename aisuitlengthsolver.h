@@ -74,11 +74,12 @@ public:
 // b) max - the maximum number ofa cards that can be callocated
 // c) suit_length - number of cards allocated. If it is vacant, the value is slVACANT
 
-typedef struct slCELL {
+class slCell {
+public:
 	int min;
 	int max;
 	int suit_length;
-} slCell;
+} ;
 
 class slData {
 
