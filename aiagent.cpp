@@ -15,6 +15,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "aiagent.h"
+#include "aiEval.h"
+#include "gmTrick.h"
 
 #define raAI_ORDERMOVES
 

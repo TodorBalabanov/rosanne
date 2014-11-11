@@ -27,6 +27,10 @@
 #endif
 
 #include "gmutil.h"
+#include "Constants.h"
+#include "gmTrick.h"
+#include "gmRules.h"
+#include "gmOutputDealInfo.h"
 
 enum {
 	gmSTATUS_NOT_STARTED = 0,
@@ -58,6 +62,7 @@ enum {
 	gmINPUT_TRUMPSEL,
 	gmINPUT_TRICK
 };
+
 enum {
 	gmERR_CANNOT_PASS = 1,
 	gmERR_BID_LESS_THAN_MIN,
@@ -70,97 +75,11 @@ enum {
 	gmERR_TRICK_CARD_NOT_IN_HAND
 };
 
-#define	gmRULE_1 1
-#define	gmRULE_2 2
-#define	gmRULE_3 4
-#define	gmRULE_4 8
-// Sluffing of jacks
-#define	gmRULE_5 16
-
-#define gmDEAL_ROUND_1 0
-#define gmDEAL_ROUND_2 1
-
-#define raBID_ROUND_3 2
-
-#define gmFOUR_JACKS 0x80808080
-#define gmJACK 0x80
-#define gmALL_CARDS 0xFFFFFFFF
-
-class gmRules {
-public:
-	int rot_addn;
-	int min_bid_1;
-	int min_bid_2;
-	int min_bid_3;
-	bool waive_rule_4;
-	bool sluff_jacks;
-
-	gmRules& operator=(const gmRules& value) {
-		rot_addn = value.rot_addn;
-		min_bid_1 = value.min_bid_1;
-		min_bid_2 = value.min_bid_2;
-		min_bid_3 = value.min_bid_3;
-		waive_rule_4 = value.waive_rule_4;
-		sluff_jacks = value.sluff_jacks;
-
-		return(*this);
-	}
-};
-
 typedef gmRules* pgmRules;
-
-class gmTrick {
-public:
-
-	bool trumped;
-	int cards[gmTOTAL_PLAYERS];
-	int lead_suit;
-	int lead_loc;
-	int count;
-	int points;
-	int winner;
-
-	gmTrick& operator=(const gmTrick& value) {
-		trumped = value.trumped;
-		for(int i=0; i<gmTOTAL_PLAYERS; i++) {
-			cards[i] = value.cards[i];
-		}
-		lead_suit = value.lead_suit;
-		lead_loc = value.lead_loc;
-		count = value.count;
-		points = value.points;
-		winner = value.winner;
-
-		return(*this);
-	}
-};
 
 #define gmNext(X) ((X + m_data.rules.rot_addn) % gmTOTAL_PLAYERS)
 #define gmTrickNext ((m_data.tricks[m_data.trick_round].lead_loc + (m_data.tricks[m_data.trick_round].count * m_data.rules.rot_addn)) % 4)
 #define gmWinnerCard (m_data.tricks[m_data.trick_round].cards[m_data.tricks[m_data.trick_round].winner])
-
-class gmOutputDealInfo {
-public:
-
-	int round;
-	unsigned long hands[gmTOTAL_PLAYERS];
-
-	gmOutputDealInfo& operator=(const gmOutputDealInfo& value) {
-		round = value.round;
-
-		for(int i=0; i<gmTOTAL_PLAYERS; i++) {
-			hands[i] = value.hands[i];
-		}
-
-		return(*this);
-	}
-};
-
-class gmOutputTrickInfo {
-public:
-	int points[gmTOTAL_TEAMS];
-	gmTrick trick;
-} ;
 
 class gmOutputDealEndInfo {
 public:

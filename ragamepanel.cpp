@@ -18,6 +18,9 @@
 #include "wx/sstream.h"
 #include "gmrand.h"
 
+#include "gmRandState.h"
+#include "gmOutputDealInfo.h"
+
 #include "red_arrow_top.xpm"
 #include "red_arrow_bottom.xpm"
 #include "red_arrow_left.xpm"
@@ -1346,15 +1349,11 @@ bool raGamePanel::Continue() {
 				m_info->SetInstruction(wxT("Deal started."), raINFO_CMD_NONE);
 				break;
 			case gmOUTPUT_DEAL:
-				out_deal_info.round=0;
-				for (int i=0; i<gmTOTAL_PLAYERS; i++){
-					out_deal_info.hands[i]=0;
-				}
+				out_deal_info = (short)0;
 				m_engine.GetOutput(NULL, &out_deal_info);
 				m_info->SetInstruction(wxT("Cards dealt."), raINFO_CMD_NONE);
 
 				m_engine.GetHands(hands);
-				//wxLogDebug(gmUtil::PrintHands(hands));
 
 				// Update hands, redraw back buffer and refresh the screen
 				if(!UpdateDrawAndRefresh()) {
@@ -1808,16 +1807,10 @@ bool raGamePanel::ResetGame() {
 	int i;
 	raConfData data;
 
-	m_saved_rules.rot_addn=0;
-	m_saved_rules.min_bid_1=0;
-	m_saved_rules.min_bid_2=0;
-	m_saved_rules.min_bid_3=0;
-	m_saved_rules.waive_rule_4=false;
-	m_saved_rules.sluff_jacks=false;
+	m_saved_rules = (short)0;
 
 	raConfig::GetInstance()->GetData(&data);
 
-	//m_orientation = raGAME_ORIENT_ALL_HORZ;
 	m_orientation = raGAME_ORIENT_MIXED;
 
 	ResetDeal();

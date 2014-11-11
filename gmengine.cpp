@@ -128,10 +128,7 @@ void gmEngine::InitCache() {
 	m_init.should_trump= false;
 	m_init.should_play_trump_card= false;
 	m_init.trump_shown= false;
-	m_init.out_deal_info.round=0;
-	for (int i=0;i<gmTOTAL_PLAYERS;i++){
-		m_init.out_deal_info.hands[i]=0;
-	}
+	m_init.out_deal_info = (short)0;
 	m_init.out_deal_end_info.winner=0;
 	m_init.in_bid_info.player=0;
 	m_init.in_bid_info.min=0;

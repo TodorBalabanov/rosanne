@@ -27,21 +27,8 @@
 #include "ggpanel.h"
 #include "ggcard.h"
 
-//#define raGAME_PLAY_TILL_END 0
-
-#define raTOTAL_CARD_BACKS 2
-#define raMAX_CARDS_PER_HAND 8
-#define raCARD_VERT_RELIEF (12)
-#define raCARD_HORZ_RELIEF (GG_CARD_WIDTH / 4)
-#define raCARD_PANEL_RELIEF 20
-
-#define raGAME_CARD_BACK_SEL 0
-
-#define raGAME_ARROW_RELIEF 8
-
-#define raGAME_FOUR_JACKS (0x80808080)
-#define raGAME_ALL_LOW_CARDS (0x0F0F0F0F)
-#define raGAME_ALL_HIGH_CARDS (0xF0F0F0F0)
+#include "gmTrick.h"
+#include "gmRules.h"
 
 // For testing purposes
 #define raTEST_DATA_FILE wxT("ra_test_data.ini")

@@ -28,22 +28,7 @@
 #include "wx/wx.h"
 #endif
 
-#define SPACES20 _("                    ")
-
-#define gmTOTAL_CARDS 32
-#define gmTOTAL_PLAYERS 4
-#define gmTOTAL_BID_ROUNDS 3
-#define gmPLAYER_INVALID -1
-#define gmSUIT_INVALID -1
-#define gmCARD_INVALID -1
-#define gmPartner(X) ((X + 2) % gmTOTAL_PLAYERS)
-
-#define gmBID_PASS 0
-#define gmBID_ALL 1000
-#define gmTOTAL_SUITS 4
-#define gmTOTAL_VALUES 8
-#define gmTOTAL_TRICKS 8
-#define gmTOTAL_TEAMS 2
+#include "Constants.h"
 
 #define gmGetSuit(X) (X / gmTOTAL_VALUES)
 #define gmGetValue(X) (X % gmTOTAL_VALUES)

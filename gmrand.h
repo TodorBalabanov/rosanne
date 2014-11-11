@@ -8,16 +8,7 @@
 #include "wx/wx.h"
 #endif
 
-#define MEXP 19937
-#define N (MEXP / 128 + 1)
-#define N32 (N * 4)
-
-class gmRandState {
-public:
-	unsigned int state_array[N32];
-	int idx;
-} ;
-
+#include "gmRandState.h"
 
 class gmRand {
 public:

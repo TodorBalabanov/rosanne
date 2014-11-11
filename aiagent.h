@@ -22,6 +22,9 @@
 #include "aisuitlengthsolver.h"
 #include "gmutil.h"
 
+#include "aiMove.h"
+#include "slProblem.h"
+
 #define aiBID_SAMPLE 100
 #define aiPLAY_SAMPLES 30
 #define aiMAX_MOVES 20
@@ -31,23 +34,6 @@
 
 #define aiPOS_INFTY +10000
 #define aiNEG_INFTY -10000
-
-//#define aiLOG_GENERATESLPROBLEM 1
-//#define aiLOG_GENERATEDEALS 0
-
-class aiMove {
-public:
-	int card;
-	bool ask_trump;
-	int rank;
-} ;
-
-class aiEval {
-public:
-	int eval;
-	int count;
-	bool valid;
-} ;
 
 class aiAgent {
 private:
