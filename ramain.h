@@ -26,6 +26,8 @@
 #include "radlgprefs.h"
 #include "radlgrules.h"
 
+#include "raApp.h"
+
 enum {
 	raID_NEW_GAME = 10000,
 	raID_EXIT,
@@ -47,27 +49,6 @@ enum {
 #define raGUI_XRS wxT("gui.xrs")
 
 class raFrame;
-
-// Declare the application class
-class raApp : public wxApp {
-private:
-	FILE *m_logfile;
-	wxLogStderr *m_logger;
-	wxLog *m_old_logger;
-	raUpdate *m_update;
-	raFrame *m_frame;
-	// Disallow copy constructor/assignment operators
-	//raApp(const raApp &);
-	raApp & operator=(const raApp &);
-public:
-	// Called on application startup
-	virtual bool OnInit();
-	virtual int OnRun();
-	virtual int OnExit();
-
-	static wxString GenerateLogFileName();
-	static void LogDetailsForDebug();
-};
 
 // Declare our main frame class
 class raFrame : public wxFrame {

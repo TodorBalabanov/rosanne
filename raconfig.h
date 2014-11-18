@@ -20,6 +20,8 @@
 #include "racommon.h"
 #include "wx/config.h"
 
+#include "raConfData.h"
+
 #define raCONFPATH_APP_DATA_X wxT("application/x")
 #define raCONFPATH_APP_DATA_Y wxT("application/y")
 #define raCONFPATH_APP_DATA_WIDTH wxT("application/width")
@@ -40,57 +42,6 @@
 #define raCONFIG_PREFS_PLAYCARDON_DCLICK 1
 #define raCONFIG_PREFS_CARDBACK_BLUE 0
 #define raCONFIG_PREFS_CARDBACK_RED 1
-
-class raConfAppData{
-public:
-	int x;
-	int y;
-	int width;
-	int height;
-	bool maximized;
-} ;
-
-class raConfGameData {
-public:
-	bool clockwise;
-	int min_bid3;
-	bool waive_rule4;
-	bool sluff_jacks;
-} ;
-
-class raConfPrefsData {
-public:
-	int play_card_on;
-	int card_back;
-	bool auto_play_single;
-	bool show_bid_bubbles;
-} ;
-
-class raConfData {
-public:
-
-	raConfAppData app_data;
-	raConfGameData game_data;
-	raConfPrefsData prefs_data;
-
-	raConfData& operator=(const raConfData& value) {
-		app_data.x = value.app_data.x;
-		app_data.y = value.app_data.y;
-		app_data.width = value.app_data.width;
-		app_data.height = value.app_data.height;
-		app_data.maximized = value.app_data.maximized;
-		game_data.clockwise = value.game_data.clockwise;
-		game_data.min_bid3 = value.game_data.min_bid3;
-		game_data.waive_rule4 = value.game_data.waive_rule4;
-		game_data.sluff_jacks = value.game_data.sluff_jacks;
-		prefs_data.play_card_on = value.prefs_data.play_card_on;
-		prefs_data.card_back = value.prefs_data.card_back;
-		prefs_data.auto_play_single = value.prefs_data.auto_play_single;
-		prefs_data.show_bid_bubbles = value.prefs_data.show_bid_bubbles;
-
-		return(*this);
-	}
-};
 
 class raConfig {
 public:
